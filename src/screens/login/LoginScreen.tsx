@@ -97,26 +97,29 @@ const LoginScreen = () => {
             style={{height: windowHeight}}
             className="flex flex-col justify-between items-center bg-gray-100 w-full">
             <View className="flex-1 w-full px-5">
-              <View className="flex justify-end items-center h-56">
-                <Image
-                  source={require('../../../assets/image/logo.jpg')}
-                  style={{
-                    resizeMode: 'contain',
-                    height: 150,
-                    width: 150,
-                    borderRadius: 25,
-                  }}
-                />
-              </View>
-              <View className="my-16">
-                <Text className="text-center text-3xl font-bold text-black py-2">
+            <View className="flex-[2] justify-end items-center">
+              <View className="h-44">
+                  <Image
+                    source={require('../../../assets/image/logo.jpg')}
+                    style={{
+                      resizeMode: 'contain',
+                      aspectRatio:1,
+                      flex: 1,
+                      width: "100%",
+                      borderRadius: 25,
+                    }}
+                  />
+                </View>
+            </View>
+              <View className="flex-[1] justify-center items-center">
+                <Text className="text-center text-3xl font-bold text-black pb-2">
                   Đăng nhập
                 </Text>
                 <Text className="text-center text-base text-gray-500 font-bold tracking-wider">
                   Vui lòng đăng nhập để tiếp tục
                 </Text>
               </View>
-              <View className="mb-4">
+              <View className="flex-[2]">
                 <TextInput
                   value={username}
                   onChangeText={value => {
@@ -192,8 +195,7 @@ const LoginScreen = () => {
                   }
                   ref={passwordRef}
                 />
-              </View>
-              <View>
+                <View className="mt-6">
                 <Button
                   className="bg-primary rounded-lg py-[2px] shadow-sm"
                   onPress={() => onLogin()}>
@@ -202,8 +204,10 @@ const LoginScreen = () => {
                   </Text>
                 </Button>
               </View>
+              </View>
+              
             </View>
-            <View className="w-full flex flex-nowrap flex-row items-center justify-center py-3">
+            <View className="w-full flex flex-nowrap flex-row items-center justify-center py-3 my-3">
               <Text className="font-bold text-base tracking-wide text-black">
                 Không có tài khoản?
               </Text>
