@@ -1,28 +1,27 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from './navigators/HomeScreen';
-import Login from './login/LoginScreen';
 import {IMAGES} from '../../constans/images';
 import {SCREENS} from '../../constans/screens';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {COLORS} from '../../constans/colors';
 import WorkScreen from './navigators/WorkScreen';
 import NotificationScreen from './navigators/NotificationScreen';
-import ProfileScreen from './navigators/ProfileScreen';
+import HomeStack from './stack/HomeStack';
+import AccountScreen from './navigators/AccountScreen';
 
 const Main = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
-      initialRouteName={SCREENS.HOME.KEY}
+      initialRouteName={SCREENS.HOMESTACK.KEY}
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}>
       <Tab.Screen
-        name={SCREENS.HOME.KEY}
-        component={HomeScreen}
+        name={SCREENS.HOMESTACK.KEY}
+        component={HomeStack}
         options={{
-          tabBarLabel: `${SCREENS.HOME.NAME}`,
+          tabBarLabel: `${SCREENS.HOMESTACK.NAME}`,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           headerShown: false,
@@ -80,8 +79,10 @@ const Main = () => {
                   tintColor: focused ? COLORS.PRIMARY : COLORS.GRAY,
                 }}
               />
-              <Text className="absolute right-0 bg-red-500 rounded-full w-4 h-4 text-center text-xs font-bold text-white top-[1px] p-[1px]">
-                1
+              <Text
+                className="absolute right-0 bg-red-500 rounded-full w-[18px] h-[18px] text-center text-xs font-bold text-white top-[1px] p-[1px]"
+                style={{borderRadius: 999999}}>
+                0
               </Text>
             </View>
           ),
@@ -90,11 +91,11 @@ const Main = () => {
         }}
       />
       <Tab.Screen
-        name={SCREENS.PROFILE.KEY}
-        component={ProfileScreen}
+        name={SCREENS.ACCOUNT.KEY}
+        component={AccountScreen}
         options={{
           headerShown: false,
-          tabBarLabel: `${SCREENS.PROFILE.NAME}`,
+          tabBarLabel: `${SCREENS.ACCOUNT.NAME}`,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           tabBarIcon: ({focused}) => (

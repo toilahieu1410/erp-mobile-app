@@ -39,7 +39,6 @@ class Http {
               return axios(config);
             });
           } catch (error) {
-            console.error('Error refreshing token:', error);
             return Promise.reject(error);
           }
         } else {
@@ -77,7 +76,6 @@ class Http {
       }
       return null;
     } catch (error) {
-      console.error('Error getting RefreshToken:', error);
       throw error;
     }
   }

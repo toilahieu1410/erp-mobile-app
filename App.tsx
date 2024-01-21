@@ -3,7 +3,6 @@ import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {StatusBar} from 'react-native';
-import HomeScreen from './src/screens/navigators/HomeScreen';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from './store/store';
 import FlashMessage from 'react-native-flash-message';
@@ -13,29 +12,6 @@ import Main from './src/screens/Main';
 import {SCREENS} from './constans/screens';
 
 const Stack = createNativeStackNavigator();
-
-const MyStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name={SCREENS.MAIN.KEY}
-        component={Main}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-};
-const AuthStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        options={{headerShown: false}}
-        component={LoginScreen}
-      />
-    </Stack.Navigator>
-  );
-};
 
 const RootNavigator = () => {
   const loginState = useSelector((state: RootState) => state.Auth);
@@ -53,7 +29,24 @@ const RootNavigator = () => {
     <>
       <NavigationContainer>
         <StatusBar backgroundColor="#027BE3" barStyle="light-content" />
-        {loginState.isAuthenticated == false ? <AuthStack /> : <MyStack />}
+        {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
+        {loginState.isAuthenticated == false ? (
+          <Stack.Navigator>
+            <Stack.Screen
+              name={SCREENS.LOGIN.KEY}
+              options={{headerShown: false}}
+              component={LoginScreen}
+            />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen
+              name={SCREENS.MAIN.KEY}
+              component={Main}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </>
   );
