@@ -24,9 +24,7 @@ export class Token {
   static async saveToken(token: Token) {
     try {
       await AsyncStorage.setItem('token', JSON.stringify(token));
-    } catch (error) {
-      console.error('Error saving token:', error);
-    }
+    } catch (error) {}
   }
 
   // Static method to load tokens from SecureStore
@@ -47,7 +45,6 @@ export class Token {
         return null; // No token found
       }
     } catch (error) {
-      console.error('Error loading token:', error);
       return null;
     }
   }
@@ -55,8 +52,6 @@ export class Token {
   static async removeToken() {
     try {
       await AsyncStorage.removeItem('token');
-    } catch (error) {
-      console.error('Error deleting token:', error);
-    }
+    } catch (error) {}
   }
 }

@@ -70,21 +70,18 @@ const authenticateSlice = createSlice({
       .addMatcher<PendingAction>(
         action => action.type.endsWith('/pending'),
         (state, action) => {
-          console.log(action.type);
           state.loading = true;
         },
       )
       .addMatcher<FulfilledAction>(
         action => action.type.endsWith('/fulfilled'),
         (state, action) => {
-          console.log(action.type);
           state.loading = false;
         },
       )
       .addMatcher<RejectedAction>(
         action => action.type.endsWith('/rejected'),
         (state, action) => {
-          console.log(action.type);
           state.loading = false;
         },
       );

@@ -97,20 +97,20 @@ const LoginScreen = () => {
             style={{height: windowHeight}}
             className="flex flex-col justify-between items-center bg-gray-100 w-full">
             <View className="flex-1 w-full px-5">
-            <View className="flex-[2] justify-end items-center">
-              <View className="h-44">
+              <View className="flex-[2] justify-end items-center">
+                <View className="h-44">
                   <Image
                     source={require('../../../assets/image/logo.jpg')}
                     style={{
                       resizeMode: 'contain',
-                      aspectRatio:1,
+                      aspectRatio: 1,
                       flex: 1,
-                      width: "100%",
+                      width: '100%',
                       borderRadius: 25,
                     }}
                   />
                 </View>
-            </View>
+              </View>
               <View className="flex-[1] justify-center items-center">
                 <Text className="text-center text-3xl font-bold text-black pb-2">
                   Đăng nhập
@@ -196,16 +196,15 @@ const LoginScreen = () => {
                   ref={passwordRef}
                 />
                 <View className="mt-6">
-                <Button
-                  className="bg-primary rounded-lg py-[2px] shadow-sm"
-                  onPress={() => onLogin()}>
-                  <Text className="text-white font-bold text-sm">
-                    Đăng nhập
-                  </Text>
-                </Button>
+                  <Button
+                    className="bg-primary rounded-lg py-[2px] shadow-sm"
+                    onPress={() => onLogin()}>
+                    <Text className="text-white font-bold text-sm">
+                      Đăng nhập
+                    </Text>
+                  </Button>
+                </View>
               </View>
-              </View>
-              
             </View>
             <View className="w-full flex flex-nowrap flex-row items-center justify-center py-3 my-3">
               <Text className="font-bold text-base tracking-wide text-black">

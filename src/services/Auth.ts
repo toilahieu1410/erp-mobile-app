@@ -31,13 +31,11 @@ const AuthenticateService = {
       const loadedToken = await Token.getToken();
       return loadedToken;
     } catch (error) {
-      console.error('Error getting token:', error);
       throw error;
     }
   },
   async CheckToken() {
     const token = await Token.getToken();
-    console.log(token);
     if (token) {
       const expireAccessToken = token?.expireAccessToken;
       const expireAccessTokenDate = new Date(expireAccessToken);
