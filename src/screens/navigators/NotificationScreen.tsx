@@ -1,11 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import AppHeader from '../../components/navigators/AppHeader';
 
 const NotificationScreen = () => {
   return (
-    <View>
-      <Text>NotificationScreen</Text>
-    </View>
+    <>
+      <SafeAreaView className="flex-1">
+        <AppHeader title="Thông báo" centerTitle={true} />
+      </SafeAreaView>
+    </>
   );
 };
 

@@ -58,14 +58,7 @@ const LoginScreen = () => {
       dispatch(login({username: username, password: password}))
         .unwrap()
         //@ts-ignore
-        .then(res => {
-          // showMessage({
-          //   message: 'Thành công.',
-          //   description: 'Vui lòng chờ trong giây lát !',
-          //   duration: 5000,
-          //   type: 'success',
-          // });
-        })
+        .then(res => {})
         .catch((err: BaseResponse) => {
           showMessage({
             message: 'Đăng nhập thất bại !',
@@ -79,6 +72,12 @@ const LoginScreen = () => {
 
   return (
     <>
+      <Spinner
+        visible={loginState.loading}
+        textContent={'Đang tải...'}
+        textStyle={{color: '#32a3f4'}}
+        color="#32a3f4"
+      />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           behavior="height"
@@ -87,12 +86,6 @@ const LoginScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Spinner
-            visible={loginState.loading}
-            textContent={'Đang tải...'}
-            textStyle={{color: '#32a3f4'}}
-            color="#32a3f4"
-          />
           <View
             style={{height: windowHeight}}
             className="flex flex-col justify-between items-center bg-gray-100 w-full">
@@ -184,7 +177,7 @@ const LoginScreen = () => {
                   right={
                     focusPassword == true ? (
                       <TextInput.Icon
-                        icon={showPassword ? 'eye-off' : 'eye'}
+                        icon={showPassword == false ? 'eye-off' : 'eye'}
                         onPress={() => {
                           setShowPassword(!showPassword);
                         }}
