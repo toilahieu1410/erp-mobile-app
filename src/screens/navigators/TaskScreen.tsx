@@ -1,20 +1,12 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-} from 'react-native';
+import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import AppHeader from '../../components/navigators/AppHeader';
 import {Icon} from 'react-native-paper';
 import {COLORS} from '../../../constans/colors';
 import {FlatGrid} from 'react-native-super-grid';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constans/screens';
 
-const WorkScreen = () => {
+const TaskScreen = () => {
   const dateNow = new Date();
   const navigator = useNavigation();
 
@@ -24,7 +16,7 @@ const WorkScreen = () => {
       icon: 'calendar-blank',
       type: '1',
       onclick: () => {
-        navigator.navigate(`${SCREENS.HOME.KEY}` as never);
+        navigator.navigate(SCREENS.TODAYTASK.KEY as never);
       },
     },
     {
@@ -32,7 +24,7 @@ const WorkScreen = () => {
       icon: 'calendar-month',
       type: '2',
       onclick: () => {
-        navigator.navigate(`${SCREENS.HOME.KEY}` as never);
+        navigator.navigate(SCREENS.TASKOVERVIEW.KEY as never);
       },
     },
     {
@@ -40,14 +32,21 @@ const WorkScreen = () => {
       icon: 'contain',
       type: '2',
       onclick: () => {
-        navigator.navigate(`${SCREENS.HOME.KEY}` as never);
+        navigator.navigate(SCREENS.ALLTASK.KEY as never);
+      },
+    },
+    {
+      title: 'Thêm mới',
+      icon: 'calendar-plus',
+      type: '3',
+      onclick: () => {
+        navigator.navigate(SCREENS.ADDNEWTASK.KEY as never);
       },
     },
   ]);
   return (
     <>
       <SafeAreaView className="flex-1">
-        <AppHeader title="Lịch công việc" centerTitle={true} />
         <View className="flex-1 mx-2">
           <View>
             <FlatGrid
@@ -72,7 +71,11 @@ const WorkScreen = () => {
                             </Text>
                           ) : null}
                         </View>
-                        <Text className="text-3xl font-bold text-black">0</Text>
+                        {item.type != '3' ? (
+                          <Text className="text-3xl font-bold text-black">
+                            0
+                          </Text>
+                        ) : null}
                       </View>
                       <View>
                         <Text className="text-xl text-gray-500">
@@ -104,6 +107,4 @@ const WorkScreen = () => {
   );
 };
 
-export default WorkScreen;
-
-const styles = StyleSheet.create({});
+export default TaskScreen;

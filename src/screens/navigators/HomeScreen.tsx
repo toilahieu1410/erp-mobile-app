@@ -290,7 +290,6 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView className="flex-1">
-      <AppHeader title="Bảng tin" centerTitle={true} />
       <View className="flex-1">
         <View>
           <Image

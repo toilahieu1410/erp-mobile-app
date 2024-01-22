@@ -5,6 +5,7 @@ import HomeScreen from '../navigators/HomeScreen';
 import AccountScreen from '../navigators/AccountScreen';
 import InforAccountScreen from '../account/InforAccountScreen';
 import ChangePasswordScreen from '../account/ChangePasswordScreen';
+import {APPHEADER} from '../../../constans/appHeaderNavigator';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
@@ -13,14 +14,26 @@ const AccountStack = () => {
       <Stack.Screen
         name={SCREENS.ACCOUNT.KEY}
         options={{
-          headerShown: false,
+          title: SCREENS.ACCOUNT.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
         }}
         component={AccountScreen}
       />
       <Stack.Screen
         name={SCREENS.INFORACCOUNT.KEY}
         options={{
-          headerShown: false,
+          title: SCREENS.INFORACCOUNT.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerPressColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
         }}
         component={InforAccountScreen}
       />

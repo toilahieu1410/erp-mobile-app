@@ -22,11 +22,11 @@ const AccountScreen = () => {
   const ListItem: item[] = [
     {
       icon: 'information',
-      title: `${SCREENS.INFORACCOUNT.NAME}`,
+      title: SCREENS.INFORACCOUNT.NAME,
       type: 'menu',
       onClick: () => {
         //@ts-ignore
-        navigation.navigate(`${SCREENS.INFORACCOUNT.KEY}`);
+        navigation.navigate(SCREENS.INFORACCOUNT.KEY);
       },
     },
     {
@@ -44,11 +44,11 @@ const AccountScreen = () => {
 
     {
       icon: 'shield-account',
-      title: `${SCREENS.CHANGEPASSWORD.NAME}`,
+      title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
         //@ts-ignore
-        navigation.navigate(`${SCREENS.CHANGEPASSWORD.KEY}`);
+        navigation.navigate(SCREENS.CHANGEPASSWORD.KEY);
       },
     },
     {
@@ -75,7 +75,6 @@ const AccountScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 w-full">
-        <AppHeader title="Tài khoản" centerTitle={true} />
         <View className="flex-1"></View>
         <View className="h-full">
           <View className="h-[25%] w-full flex flex-col justify-center items-center my-3">

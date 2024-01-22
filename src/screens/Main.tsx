@@ -3,11 +3,10 @@ import {IMAGES} from '../../constans/images';
 import {SCREENS} from '../../constans/screens';
 import {Image, Text, View} from 'react-native';
 import {COLORS} from '../../constans/colors';
-import WorkScreen from './navigators/WorkScreen';
 import NotificationScreen from './navigators/NotificationScreen';
 import HomeStack from './stack/HomeStack';
-import AccountScreen from './navigators/AccountScreen';
 import AccountStack from './stack/AccountStack';
+import TaskStack from './stack/TaskStack';
 
 const Main = () => {
   const Tab = createBottomTabNavigator();
@@ -22,7 +21,7 @@ const Main = () => {
         name={SCREENS.HOMESTACK.KEY}
         component={HomeStack}
         options={{
-          tabBarLabel: `${SCREENS.HOMESTACK.NAME}`,
+          tabBarLabel: SCREENS.HOMESTACK.NAME,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           headerShown: false,
@@ -41,16 +40,16 @@ const Main = () => {
         }}
       />
       <Tab.Screen
-        name={SCREENS.WORK.KEY}
-        component={WorkScreen}
+        name={SCREENS.TASKSTACK.KEY}
+        component={TaskStack}
         options={{
           headerShown: false,
-          tabBarLabel: `${SCREENS.WORK.NAME}`,
+          tabBarLabel: SCREENS.TASKSTACK.NAME,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           tabBarIcon: ({focused}) => (
             <Image
-              source={IMAGES.WORK}
+              source={IMAGES.TASK}
               style={{
                 width: 25,
                 height: 25,
@@ -67,7 +66,7 @@ const Main = () => {
         component={NotificationScreen}
         options={{
           headerShown: false,
-          tabBarLabel: `${SCREENS.NOTIFICATION.NAME}`,
+          tabBarLabel: SCREENS.NOTIFICATION.NAME,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           tabBarIcon: ({focused}) => (
@@ -96,7 +95,7 @@ const Main = () => {
         component={AccountStack}
         options={{
           headerShown: false,
-          tabBarLabel: `${SCREENS.ACCOUNTSTACK.NAME}`,
+          tabBarLabel: SCREENS.ACCOUNTSTACK.NAME,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           tabBarIcon: ({focused}) => (
