@@ -1,7 +1,9 @@
 import {Dimensions, Image, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {Avatar} from 'react-native-paper';
+import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../../constans/screens';
 type cript = {
   avatar: string;
   useCreate: string;
@@ -16,6 +18,7 @@ const HomeComponent = ({
   title,
   thumbnail,
 }: cript) => {
+  const navigator = useNavigation();
   const [imageHeight, setImageHeight] = useState(0);
   const getHeightImage = () => {
     if (thumbnail != undefined && thumbnail != null && thumbnail.length > 0) {
@@ -35,30 +38,36 @@ const HomeComponent = ({
     <>
       <View className="w-full bg-white">
         <View>
-          <View className="mx-3">
-            <View className="flex flex-row justify-start items-center py-2">
-              <Avatar.Image
-                style={{
-                  backgroundColor: 'white',
-                  borderColor: 'white',
-                  borderWidth: 2,
-                }}
-                size={50}
-                source={{uri: avatar!}}
-                onError={err => {
-                  console.log(err);
-                }}></Avatar.Image>
-              <View>
-                <View className="flex flex-col ml-2">
-                  <Text>{useCreate}</Text>
-                  <Text>{dateCreate}</Text>
+          <TouchableRipple
+            rippleColor="transparent"
+            onPress={() => {
+              navigator.navigate(SCREENS.HOMEDETAIL.KEY as never);
+            }}>
+            <View className="mx-3">
+              <View className="flex flex-row justify-start items-center py-2">
+                <Avatar.Image
+                  style={{
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    borderWidth: 2,
+                  }}
+                  size={50}
+                  source={{uri: avatar!}}
+                  onError={err => {
+                    console.log(err);
+                  }}></Avatar.Image>
+                <View>
+                  <View className="flex flex-col ml-2">
+                    <Text>{useCreate}</Text>
+                    <Text>{dateCreate}</Text>
+                  </View>
                 </View>
               </View>
+              <View className="py-2">
+                <Text>{title}</Text>
+              </View>
             </View>
-            <View className="py-2">
-              <Text>{title}</Text>
-            </View>
-          </View>
+          </TouchableRipple>
           <View>
             <Image
               source={{uri: thumbnail}}

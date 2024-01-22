@@ -1,7 +1,7 @@
-type BaseScreenObject = {
+interface BaseScreenObject {
   KEY: string;
   NAME: string;
-};
+}
 
 export const SCREENS: {[key: string]: BaseScreenObject} = {
   LOGIN: {KEY: 'LoginScreen', NAME: 'Đăng nhập'},
@@ -10,11 +10,17 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   // =========================== Home ==========================================
 
   HOME: {KEY: 'HomeScreen', NAME: 'Bảng tin'},
+  HOMEDETAIL: {KEY: 'HomeDetailScreen', NAME: 'Chi tiết bảng tin'},
   HOMESTACK: {KEY: 'HomeStackScreen', NAME: 'Bảng tin'},
 
   // =========================== Công việc ==========================================
 
-  WORK: {KEY: 'WorkScreen', NAME: 'Công việc'},
+  TASKSTACK: {KEY: 'TaskStackScreen', NAME: 'Lịch công việc'},
+  TASK: {KEY: 'TaskScreen', NAME: 'Lịch công việc'},
+  TODAYTASK: {KEY: 'TodayTaskScreen', NAME: 'Công việc hôm nay'},
+  TASKOVERVIEW: {KEY: 'TaskOverViewScreen', NAME: 'Tổng quan công việc'},
+  ALLTASK: {KEY: 'AllTaskScreen', NAME: 'Tất cả công việc'},
+  ADDNEWTASK: {KEY: 'AddNewTaskScreen', NAME: 'Thêm công việc mới'},
 
   // =========================== thông báo ==========================================
 

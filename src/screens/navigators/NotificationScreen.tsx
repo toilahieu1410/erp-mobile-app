@@ -6,7 +6,7 @@ const NotificationScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1">
-        <AppHeader title="Thông báo" centerTitle={true} />
+        <AppHeader title="Thông báo" centerTitle={true}></AppHeader>
       </SafeAreaView>
     </>
   );

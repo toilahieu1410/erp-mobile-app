@@ -23,8 +23,7 @@ const ChangePasswordScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 w-full">
-        <AppHeader title="Đổi mật khẩu" showButtonBack={true} />
-
+        <AppHeader title="Đổi mật khẩu" showButtonBack={true}></AppHeader>
         <LinearGradient
           colors={['#e2fcfc', '#88e3f2', '#e2fcfc', '#ffffff']}
           start={{x: 0.0, y: 0.25}}

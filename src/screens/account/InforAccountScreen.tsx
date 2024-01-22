@@ -35,8 +35,7 @@ const InforAccountScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 w-full">
-        <AppHeader title="Thông tin tài khoản" showButtonBack={true} />
-
+        <AppHeader title="Thông tin" showButtonBack={true}></AppHeader>
         <LinearGradient
           colors={['#e2fcfc', '#88e3f2', '#e2fcfc', '#ffffff']}
           start={{x: 0.0, y: 0.25}}

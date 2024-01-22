@@ -2,6 +2,7 @@ import React from 'react';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import {Platform} from 'react-native';
 
 type AppBarProps = {
   showButtonBack?: Boolean | false;
@@ -27,8 +28,11 @@ const AppHeader = ({
   actions,
 }: AppBarProps) => {
   const navigator = useNavigation();
+
   return (
-    <Appbar.Header style={{elevation: 3}}>
+    <Appbar.Header
+      style={{elevation: 1}}
+      statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}>
       {showButtonBack == true ? (
         <Appbar.BackAction
           rippleColor="transparent"
