@@ -20,7 +20,7 @@ interface APPHEADER_Props {
   headerStyle: headerStyleProps;
 }
 export const APPHEADER: APPHEADER_Props = {
-  headerShown: true,
+  headerShown: false,
   headerStyle: {
     fontWeight: '400',
     fontSize: 18,

@@ -5,6 +5,7 @@ import {COLORS} from '../../../constans/colors';
 import {FlatGrid} from 'react-native-super-grid';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constans/screens';
+import AppHeader from '../../components/navigators/AppHeader';
 
 const TaskScreen = () => {
   const dateNow = new Date();
@@ -47,6 +48,7 @@ const TaskScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1">
+        <AppHeader title="Lịch công việc" centerTitle={true}></AppHeader>
         <View className="flex-1 mx-2">
           <View>
             <FlatGrid
@@ -88,19 +90,6 @@ const TaskScreen = () => {
               }}
             />
           </View>
-          {/* <Agenda
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            renderItem={item => {
-              return (
-                <View>
-                  <Text>{item.height}</Text>
-                </View>
-              );
-            }}
-            markingType={'custom'}
-          /> */}
         </View>
       </SafeAreaView>
     </>

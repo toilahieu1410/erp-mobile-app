@@ -25,60 +25,6 @@ const TaskStack = () => {
         }}
         component={TaskScreen}
       />
-      <Stack.Screen
-        name={SCREENS.TODAYTASK.KEY}
-        options={{
-          title: SCREENS.TODAYTASK.NAME,
-          headerShown: APPHEADER.headerShown,
-          headerPressColor: 'transparent',
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={TodayTaskScreen}
-      />
-
-      <Stack.Screen
-        name={SCREENS.TASKOVERVIEW.KEY}
-        options={{
-          title: SCREENS.TASKOVERVIEW.NAME,
-          headerShown: APPHEADER.headerShown,
-          headerPressColor: 'transparent',
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={TaskOverviewScreen}
-      />
-      <Stack.Screen
-        name={SCREENS.ALLTASK.KEY}
-        options={{
-          title: SCREENS.ALLTASK.NAME,
-          headerShown: APPHEADER.headerShown,
-          headerPressColor: 'transparent',
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={AllTaskScreen}
-      />
-
-      <Stack.Screen
-        name={SCREENS.ADDNEWTASK.KEY}
-        options={{
-          title: SCREENS.ADDNEWTASK.NAME,
-          headerShown: APPHEADER.headerShown,
-          headerPressColor: 'transparent',
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={AddNewTaskScreen}
-      />
     </Stack.Navigator>
   );
 };

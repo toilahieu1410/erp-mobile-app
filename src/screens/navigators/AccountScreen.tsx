@@ -75,6 +75,7 @@ const AccountScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 w-full">
+        <AppHeader title="Tài khoản" centerTitle={true}></AppHeader>
         <View className="flex-1"></View>
         <View className="h-full">
           <View className="h-[25%] w-full flex flex-col justify-center items-center my-3">

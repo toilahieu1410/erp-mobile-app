@@ -5,7 +5,9 @@ import AppHeader from '../../components/navigators/AppHeader';
 const NotificationScreen = () => {
   return (
     <>
-      <SafeAreaView className="flex-1"></SafeAreaView>
+      <SafeAreaView className="flex-1">
+        <AppHeader title="Thông báo" centerTitle={true}></AppHeader>
+      </SafeAreaView>
     </>
   );
 };
