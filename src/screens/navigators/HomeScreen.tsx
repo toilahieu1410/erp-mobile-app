@@ -10,6 +10,7 @@ import {Appbar, Avatar, Button, Text} from 'react-native-paper';
 import {useAppDispatch} from '../../../store/store';
 import {showMessage} from 'react-native-flash-message';
 import HomeComponent from '../../components/home/HomeComponent';
+import AppHeader from '../../components/navigators/AppHeader';
 const HomeScreen = () => {
   const windowHeight = Dimensions.get('window').height;
   const ds = Dimensions.get('window').height;
@@ -289,12 +290,7 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView className="flex-1">
-      <Appbar.Header style={{elevation: 2}}>
-        <Appbar.Content
-          title="Trang chủ"
-          titleStyle={{textAlign: 'center', fontSize: 18}}
-        />
-      </Appbar.Header>
+      <AppHeader title="Bảng tin" centerTitle={true} />
       <View className="flex-1">
         <View>
           <Image

@@ -10,6 +10,8 @@ import {checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
 import Main from './src/screens/Main';
 import {SCREENS} from './constans/screens';
+import ChangePasswordScreen from './src/screens/account/ChangePasswordScreen';
+import MainStack from './src/screens/stack/MainStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,20 +32,14 @@ const RootNavigator = () => {
       <NavigationContainer>
         <StatusBar backgroundColor="#027BE3" barStyle="light-content" />
         {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
-        {loginState.isAuthenticated == false ? (
+        {loginState.isAuthenticated == true ? (
+          <MainStack />
+        ) : (
           <Stack.Navigator>
             <Stack.Screen
               name={SCREENS.LOGIN.KEY}
               options={{headerShown: false}}
               component={LoginScreen}
-            />
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen
-              name={SCREENS.MAIN.KEY}
-              component={Main}
-              options={{headerShown: false}}
             />
           </Stack.Navigator>
         )}

@@ -7,6 +7,7 @@ import WorkScreen from './navigators/WorkScreen';
 import NotificationScreen from './navigators/NotificationScreen';
 import HomeStack from './stack/HomeStack';
 import AccountScreen from './navigators/AccountScreen';
+import AccountStack from './stack/AccountStack';
 
 const Main = () => {
   const Tab = createBottomTabNavigator();
@@ -91,11 +92,11 @@ const Main = () => {
         }}
       />
       <Tab.Screen
-        name={SCREENS.ACCOUNT.KEY}
-        component={AccountScreen}
+        name={SCREENS.ACCOUNTSTACK.KEY}
+        component={AccountStack}
         options={{
           headerShown: false,
-          tabBarLabel: `${SCREENS.ACCOUNT.NAME}`,
+          tabBarLabel: `${SCREENS.ACCOUNTSTACK.NAME}`,
           tabBarShowLabel: true,
           tabBarLabelStyle: {fontSize: 12},
           tabBarIcon: ({focused}) => (
