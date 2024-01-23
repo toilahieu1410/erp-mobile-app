@@ -79,11 +79,11 @@ const Main = () => {
                   tintColor: focused ? COLORS.PRIMARY : COLORS.GRAY,
                 }}
               />
-              <Text
-                className="absolute right-0 bg-red-500 rounded-full w-[18px] h-[18px] text-center text-xs font-bold text-white top-[1px] p-[1px]"
-                style={{borderRadius: 999999}}>
-                0
-              </Text>
+              <View className="absolute right-0 bg-red-500 rounded-full w-[18px] h-[18px]  top-[1px] p-[1px]">
+                <Text className="text-center text-xs font-bold text-white">
+                  0
+                </Text>
+              </View>
             </View>
           ),
           tabBarActiveTintColor: COLORS.PRIMARY,

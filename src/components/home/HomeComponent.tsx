@@ -4,6 +4,8 @@ import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constans/screens';
+import {ImageZoom} from '@likashefqet/react-native-image-zoom';
+import Lightbox from 'react-native-lightbox-v2';
 type cript = {
   avatar: string;
   useCreate: string;
@@ -41,7 +43,8 @@ const HomeComponent = ({
           <TouchableRipple
             rippleColor="transparent"
             onPress={() => {
-              navigator.navigate(SCREENS.HOMEDETAIL.KEY as never);
+              //@ts-ignore
+              navigator.navigate(SCREENS.HOMEDETAIL.KEY);
             }}>
             <View className="mx-3">
               <View className="flex flex-row justify-start items-center py-2">
@@ -69,18 +72,20 @@ const HomeComponent = ({
             </View>
           </TouchableRipple>
           <View>
-            <Image
-              source={{uri: thumbnail}}
-              style={{
-                width: '100%',
-                resizeMode: 'contain',
-                flex: 1,
-                height: imageHeight,
-              }}
-              onError={err => {
-                console.log(err);
-              }}
-            />
+            <Lightbox>
+              <Image
+                source={{uri: thumbnail}}
+                style={{
+                  width: '100%',
+                  resizeMode: 'contain',
+                  flex: 1,
+                  height: imageHeight,
+                }}
+                onError={err => {
+                  console.log(err);
+                }}
+              />
+            </Lightbox>
           </View>
         </View>
         <View className="border-t-[1px] h-4 border-t-gray-300"></View>
