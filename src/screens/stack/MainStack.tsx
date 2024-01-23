@@ -9,6 +9,7 @@ import TaskOverviewScreen from '../task/TaskOverviewScreen';
 import TodayTaskScreen from '../task/TodayTaskScreen';
 import AllTaskScreen from '../task/AllTaskScreen';
 import AddNewTaskScreen from '../task/AddNewTaskScreen';
+import HomeDetailScreen from '../home/HomeDetailScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ const MainStack = () => {
         component={Main}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name={SCREENS.CHANGEPASSWORD.KEY}
         component={ChangePasswordScreen}
@@ -32,6 +34,20 @@ const MainStack = () => {
           },
         }}
       />
+      <Stack.Screen
+        name={SCREENS.HOMEDETAIL.KEY}
+        component={HomeDetailScreen}
+        options={{
+          title: SCREENS.HOMEDETAIL.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTintColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+      />
+
       <Stack.Screen
         name={SCREENS.TODAYTASK.KEY}
         options={{

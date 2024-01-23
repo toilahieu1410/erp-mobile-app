@@ -11,14 +11,9 @@ import {useAppDispatch} from '../../../store/store';
 import {showMessage} from 'react-native-flash-message';
 import HomeComponent from '../../components/home/HomeComponent';
 import AppHeader from '../../components/navigators/AppHeader';
+import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 const HomeScreen = () => {
-  const windowHeight = Dimensions.get('window').height;
-  const ds = Dimensions.get('window').height;
-  const aspectRatioImage = (uri: string) => {
-    Image.getSize(uri, (width, height) => {
-      return width / height;
-    });
-  };
   // const dispatch = useAppDispatch();
   // const LogoutScreen = () => {
   //   dispatch(logout())
