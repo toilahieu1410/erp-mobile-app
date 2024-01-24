@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
 import {COLORS} from '../../../constans/colors';
 import {FlatGrid} from 'react-native-super-grid';
@@ -22,6 +22,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 const TaskScreen = () => {
   const dateNow = new Date();
   const navigator = useNavigation();
+  const [test, setTest] = useState<number>(50);
 
   return (
     <>
@@ -50,13 +51,13 @@ const TaskScreen = () => {
                   </TouchableRipple>
                 </View>
               </View>
-              <View className="mt-4 rounded-xl overflow-hidden">
+              <View className="mt-4 rounded-xl h-40 w-full overflow-hidden">
                 <LinearGradient
                   colors={['#027BE3', '#094479', '#00d4ff']}
                   start={{x: 0.0, y: 0.25}}
                   end={{x: 1, y: 1.0}}
                   className="flex-1">
-                  <View className="w-full h-40 p-4 flex flex-col flex-nowrap justify-between">
+                  <View className="p-4 flex h-full flex-col flex-nowrap justify-between">
                     <View className="flex flex-row flex-nowrap justify-between items-center">
                       <View>
                         <Text className="text-xl font-bold text-white">
@@ -68,7 +69,7 @@ const TaskScreen = () => {
                       </View>
                       <View>
                         <CircularProgress
-                          value={60}
+                          value={test}
                           radius={25}
                           duration={2000}
                           inActiveStrokeOpacity={0.3}
@@ -94,7 +95,7 @@ const TaskScreen = () => {
                   </View>
                 </LinearGradient>
               </View>
-              <View className="">
+              <View className="my-4">
                 <Text className="text-black text-lg">Công việc hôm nay</Text>
               </View>
             </View>
