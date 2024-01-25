@@ -12,6 +12,7 @@ import Main from './src/screens/Main';
 import {SCREENS} from './constans/screens';
 import ChangePasswordScreen from './src/screens/account/ChangePasswordScreen';
 import MainStack from './src/screens/stack/MainStack';
+import {PaperProvider} from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,10 +51,12 @@ const RootNavigator = () => {
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <RootNavigator></RootNavigator>
-      <FlashMessage position="top" />
-    </Provider>
+    <PaperProvider>
+      <Provider store={store}>
+        <RootNavigator></RootNavigator>
+        <FlashMessage position="top" />
+      </Provider>
+    </PaperProvider>
   );
 };
 
