@@ -1,8 +1,6 @@
-import {Image, SafeAreaView, TextInput, View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import React from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
-import Lightbox from 'react-native-lightbox-v2';
-import PinchZoomView from 'react-native-pinch-zoom-view';
 const TodayTaskScreen = () => {
   // const renderImage = () => (
   //   <Image
@@ -17,19 +15,7 @@ const TodayTaskScreen = () => {
   return (
     <SafeAreaView className="flex-1">
       <AppHeader title="Công việc hôm nay" showButtonBack={true}></AppHeader>
-      <View className="flex-1">
-        <Lightbox underlayColor="white">
-          <PinchZoomView>
-            <Image
-              className="w-full h-80"
-              resizeMode="contain"
-              source={{
-                uri: 'https://www.yayomg.com/wp-content/uploads/2014/04/yayomg-pig-wearing-party-hat.jpg',
-              }}
-            />
-          </PinchZoomView>
-        </Lightbox>
-      </View>
+      <View className="flex-1"></View>
     </SafeAreaView>
   );
 };

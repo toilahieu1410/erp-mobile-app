@@ -4,7 +4,6 @@ import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constans/screens';
-import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 import Lightbox from 'react-native-lightbox-v2';
 type cript = {
   avatar: string;
