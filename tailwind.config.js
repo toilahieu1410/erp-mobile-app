@@ -9,7 +9,15 @@ module.exports = {
         primary: '#32a3f4',
         lightPrimary: '#32A3F4',
       },
+      classes: {
+        shaDownElement: {
+          elevation: 3,
+          shadowColor: 'black',
+          shadowOffset: {width: 10, height: 10},
+          shadowOpacity: 0.5,
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: ['nativewind/babel'],
 };

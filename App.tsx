@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {StatusBar} from 'react-native';
+import {LogBox, StatusBar} from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from './store/store';
 import FlashMessage from 'react-native-flash-message';
@@ -50,6 +50,7 @@ const RootNavigator = () => {
 };
 
 const App = () => {
+  LogBox.ignoreAllLogs();
   return (
     <PaperProvider>
       <Provider store={store}>
