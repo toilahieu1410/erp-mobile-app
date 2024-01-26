@@ -3,6 +3,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  SectionList,
   Text,
   TextInput,
   View,
@@ -24,11 +25,12 @@ import {IMAGES} from '../../../constans/images';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import {FlatList} from 'react-native-gesture-handler';
 import TaskFlatListComponent from '../../components/task/TaskFlatListComponent';
+import {Task} from '../../models/Task';
 
 const TaskScreen = () => {
   const [test, setTest] = useState<number>(50);
   const fullHeightScreen = Dimensions.get('screen').height;
-  const taskList = [
+  const taskList: ReadonlyArray<Task> = [
     {
       id: 'KAP-1',
       title: 'Gặp khách hàng tại Đình Thôn',
@@ -144,6 +146,8 @@ const TaskScreen = () => {
       title: 'Khảo sát thị trường mới',
       status: 'todo',
       fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate: 'a',
+      userCreate: 'Duclv',
       watching: [],
     },
   ];
@@ -230,47 +234,19 @@ const TaskScreen = () => {
                 </Text>
               </View>
               <View>
-                <FlatList
-                  data={taskList}
-                  keyExtractor={item => item.id}
-                  ref={ref => {
-                    //@ts-ignore
-                    this.flatListRef = ref;
-                  }}
-                  initialNumToRender={15}
-                  renderItem={({item}) => {
-                    return (
-                      <TouchableRipple
-                        rippleColor={'transparent'}
-                        className="block"
-                        onPress={() => {
-                          console.log('detail');
-                        }}>
-                        <TaskFlatListComponent task={item} />
-                      </TouchableRipple>
-                    );
-                  }}
-                  ItemSeparatorComponent={props => {
-                    return (
-                      <View
-                        className="bg-white"
-                        style={{
-                          height: 8,
-                        }}
-                      />
-                    );
-                  }}
-                  ListFooterComponent={() => {
-                    return (
-                      <View
-                        className="bg-white"
-                        style={{
-                          height: 8,
-                        }}
-                      />
-                    );
-                  }}
-                />
+                {taskList.map((item, index) => {
+                  return (
+                    <TouchableRipple
+                      key={item.id}
+                      rippleColor={'transparent'}
+                      className="block mb-2"
+                      onPress={() => {
+                        console.log('detail');
+                      }}>
+                      <TaskFlatListComponent task={item} />
+                    </TouchableRipple>
+                  );
+                })}
               </View>
             </View>
           </View>

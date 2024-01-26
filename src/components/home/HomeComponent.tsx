@@ -1,10 +1,11 @@
 import {Dimensions, Image, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constans/screens';
 import Lightbox from 'react-native-lightbox-v2';
+import RenderHTML from 'react-native-render-html';
 type cript = {
   avatar: string;
   useCreate: string;
@@ -34,7 +35,11 @@ const HomeComponent = ({
       return;
     }
   };
-  getHeightImage();
+
+  useEffect(() => {
+    getHeightImage();
+  }, [Dimensions.get('screen').width]);
+
   return (
     <>
       <View className="w-full bg-white">
@@ -60,13 +65,17 @@ const HomeComponent = ({
                   }}></Avatar.Image>
                 <View>
                   <View className="flex flex-col ml-2">
-                    <Text>{useCreate}</Text>
-                    <Text>{dateCreate}</Text>
+                    <Text className="text-black font-bold">{useCreate}</Text>
+                    <Text className="text-gray-400">{dateCreate}</Text>
                   </View>
                 </View>
               </View>
-              <View className="py-2">
-                <Text>{title}</Text>
+              <View className="py-2 w-full">
+                <RenderHTML
+                  contentWidth={Dimensions.get('screen').width}
+                  source={{html: title}}
+                  baseStyle={{width: '100%', color: 'black'}}
+                />
               </View>
             </View>
           </TouchableRipple>

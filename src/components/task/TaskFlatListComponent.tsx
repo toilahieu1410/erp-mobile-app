@@ -15,44 +15,54 @@ const TaskFlatListComponent = (props: TaskProps) => {
     const watchingItems: JSX.Element[] = [];
 
     for (let index = 0; index < task.watching.length; index++) {
-      const watchingItem = task.watching[index];
-      if (index < 3) {
-        watchingItems.push(
-          <View className="absolute top-0" style={{left: index * 13}}>
-            <Avatar.Image
-              style={{
-                backgroundColor: 'white',
-                borderColor: 'white',
-                borderWidth: 1,
-              }}
-              size={20}
-              source={{uri: watchingItem.avatar!}}
-              onError={err => {
-                console.log(err);
-              }}
-            />
-          </View>,
-        );
-      } else {
-        watchingItems.push(
-          <View
-            className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
-            style={{left: index * 13}}>
-            <Text className="text-[12px] text-white">
-              {task.watching.length - 3 < 99
-                ? `+${task.watching.length - 3}`
-                : `99+`}
-            </Text>
-          </View>,
-        );
-        break;
+      if (task.watching.length > 0) {
+        const watchingItem = task.watching[index];
+        if (index < 3) {
+          watchingItems.push(
+            <View className="absolute top-0" style={{left: index * 13}}>
+              <Avatar.Image
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: 'white',
+                  borderWidth: 1,
+                }}
+                size={20}
+                source={{uri: watchingItem.avatar!}}
+                onError={err => {
+                  console.log(err);
+                }}
+              />
+            </View>,
+          );
+        } else {
+          watchingItems.push(
+            <View
+              className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
+              style={{left: index * 13}}>
+              <Text className="text-[12px] text-white">
+                {task.watching.length - 3 < 99
+                  ? `+${task.watching.length - 3}`
+                  : `99+`}
+              </Text>
+            </View>,
+          );
+          break;
+        }
       }
     }
 
     return watchingItems;
   };
   return (
-    <View className="rounded-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px]">
+    <View
+      className="rounded-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px] shaDownElement bg-white"
+      style={{
+        shadowColor: '#000000',
+        shadowOffset: {width: 4, height: 13},
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5,
+      }}>
       <View className="flex flex-col flex-nowrap justify-between h-full">
         <View className="flex flex-row flex-nowrap justify-between items-start flex-1 mb-2">
           <View className="flex flex-row flex-nowrap items-start flex-1">

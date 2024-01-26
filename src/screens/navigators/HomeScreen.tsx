@@ -40,7 +40,7 @@ const HomeScreen = () => {
           CreatedAt: '23/12/2023 10:36',
           PostType: 'Thông báo nội bộ',
           Title:
-            'Thông báo hướng dẫn cách kiểm tra tình trạng voucher và cách kiểm tra sản phẩm GIGA.vn theo giá nội bộ',
+            'Thông báo hướng dẫn cách kiểm tra tình trạng voucher và cách kiểm tra sản phẩm GIGA.vn theo giá nội bộ <a href="https://www.w3schools.com/">Visit W3Schools.com!</a>',
           UpdatedAt: null,
           Avatar:
             'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',

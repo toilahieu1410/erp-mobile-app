@@ -1,5 +1,5 @@
 export interface Task {
-  id: number | 0;
+  id: string | 0;
   title: string;
   status: string;
   userCreate: string;
@@ -9,7 +9,7 @@ export interface Task {
 }
 
 export interface Watching {
-  username: number;
+  username: string;
   fullName: string;
   avatar: string;
 }
