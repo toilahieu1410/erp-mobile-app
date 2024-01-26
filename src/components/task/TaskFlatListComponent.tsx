@@ -58,10 +58,10 @@ const TaskFlatListComponent = (props: TaskProps) => {
       className="rounded-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px] shaDownElement bg-white"
       style={{
         shadowColor: '#000000',
-        shadowOffset: {width: 4, height: 13},
+        shadowOffset: {width: 2, height: 5},
         shadowOpacity: 0.3,
         shadowRadius: 8,
-        elevation: 5,
+        elevation: 2,
       }}>
       <View className="flex flex-col flex-nowrap justify-between h-full">
         <View className="flex flex-row flex-nowrap justify-between items-start flex-1 mb-2">

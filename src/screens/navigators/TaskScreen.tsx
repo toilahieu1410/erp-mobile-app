@@ -239,7 +239,7 @@ const TaskScreen = () => {
                     <TouchableRipple
                       key={item.id}
                       rippleColor={'transparent'}
-                      className="block mb-2"
+                      className="block mb-4"
                       onPress={() => {
                         console.log('detail');
                       }}>
