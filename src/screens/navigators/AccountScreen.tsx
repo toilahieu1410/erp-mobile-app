@@ -1,6 +1,6 @@
-import {Dimensions, SafeAreaView, Text, View} from 'react-native';
+import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Appbar, Avatar, Icon, TouchableRipple} from 'react-native-paper';
+import {Avatar, Icon, TouchableRipple} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store/store';
@@ -9,19 +9,21 @@ import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
 import {SCREENS} from '../../../constans/screens';
 import AppHeader from '../../components/navigators/AppHeader';
+import {IMAGES} from '../../../constans/images';
+import {COLORS} from '../../../constans/colors';
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   interface item {
-    icon?: String;
+    icon?: React.ReactElement;
     title: String;
     type: String;
     onClick?: Function;
   }
   const ListItem: item[] = [
     {
-      icon: 'information',
+      icon: <Icon size={30} color="#027BE3" source={'information'}></Icon>,
       title: SCREENS.INFORACCOUNT.NAME,
       type: 'menu',
       onClick: () => {
@@ -30,7 +32,20 @@ const AccountScreen = () => {
       },
     },
     {
-      icon: 'account-group',
+      icon: (
+        <Image
+          source={IMAGES.DOLLAR}
+          style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
+      ),
+      title: SCREENS.PAYROLL.NAME,
+      type: 'menu',
+      onClick: () => {
+        //@ts-ignore
+        navigation.navigate(SCREENS.PAYROLL.KEY);
+      },
+    },
+    {
+      icon: <Icon size={30} color="#027BE3" source={'account-group'}></Icon>,
       title: 'Nhóm của tôi',
       type: 'menu',
       onClick: () => {
@@ -43,7 +58,7 @@ const AccountScreen = () => {
     },
 
     {
-      icon: 'shield-account',
+      icon: <Icon size={30} color="#027BE3" source={'shield-account'}></Icon>,
       title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
@@ -52,7 +67,7 @@ const AccountScreen = () => {
       },
     },
     {
-      icon: 'exit-to-app',
+      icon: <Icon size={30} color="#027BE3" source={'exit-to-app'}></Icon>,
       title: 'Đăng xuất',
       type: 'menu',
       onClick: () => {
@@ -103,7 +118,7 @@ const AccountScreen = () => {
                   }}>
                   <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
                     <View className="flex flex-row items-center">
-                      <Icon size={30} color="#027BE3" source={item.icon}></Icon>
+                      {item.icon}
                       <Text className="text-base px-3 font-semibold">
                         {item.title}
                       </Text>

@@ -1,11 +1,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SCREENS} from '../../../constans/screens';
-import HomeScreen from '../navigators/HomeScreen';
 import AccountScreen from '../navigators/AccountScreen';
 import InforAccountScreen from '../account/InforAccountScreen';
-import ChangePasswordScreen from '../account/ChangePasswordScreen';
 import {APPHEADER} from '../../../constans/appHeaderNavigator';
+import PayRollScreen from '../account/PayRollScreen';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
@@ -36,6 +35,19 @@ const AccountStack = () => {
           },
         }}
         component={InforAccountScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.PAYROLL.KEY}
+        options={{
+          title: SCREENS.PAYROLL.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerPressColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={PayRollScreen}
       />
     </Stack.Navigator>
   );

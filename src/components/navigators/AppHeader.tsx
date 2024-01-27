@@ -31,7 +31,7 @@ const AppHeader = ({
 
   return (
     <Appbar.Header
-      style={{elevation: 1}}
+      style={{elevation: 1, backgroundColor: '#ffffff'}}
       statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}>
       {showButtonBack == true ? (
         <Appbar.BackAction
