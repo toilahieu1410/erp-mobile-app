@@ -3,10 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {SCREENS} from '../../../constans/screens';
 import {APPHEADER} from '../../../constans/appHeaderNavigator';
 import TaskScreen from '../navigators/TaskScreen';
-import TodayTaskScreen from '../task/TodayTaskScreen';
-import TaskOverviewScreen from '../task/TaskOverviewScreen';
-import AllTaskScreen from '../task/AllTaskScreen';
-import AddNewTaskScreen from '../task/AddNewTaskScreen';
+
 const Stack = createStackNavigator();
 
 const TaskStack = () => {

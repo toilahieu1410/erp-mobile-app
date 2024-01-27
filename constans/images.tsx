@@ -4,4 +4,5 @@ export const IMAGES = {
   NOTIFICATION: require('../assets/image/navigator/notify.png'),
   TASK: require('../assets/image/navigator/work.png'),
   SEARCH: require('../assets/image/app/search.png'),
+  DOLLAR: require('../assets/image/app/dollar.png'),
 };
