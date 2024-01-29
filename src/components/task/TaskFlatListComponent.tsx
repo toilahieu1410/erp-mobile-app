@@ -1,15 +1,15 @@
 import {Text, View} from 'react-native';
-import React, {useState} from 'react';
-import {Avatar, Icon} from 'react-native-paper';
+import React, {useRef, useState} from 'react';
+import {Avatar, Icon, Title, TouchableRipple} from 'react-native-paper';
 import {Task} from '../../models/Task';
-import {Element} from 'react-native-render-html';
+import ActionSheet from 'react-native-actionsheet';
 
 interface TaskProps {
   task: Task;
 }
 const TaskFlatListComponent = (props: TaskProps) => {
   const task = props.task;
-  const [visibleMenu, setVisibleMenu] = useState(true);
+  const actionRef = useRef();
 
   const renderWatchingItems = () => {
     const watchingItems: JSX.Element[] = [];
@@ -19,7 +19,10 @@ const TaskFlatListComponent = (props: TaskProps) => {
         const watchingItem = task.watching[index];
         if (index < 3) {
           watchingItems.push(
-            <View className="absolute top-0" style={{left: index * 13}}>
+            <View
+              className="absolute top-0"
+              style={{left: index * 13}}
+              key={index.toString()}>
               <Avatar.Image
                 style={{
                   backgroundColor: 'white',
@@ -37,6 +40,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
         } else {
           watchingItems.push(
             <View
+              key={index.toString()}
               className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
               style={{left: index * 13}}>
               <Text className="text-[12px] text-white">
@@ -88,7 +92,24 @@ const TaskFlatListComponent = (props: TaskProps) => {
             </View>
           </View>
           <View>
-            <Icon source={'dots-horizontal'} size={30} />
+            <TouchableRipple
+              onPress={() => {
+                actionRef?.current?.show();
+                console.log('agaag');
+              }}
+              rippleColor={'transparent'}>
+              <Icon source="dots-horizontal" size={24} color="black" />
+            </TouchableRipple>
+            <ActionSheet
+              ref={actionRef}
+              title={task.title}
+              options={['Done', 'Chi tiết', 'Xóa', 'cancel']}
+              cancelButtonIndex={3}
+              destructiveButtonIndex={2}
+              onPress={index => {
+                console.log(index);
+              }}
+            />
           </View>
         </View>
         <View className="w-full h-[35%] bg-primary rounded-md overflow-hidden">
