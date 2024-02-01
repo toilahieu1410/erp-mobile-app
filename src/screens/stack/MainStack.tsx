@@ -10,6 +10,7 @@ import TodayTaskScreen from '../task/TodayTaskScreen';
 import AllTaskScreen from '../task/AllTaskScreen';
 import AddNewTaskScreen from '../task/AddNewTaskScreen';
 import HomeDetailScreen from '../home/HomeDetailScreen';
+import SalaryDetailsScreen from '../account/SalaryDetailsScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -101,6 +102,18 @@ const MainStack = () => {
           },
         }}
         component={AddNewTaskScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.SALARYDETAIL.KEY}
+        options={{
+          title: SCREENS.SALARYDETAIL.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={SalaryDetailsScreen}
       />
     </Stack.Navigator>
   );

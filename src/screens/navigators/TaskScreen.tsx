@@ -26,6 +26,7 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import {FlatList} from 'react-native-gesture-handler';
 import TaskFlatListComponent from '../../components/task/TaskFlatListComponent';
 import {Task} from '../../models/Task';
+import ProcessTaskTodayComponent from '../../components/task/ProcessTaskTodayComponent';
 
 const TaskScreen = () => {
   const [test, setTest] = useState<number>(50);
@@ -179,52 +180,7 @@ const TaskScreen = () => {
                   </TouchableRipple>
                 </View>
               </View>
-              <View
-                className="mt-4 rounded-xl w-full overflow-hidden"
-                style={{height: fullHeightScreen / 5.5}}>
-                <LinearGradient
-                  colors={['#027BE3', '#094479', '#00d4ff']}
-                  start={{x: 0.0, y: 0.25}}
-                  end={{x: 1, y: 1.0}}
-                  className="flex-1">
-                  <View className="p-4 flex h-full flex-col flex-nowrap justify-between">
-                    <View className="flex flex-row flex-nowrap justify-between items-center">
-                      <View>
-                        <Text className="text-xl font-bold text-white">
-                          Tiến trình
-                        </Text>
-                        <Text className="text-white">
-                          Tiến trình công việc hôm nay của bạn
-                        </Text>
-                      </View>
-                      <View>
-                        <CircularProgress
-                          value={test}
-                          radius={25}
-                          duration={2000}
-                          inActiveStrokeOpacity={0.3}
-                          inActiveStrokeColor={'#00c600'}
-                          maxValue={100}
-                          progressValueColor={'#fff'}
-                          valueSuffix={'%'}
-                          inActiveStrokeWidth={5}
-                          activeStrokeWidth={5}
-                        />
-                      </View>
-                    </View>
-                    <View>
-                      <View>
-                        <Text className="text-xl font-bold text-white">
-                          Task
-                        </Text>
-                        <Text className="text-white">
-                          14/24 tổng số ngày hôm nay
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </LinearGradient>
-              </View>
+              <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
               <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
                 <Text className="text-black text-lg font-bold">
                   Công việc hôm nay

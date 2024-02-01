@@ -1,10 +1,13 @@
 import {Animated, SafeAreaView, Text, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
+import {TouchableRipple} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../../constans/screens';
 
 const PayRollScreen = () => {
   const slideAnimation = useRef(new Animated.Value(0)).current;
-
+  const navigator = useNavigation();
   const List = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   useEffect(() => {
     Animated.timing(slideAnimation, {
@@ -25,10 +28,20 @@ const PayRollScreen = () => {
         {List.map(item => {
           return (
             <Animated.View style={{transform: [{translateX: slideFromLeft}]}}>
-              <View className="py-4 px-2 border-b border-gray-300 flex flex-row flex-nowrap justify-between items-center">
-                <Text className="text-black text-sm">Tháng {item}</Text>
-                <Text className="text-black text-sm">0 đ</Text>
-              </View>
+              <TouchableRipple
+                onPress={() => {
+                  const data = {
+                    thang: item,
+                    nam: 2023,
+                  };
+                  //@ts-ignore
+                  navigator.navigate(SCREENS.SALARYDETAIL.KEY, data);
+                }}>
+                <View className="py-4 px-2 border-b border-gray-300 flex flex-row flex-nowrap justify-between items-center">
+                  <Text className="text-black text-sm">Tháng {item}</Text>
+                  <Text className="text-black text-sm">0 đ</Text>
+                </View>
+              </TouchableRipple>
             </Animated.View>
           );
         })}

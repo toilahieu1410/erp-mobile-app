@@ -6,13 +6,13 @@ import {Token} from '../services/Token';
 
 interface AuthState {
   loading: boolean;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean | null;
   user: any;
 }
 
 const initialState: AuthState = {
   loading: false,
-  isAuthenticated: false,
+  isAuthenticated: null,
   user: {},
 };
 export const checkToken = createAsyncThunk<boolean>(
