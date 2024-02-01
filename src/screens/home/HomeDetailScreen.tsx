@@ -27,7 +27,7 @@ const HomeDetailScreen = () => {
     FullNameUserCreate: 'Lâm Thị Hiền',
   };
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <AppHeader title="Chi tiết bảng tin" showButtonBack={true}></AppHeader>
       <ScrollView>
         <View>
@@ -54,6 +54,7 @@ const HomeDetailScreen = () => {
             }}>
             <RenderHTML
               contentWidth={Dimensions.get('screen').width}
+              baseStyle={{color: 'black'}}
               source={{html: data.Content}}
             />
           </View>

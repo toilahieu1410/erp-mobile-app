@@ -33,4 +33,5 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   INFORACCOUNT: {KEY: 'InforAccountScreen', NAME: 'Thông tin tài khoản'},
   CHANGEPASSWORD: {KEY: 'ChangePasswordScreen', NAME: 'Đổi mật khẩu'},
   PAYROLL: {KEY: 'PayRollScreen', NAME: 'Bảng lương'},
+  SALARYDETAIL: {KEY: 'SalaryDetailScreen', NAME: 'Chi tiết bảng lương'},
 };

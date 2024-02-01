@@ -1,34 +1,7 @@
-import {
-  FlatList,
-  Image,
-  RefreshControl,
-  SafeAreaView,
-  View,
-  Dimensions,
-} from 'react-native';
-import {Appbar, Avatar, Button, Text} from 'react-native-paper';
-import {useAppDispatch} from '../../../store/store';
-import {showMessage} from 'react-native-flash-message';
+import {FlatList, Image, SafeAreaView, View} from 'react-native';
 import HomeComponent from '../../components/home/HomeComponent';
 import AppHeader from '../../components/navigators/AppHeader';
-import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
 const HomeScreen = () => {
-  // const dispatch = useAppDispatch();
-  // const LogoutScreen = () => {
-  //   dispatch(logout())
-  //     .unwrap()
-  //     .then(res => {
-  //       showMessage({
-  //         type: 'success',
-  //         position: 'top',
-  //         message: 'Đăng xuất thành công',
-  //       });
-  //     })
-  //     .catch((err: BaseResponse) => {
-  //       Alert.alert('Thất bại', err.message);
-  //     });
-  // };
   const List = {
     data: {
       data: [
@@ -284,7 +257,7 @@ const HomeScreen = () => {
     message: null,
   };
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <AppHeader title="Bảng tin" centerTitle={true}></AppHeader>
       <View className="flex-1">
         <View>

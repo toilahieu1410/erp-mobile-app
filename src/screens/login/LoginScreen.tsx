@@ -28,7 +28,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   const loginState = useSelector((state: RootState) => state.Auth);
-
+  console.log('màn hình login');
   const dispatch = useDispatch();
 
   const onLogin = () => {
@@ -80,15 +80,15 @@ const LoginScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
+          <Spinner
+            visible={loginState.loading}
+            textContent={'Đang tải...'}
+            textStyle={{color: '#32a3f4'}}
+            color="#32a3f4"
+          />
           <View
             style={{height: windowHeight}}
             className="flex flex-col justify-between items-center bg-gray-100 w-full">
-            <Spinner
-              visible={loginState.loading}
-              textContent={'Đang tải...'}
-              textStyle={{color: '#32a3f4'}}
-              color="#32a3f4"
-            />
             <View className="flex-1 w-full px-5">
               <View className="flex-[2] justify-end items-center">
                 <View className="h-44">

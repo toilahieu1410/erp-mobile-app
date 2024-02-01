@@ -31,8 +31,16 @@ const AppHeader = ({
 
   return (
     <Appbar.Header
-      style={{elevation: 1, backgroundColor: '#ffffff'}}
-      statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}>
+      style={{
+        elevation: Platform.OS === 'ios' ? 0 : 4,
+        backgroundColor: '#ffffff',
+      }}
+      statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}
+      mode={
+        Platform.OS === 'ios' || centerTitle == true
+          ? 'center-aligned'
+          : 'small'
+      }>
       {showButtonBack == true ? (
         <Appbar.BackAction
           rippleColor="transparent"
@@ -42,14 +50,7 @@ const AppHeader = ({
           }}
         />
       ) : null}
-      <Appbar.Content
-        title={`${title}`}
-        titleStyle={
-          centerTitle == true
-            ? {textAlign: 'center', fontSize: 18}
-            : {fontSize: 18}
-        }
-      />
+      <Appbar.Content title={`${title}`} titleStyle={{fontSize: 18}} />
       {actions}
     </Appbar.Header>
   );

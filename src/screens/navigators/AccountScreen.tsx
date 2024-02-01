@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {Avatar, Icon, TouchableRipple} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../store/store';
 import {logout} from '../../slice/Auth';
 import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
@@ -89,7 +88,7 @@ const AccountScreen = () => {
   ];
   return (
     <>
-      <SafeAreaView className="flex-1 w-full">
+      <SafeAreaView className="flex-1 w-full bg-white">
         <AppHeader title="Tài khoản" centerTitle={true}></AppHeader>
         <View className="flex-1"></View>
         <View className="h-full">
@@ -103,8 +102,12 @@ const AccountScreen = () => {
                 }}></Avatar.Image>
             </View>
             <View>
-              <Text className="text-center text-xl font-bold">Lâm Văn Đức</Text>
-              <Text className="text-center text-base">Ducvl@hoplong.com</Text>
+              <Text className="text-center text-xl font-bold text-black">
+                Lâm Văn Đức
+              </Text>
+              <Text className="text-center text-base text-black">
+                Ducvl@hoplong.com
+              </Text>
             </View>
           </View>
           <View className="h-full">
@@ -119,7 +122,7 @@ const AccountScreen = () => {
                   <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
                     <View className="flex flex-row items-center">
                       {item.icon}
-                      <Text className="text-base px-3 font-semibold">
+                      <Text className="text-base px-3 font-semibold text-black">
                         {item.title}
                       </Text>
                     </View>

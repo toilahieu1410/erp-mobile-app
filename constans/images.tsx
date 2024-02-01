@@ -5,4 +5,5 @@ export const IMAGES = {
   TASK: require('../assets/image/navigator/work.png'),
   SEARCH: require('../assets/image/app/search.png'),
   DOLLAR: require('../assets/image/app/dollar.png'),
+  SPLASHSCREEN: require('../assets/image/splash.jpg'),
 };

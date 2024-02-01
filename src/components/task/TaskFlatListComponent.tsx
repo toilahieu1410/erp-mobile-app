@@ -3,6 +3,7 @@ import React, {useRef, useState} from 'react';
 import {Avatar, Icon, Title, TouchableRipple} from 'react-native-paper';
 import {Task} from '../../models/Task';
 import ActionSheet from 'react-native-actionsheet';
+import BottomActionComponent from './BottomActionComponent';
 
 interface TaskProps {
   task: Task;
@@ -92,24 +93,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
             </View>
           </View>
           <View>
-            <TouchableRipple
-              onPress={() => {
-                actionRef?.current?.show();
-                console.log('agaag');
-              }}
-              rippleColor={'transparent'}>
-              <Icon source="dots-horizontal" size={24} color="black" />
-            </TouchableRipple>
-            <ActionSheet
-              ref={actionRef}
-              title={task.title}
-              options={['Done', 'Chi tiết', 'Xóa', 'cancel']}
-              cancelButtonIndex={3}
-              destructiveButtonIndex={2}
-              onPress={index => {
-                console.log(index);
-              }}
-            />
+            <BottomActionComponent title={task.title} id={task.id} />
           </View>
         </View>
         <View className="w-full h-[35%] bg-primary rounded-md overflow-hidden">
