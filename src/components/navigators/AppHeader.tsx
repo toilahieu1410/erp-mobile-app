@@ -32,8 +32,9 @@ const AppHeader = ({
   return (
     <Appbar.Header
       style={{
-        elevation: Platform.OS === 'ios' ? 0 : 4,
+        elevation: Platform.OS === 'ios' ? 1 : 4,
         backgroundColor: '#ffffff',
+        height: 50,
       }}
       statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}
       mode={
@@ -44,13 +45,13 @@ const AppHeader = ({
       {showButtonBack == true ? (
         <Appbar.BackAction
           rippleColor="transparent"
-          className="p-0"
+          className="p-0 m-0"
           onPress={() => {
             navigator.goBack();
           }}
         />
       ) : null}
-      <Appbar.Content title={`${title}`} titleStyle={{fontSize: 18}} />
+      <Appbar.Content title={`${title}`} titleStyle={{fontSize: 16}} />
       {actions}
     </Appbar.Header>
   );

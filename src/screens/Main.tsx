@@ -79,9 +79,9 @@ const Main = () => {
                   tintColor: focused ? COLORS.PRIMARY : COLORS.GRAY,
                 }}
               />
-              <View className="absolute right-0 bg-red-500 rounded-full w-[18px] h-[18px]  top-[1px] p-[1px]">
+              <View className="absolute right-[-5px] bg-red-500 rounded-full min-w-[18px] h-[18px]  top-[1px] p-[1px]">
                 <Text className="text-center text-xs font-bold text-white">
-                  0
+                  99+
                 </Text>
               </View>
             </View>
