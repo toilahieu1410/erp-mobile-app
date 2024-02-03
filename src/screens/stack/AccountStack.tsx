@@ -5,6 +5,7 @@ import AccountScreen from '../navigators/AccountScreen';
 import InforAccountScreen from '../account/InforAccountScreen';
 import {APPHEADER} from '../../../constans/appHeaderNavigator';
 import PayRollScreen from '../account/PayRollScreen';
+import AttendanceSheetScreen from '../account/AttendanceSheetScreen';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
@@ -35,6 +36,19 @@ const AccountStack = () => {
           },
         }}
         component={InforAccountScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.ATTENDANCESHEET.KEY}
+        component={AttendanceSheetScreen}
+        options={{
+          title: SCREENS.ATTENDANCESHEET.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTintColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
       />
       <Stack.Screen
         name={SCREENS.PAYROLL.KEY}

@@ -30,6 +30,20 @@ const AccountScreen = () => {
         navigation.navigate(SCREENS.INFORACCOUNT.KEY);
       },
     },
+
+    {
+      icon: (
+        <Image
+          source={IMAGES.CLOCKCHECK}
+          style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
+      ),
+      title: SCREENS.ATTENDANCESHEET.NAME,
+      type: 'menu',
+      onClick: () => {
+        //@ts-ignore
+        navigation.navigate(SCREENS.ATTENDANCESHEET.KEY);
+      },
+    },
     {
       icon: (
         <Image

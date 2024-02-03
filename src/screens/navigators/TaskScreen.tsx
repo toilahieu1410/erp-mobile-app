@@ -27,9 +27,12 @@ import {FlatList} from 'react-native-gesture-handler';
 import TaskFlatListComponent from '../../components/task/TaskFlatListComponent';
 import {Task} from '../../models/Task';
 import ProcessTaskTodayComponent from '../../components/task/ProcessTaskTodayComponent';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../../constans/screens';
 
 const TaskScreen = () => {
   const [test, setTest] = useState<number>(50);
+  const navigation = useNavigation();
   const fullHeightScreen = Dimensions.get('screen').height;
   const taskList: ReadonlyArray<Task> = [
     {
@@ -156,32 +159,33 @@ const TaskScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">
-        <AppHeader title="Lịch công việc" centerTitle={true}></AppHeader>
+        <AppHeader
+          title="Lịch công việc"
+          centerTitle={true}
+          actions={
+            <TouchableRipple
+              rippleColor="transparent"
+              onPress={() =>
+                //@ts-ignore
+                navigation.navigate(SCREENS.SEARCHTASK.KEY)
+              }
+              style={{marginRight: 10}}>
+              <Image
+                source={IMAGES.SEARCH}
+                style={{
+                  width: 20,
+                  height: 20,
+                  tintColor: COLORS.PRIMARY,
+                }}
+              />
+            </TouchableRipple>
+          }
+        />
         <ScrollView>
-          <View className="flex-1 px-2 mt-2">
+          <View className="flex-1 px-2">
             <View className="w-full">
-              <View className="flex flex-row justify-between items-center w-full border border-gray-300 rounded-xl pl-2 overflow-hidden">
-                <TextInput
-                  className="rounded-xl text-base flex-1 p-2"
-                  placeholder="Tìm kiếm công việc"
-                />
-                <View className="p-3 bg-gray-200">
-                  <TouchableRipple
-                    rippleColor="transparent"
-                    onPress={() => console.log('search')}>
-                    <Image
-                      source={IMAGES.SEARCH}
-                      style={{
-                        width: 20,
-                        height: 20,
-                        tintColor: COLORS.PRIMARY,
-                      }}
-                    />
-                  </TouchableRipple>
-                </View>
-              </View>
               <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
-              <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
+              <View className="my-4  flex flex-row flex-nowrap justify-between items-center">
                 <Text className="text-black text-lg font-bold">
                   Công việc hôm nay
                 </Text>
@@ -196,9 +200,7 @@ const TaskScreen = () => {
                       key={item.id}
                       rippleColor={'transparent'}
                       className="block mb-4"
-                      onPress={() => {
-                        console.log('detail');
-                      }}>
+                      onPress={() => {}}>
                       <TaskFlatListComponent task={item} />
                     </TouchableRipple>
                   );

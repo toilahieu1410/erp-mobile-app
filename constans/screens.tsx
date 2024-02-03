@@ -17,10 +17,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
 
   TASKSTACK: {KEY: 'TaskStackScreen', NAME: 'Lịch công việc'},
   TASK: {KEY: 'TaskScreen', NAME: 'Lịch công việc'},
-  TODAYTASK: {KEY: 'TodayTaskScreen', NAME: 'Công việc hôm nay'},
-  TASKOVERVIEW: {KEY: 'TaskOverViewScreen', NAME: 'Tổng quan công việc'},
-  ALLTASK: {KEY: 'AllTaskScreen', NAME: 'Tất cả công việc'},
-  ADDNEWTASK: {KEY: 'AddNewTaskScreen', NAME: 'Thêm công việc mới'},
+  SEARCHTASK: {KEY: 'SearchTaskScreen', NAME: 'Tìm kiếm công việc cần làm'},
 
   // =========================== thông báo ==========================================
 
@@ -32,6 +29,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
 
   INFORACCOUNT: {KEY: 'InforAccountScreen', NAME: 'Thông tin tài khoản'},
   CHANGEPASSWORD: {KEY: 'ChangePasswordScreen', NAME: 'Đổi mật khẩu'},
+  ATTENDANCESHEET: {KEY: 'AttendanceSheetScreen', NAME: 'Bảng chấm công'},
+
   PAYROLL: {KEY: 'PayRollScreen', NAME: 'Bảng lương'},
-  SALARYDETAIL: {KEY: 'SalaryDetailScreen', NAME: 'Chi tiết bảng lương'},
 };

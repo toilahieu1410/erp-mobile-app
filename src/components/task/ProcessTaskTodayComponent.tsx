@@ -13,7 +13,7 @@ const ProcessTaskTodayComponent = ({
 }: ProcessTaskTodayComponentProps) => {
   return (
     <View
-      className="mt-4 rounded-xl w-full overflow-hidden"
+      className="mt-2 rounded-xl w-full overflow-hidden"
       style={{height: Dimensions.get('screen').height / 5.5}}>
       <LinearGradient
         colors={['#027BE3', '#094479', '#00d4ff']}
