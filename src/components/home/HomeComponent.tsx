@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../constans/screens';
+import {SCREENS} from '../../../constants/screens';
 import Lightbox from 'react-native-lightbox-v2';
 import RenderHTML from 'react-native-render-html';
 type cript = {

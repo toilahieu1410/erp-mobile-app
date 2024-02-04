@@ -1,8 +1,7 @@
 import {Text, View} from 'react-native';
-import React, {useRef, useState} from 'react';
-import {Avatar, Icon, Title, TouchableRipple} from 'react-native-paper';
-import {Task} from '../../models/Task';
-import ActionSheet from 'react-native-actionsheet';
+import React from 'react';
+import {Avatar} from 'react-native-paper';
+import {Task} from '../../../models/Task';
 import BottomActionComponent from './BottomActionComponent';
 
 interface TaskProps {
@@ -10,7 +9,6 @@ interface TaskProps {
 }
 const TaskFlatListComponent = (props: TaskProps) => {
   const task = props.task;
-  const actionRef = useRef();
 
   const renderWatchingItems = () => {
     const watchingItems: JSX.Element[] = [];

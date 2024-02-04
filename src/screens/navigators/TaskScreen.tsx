@@ -1,39 +1,25 @@
 import {
-  Dimensions,
+  Button,
   Image,
   SafeAreaView,
   ScrollView,
-  SectionList,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {
-  Avatar,
-  Button,
-  Divider,
-  Icon,
-  Menu,
-  PaperProvider,
-  TouchableRipple,
-} from 'react-native-paper';
-import {COLORS} from '../../../constans/colors';
+import {Icon, IconButton, TouchableRipple} from 'react-native-paper';
+import {COLORS} from '../../../constants/colors';
 import AppHeader from '../../components/navigators/AppHeader';
-import LinearGradient from 'react-native-linear-gradient';
-import {IMAGES} from '../../../constans/images';
-import CircularProgress from 'react-native-circular-progress-indicator';
-import {FlatList} from 'react-native-gesture-handler';
-import TaskFlatListComponent from '../../components/task/TaskFlatListComponent';
+import {IMAGES} from '../../../constants/images';
+import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
 import {Task} from '../../models/Task';
-import ProcessTaskTodayComponent from '../../components/task/ProcessTaskTodayComponent';
+import ProcessTaskTodayComponent from '../../components/task/taskMain/ProcessTaskTodayComponent';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../constans/screens';
+import {SCREENS} from '../../../constants/screens';
+import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent';
 
 const TaskScreen = () => {
-  const [test, setTest] = useState<number>(50);
   const navigation = useNavigation();
-  const fullHeightScreen = Dimensions.get('screen').height;
   const taskList: ReadonlyArray<Task> = [
     {
       id: 'KAP-1',
@@ -182,18 +168,19 @@ const TaskScreen = () => {
           }
         />
         <ScrollView>
-          <View className="flex-1 px-2">
+          <View className="flex-1">
             <View className="w-full">
-              <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
-              <View className="my-4  flex flex-row flex-nowrap justify-between items-center">
-                <Text className="text-black text-lg font-bold">
-                  Công việc hôm nay
-                </Text>
+              <View>
+                <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
+              </View>
+              <MenuTaskComponent />
+              <View className="my-4 px-2 flex flex-row flex-nowrap justify-between items-center">
+                <Text className="text-black text-lg font-bold">Công việc</Text>
                 <Text className="text-primary font-bold text-base">
                   Xem thêm
                 </Text>
               </View>
-              <View>
+              <View className="px-2">
                 {taskList.map((item, index) => {
                   return (
                     <TouchableRipple

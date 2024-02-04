@@ -1,9 +1,9 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SCREENS} from '../../../constans/screens';
+import {SCREENS} from '../../../constants/screens';
 import Main from '../Main';
 import ChangePasswordScreen from '../account/ChangePasswordScreen';
-import {APPHEADER} from '../../../constans/appHeaderNavigator';
+import {APPHEADER} from '../../../constants/appHeaderNavigator';
 import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 

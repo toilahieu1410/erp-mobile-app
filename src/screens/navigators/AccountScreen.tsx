@@ -6,10 +6,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../slice/Auth';
 import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
-import {SCREENS} from '../../../constans/screens';
+import {SCREENS} from '../../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../../constans/images';
-import {COLORS} from '../../../constans/colors';
+import {IMAGES} from '../../../constants/images';
+import {COLORS} from '../../../constants/colors';
 
 const AccountScreen = () => {
   const navigation = useNavigation();

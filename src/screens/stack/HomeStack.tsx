@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SCREENS} from '../../../constans/screens';
+import {SCREENS} from '../../../constants/screens';
 import HomeScreen from '../navigators/HomeScreen';
-import {APPHEADER} from '../../../constans/appHeaderNavigator';
+import {APPHEADER} from '../../../constants/appHeaderNavigator';
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
