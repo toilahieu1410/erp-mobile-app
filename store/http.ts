@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios';
 import {Token} from '../src/services/Token';
 import {BaseResponse} from '../src/models/BaseResponse';
-import {API_BASE_URL} from '../constans/base';
+import {API_BASE_URL} from '../constants/base';
 
 class Http {
   instance: AxiosInstance;

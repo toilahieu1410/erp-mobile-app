@@ -12,7 +12,7 @@ import {Appbar, Button, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppHeader from '../../components/navigators/AppHeader';
-import {COLORS} from '../../../constans/colors';
+import {COLORS} from '../../../constants/colors';
 
 const ChangePasswordScreen = () => {
   const navigator = useNavigation();

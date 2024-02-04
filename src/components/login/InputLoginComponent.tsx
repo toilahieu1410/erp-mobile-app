@@ -4,7 +4,7 @@ import React, {useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {showMessage} from 'react-native-flash-message';
 import {BaseResponse} from '../../models/BaseResponse';
-import {COLORS} from '../../../constans/colors';
+import {COLORS} from '../../../constants/colors';
 import {login} from '../../slice/Auth';
 
 const InputLoginComponent = () => {
