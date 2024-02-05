@@ -8,19 +8,9 @@ type AppBarProps = {
   showButtonBack?: Boolean | false;
   title: String | React.ReactNode;
   centerTitle?: Boolean | false;
-  actions?: React.ReactElement | null;
+  actions?: React.ReactElement;
 };
-{
-  /* <Appbar.Header style={{elevation: 2}}>
-  <Appbar.BackAction
-    rippleColor="transparent"
-    onPress={() => {
-      navigator.goBack();
-    }}
-  />
-  <Appbar.Content title="Thông tin tài khoản" titleStyle={{fontSize: 18}} />
-</Appbar.Header>; */
-}
+
 const AppHeader = ({
   showButtonBack,
   title,
@@ -51,8 +41,11 @@ const AppHeader = ({
           }}
         />
       ) : null}
-      <Appbar.Content title={`${title}`} titleStyle={{fontSize: 16}} />
-      {actions}
+      <Appbar.Content
+        title={`${title}`}
+        titleStyle={{fontSize: 16, fontWeight: 'bold'}}
+      />
+      {actions && actions}
     </Appbar.Header>
   );
 };

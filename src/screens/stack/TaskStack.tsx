@@ -4,6 +4,7 @@ import {SCREENS} from '../../../constants/screens';
 import {APPHEADER} from '../../../constants/appHeaderNavigator';
 import TaskScreen from '../navigators/TaskScreen';
 import AddTaskScreen from '../task/AddTaskScreen';
+import DetailTaskScreen from '../task/DetailTaskScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,19 @@ const TaskStack = () => {
           },
         }}
         component={AddTaskScreen}
+      />
+      <Stack.Screen
+        name={SCREENS.DETAILTASK.KEY}
+        options={{
+          title: SCREENS.DETAILTASK.NAME,
+          headerTitleAlign: 'center',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={DetailTaskScreen}
       />
     </Stack.Navigator>
   );
