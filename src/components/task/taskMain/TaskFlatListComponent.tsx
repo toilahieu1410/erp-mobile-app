@@ -1,14 +1,17 @@
 import {Text, View} from 'react-native';
 import React from 'react';
-import {Avatar} from 'react-native-paper';
+import {Avatar, TouchableRipple} from 'react-native-paper';
 import {Task} from '../../../models/Task';
 import BottomActionComponent from './BottomActionComponent';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../../../constants/screens';
 
 interface TaskProps {
   task: Task;
 }
 const TaskFlatListComponent = (props: TaskProps) => {
   const task = props.task;
+  const navigator = useNavigation();
 
   const renderWatchingItems = () => {
     const watchingItems: JSX.Element[] = [];
@@ -57,45 +60,51 @@ const TaskFlatListComponent = (props: TaskProps) => {
     return watchingItems;
   };
   return (
-    <View
-      className="rounded-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px] shaDownElement bg-white"
-      style={{
-        shadowColor: '#000000',
-        shadowOffset: {width: 2, height: 5},
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 2,
-      }}>
-      <View className="flex flex-col flex-nowrap justify-between h-full">
-        <View className="flex flex-row flex-nowrap justify-between items-start flex-1 mb-2">
-          <View className="flex flex-row flex-nowrap items-start flex-1">
-            <Avatar.Image
-              style={{
-                backgroundColor: 'white',
-                borderColor: 'white',
-                borderWidth: 2,
-                marginRight: 8,
-              }}
-              size={40}
-              source={{uri: task.avatarUserCreate!}}
-              onError={err => {
-                console.log(err);
-              }}
-            />
-            <View className="flex-1">
-              <Text
-                numberOfLines={2}
-                className="text-black text-sm font-bold tracking-wider">
-                {task.title}
-              </Text>
+    <TouchableRipple
+      rippleColor={'transparent'}
+      className="block mb-4"
+      onPress={() =>
+        //@ts-ignore
+        navigator.navigate(SCREENS.DETAILTASK.KEY, {id: task.id})
+      }>
+      <View
+        className="rounded-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px] shaDownElement bg-white"
+        style={{
+          shadowColor: '#000000',
+          shadowOffset: {width: 2, height: 5},
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 2,
+        }}>
+        <View className="flex flex-col flex-nowrap justify-between h-full">
+          <View className="flex flex-row flex-nowrap justify-between items-start flex-1 mb-2">
+            <View className="flex flex-row flex-nowrap items-start flex-1">
+              <Avatar.Image
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: 'white',
+                  borderWidth: 2,
+                  marginRight: 8,
+                }}
+                size={40}
+                source={{uri: task.avatarUserCreate!}}
+                onError={err => {
+                  console.log(err);
+                }}
+              />
+              <View className="flex-1">
+                <Text
+                  numberOfLines={2}
+                  className="text-black text-sm font-bold tracking-wider">
+                  {task.title}
+                </Text>
+              </View>
+            </View>
+            <View>
+              <BottomActionComponent title={task.title} id={task.id} />
             </View>
           </View>
-          <View>
-            <BottomActionComponent title={task.title} id={task.id} />
-          </View>
-        </View>
-        <View className="w-full h-[35%] bg-primary rounded-md overflow-hidden">
-          <View className="h-full w-full bg-gray-200 flex flex-row flex-nowrap justify-between items-center ml-[3px] p-2">
+          <View className="h-[35%] w-full bg-gray-200 flex flex-row flex-nowrap justify-between items-center ml-[3px] p-2 rounded-md border-l-2 border-l-primary">
             <View className="h-full">
               <View className="relative">{renderWatchingItems()}</View>
             </View>
@@ -113,7 +122,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableRipple>
   );
 };
 

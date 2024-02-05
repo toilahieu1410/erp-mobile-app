@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Icon, IconButton, TouchableRipple} from 'react-native-paper';
+import {TouchableRipple} from 'react-native-paper';
 import {COLORS} from '../../../constants/colors';
 import AppHeader from '../../components/navigators/AppHeader';
 import {IMAGES} from '../../../constants/images';
@@ -181,16 +181,8 @@ const TaskScreen = () => {
                 </Text>
               </View>
               <View className="px-2">
-                {taskList.map((item, index) => {
-                  return (
-                    <TouchableRipple
-                      key={item.id}
-                      rippleColor={'transparent'}
-                      className="block mb-4"
-                      onPress={() => {}}>
-                      <TaskFlatListComponent task={item} />
-                    </TouchableRipple>
-                  );
+                {taskList.map(item => {
+                  return <TaskFlatListComponent task={item} key={item.id} />;
                 })}
               </View>
             </View>

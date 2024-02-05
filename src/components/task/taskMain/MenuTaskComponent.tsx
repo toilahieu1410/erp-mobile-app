@@ -27,7 +27,7 @@ const MenuTaskComponent = () => {
                   style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
                 />
               </View>
-              <Text>Thêm mới</Text>
+              <Text className="text-black">Thêm mới</Text>
             </View>
           </TouchableRipple>
           <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
@@ -39,7 +39,7 @@ const MenuTaskComponent = () => {
                 style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
               />
             </View>
-            <Text>Danh sách</Text>
+            <Text className="text-black">Danh sách</Text>
           </View>
           {/* <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
               <View
