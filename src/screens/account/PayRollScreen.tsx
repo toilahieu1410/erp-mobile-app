@@ -247,7 +247,7 @@ const PayRollScreen = () => {
               />
               <PayRollComponent
                 type="content"
-                title="26, Nhân viên đóng (22%)"
+                title="26, Nhân viên đóng (10.5%)"
                 subTitle="(26) = (4) * 10.5%"
                 value={1000}
               />
