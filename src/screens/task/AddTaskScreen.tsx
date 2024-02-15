@@ -1,10 +1,18 @@
-import {SafeAreaView, Text, View} from 'react-native';
-import React from 'react';
+import {SafeAreaView, ScrollView, Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
 import {TouchableRipple} from 'react-native-paper';
-import InputChangePassword from '../../components/account/ChangePassword/InputChangePassword';
+import CustomTextInput from '../../components/app/CustomTextInput';
+import SelectOption from '../../components/app/SelectOption';
+import Editor from '../../components/app/Editor';
 
 const AddTaskScreen = () => {
+  const [text, setText] = useState<string | undefined>();
+  const countries = [
+    {key: 'Task', display: 'Task'},
+    {key: 'Visit', display: 'Visit'},
+    {key: 'Tele sale', display: 'Tele sale'},
+  ];
   return (
     <SafeAreaView className="flex-1 bg-white">
       <AppHeader
@@ -17,10 +25,20 @@ const AddTaskScreen = () => {
           </TouchableRipple>
         }
       />
-      <View className="flex-1 px-2 my-2">
-        <InputChangePassword label="Tiêu đề" />
-        <InputChangePassword label="Tiêu đề" />
-        <InputChangePassword label="Tiêu đề" />
+      <View className="flex-1 my-2">
+        <ScrollView className="px-2">
+          <SelectOption
+            option={countries}
+            title="Loại công việc"
+            value={text}
+            onSelect={(key, name) => {
+              setText(key);
+            }}
+          />
+          <CustomTextInput label="Tiêu đề" />
+          <CustomTextInput label="Khách hàng" />
+          <Editor></Editor>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
