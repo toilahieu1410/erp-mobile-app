@@ -10,4 +10,6 @@ export const IMAGES = {
   ADD_TO_DO_LIST: require('../assets/image/app/add-to-do-list.png'),
   OVERVIEW_TO_DO: require('../assets/image/app/overview-to-do.png'),
   TO_DO_LIST: require('../assets/image/app/to-do-list.png'),
+  SET_TEXT_COLOR: require('../assets/image/app/setTextColor.png'),
+  FILL_COLOR: require('../assets/image/app/fillColor.png'),
 };
