@@ -20,6 +20,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   SEARCHTASK: {KEY: 'SearchTaskScreen', NAME: 'Tìm kiếm công việc cần làm'},
   ADDNEWTASK: {KEY: 'AddNewTaskScreen', NAME: 'Thêm mới công việc'},
   DETAILTASK: {KEY: 'DetailTaskScreen', NAME: 'Chi tiết công việc'},
+  TASK_LIST: {KEY: 'TaskListScreen', NAME: 'Danh sách công việc'},
 
   // =========================== thông báo ==========================================
 
