@@ -5,7 +5,9 @@ import AccountScreen from '../navigators/AccountScreen';
 import InforAccountScreen from '../account/InforAccountScreen';
 import {APPHEADER} from '../../../constants/appHeaderNavigator';
 import PayRollScreen from '../account/PayRollScreen';
-import AttendanceSheetScreen from '../account/AttendanceSheetScreen';
+import AttendanceSheetScreen from '../account/attendance/AttendanceSheetScreen';
+import AttendanceScreen from '../account/attendance/AttendanceScreen';
+import CheckInWFHScreen from '../account/attendance/CheckInWFHScreen';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
@@ -42,6 +44,32 @@ const AccountStack = () => {
         component={AttendanceSheetScreen}
         options={{
           title: SCREENS.ATTENDANCESHEET.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTintColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+      />
+      <Stack.Screen
+        name={SCREENS.ATTENDANCE.KEY}
+        component={AttendanceScreen}
+        options={{
+          title: SCREENS.ATTENDANCE.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTintColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+      />
+      <Stack.Screen
+        name={SCREENS.CHECKIN_WFH.KEY}
+        component={CheckInWFHScreen}
+        options={{
+          title: SCREENS.CHECKIN_WFH.NAME,
           headerShown: APPHEADER.headerShown,
           headerTintColor: 'transparent',
           headerTitleStyle: {

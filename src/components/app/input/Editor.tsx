@@ -11,7 +11,7 @@ import RNFS from 'react-native-fs';
 import React, {useRef, useState} from 'react';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import ImagePicker from 'react-native-image-crop-picker';
-import {IMAGES} from '../../../constants/images';
+import {IMAGES} from '../../../../constants/images';
 const Editor = () => {
   const refEditor = React.useRef();
   const [text, setText] = useState();
@@ -43,7 +43,8 @@ const Editor = () => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      className="mb-4">
       <View>
         <View className="flex flex-row flex-nowrap items-center justify-between absolute top-0 z-50">
           <RichToolbar

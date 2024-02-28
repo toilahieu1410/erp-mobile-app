@@ -1,12 +1,5 @@
-import {
-  Button,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
 import {COLORS} from '../../../constants/colors';
 import AppHeader from '../../components/navigators/AppHeader';

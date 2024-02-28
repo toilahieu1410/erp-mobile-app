@@ -1,8 +1,8 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Agenda} from 'react-native-calendars';
-import AppHeader from '../../components/navigators/AppHeader';
-import AttendanceSheetComponent from '../../components/account/AttendanceSheet/AttendanceSheetComponent';
+import AppHeader from '../../../components/navigators/AppHeader';
+import AttendanceSheetComponent from '../../../components/account/AttendanceSheet/AttendanceSheetComponent';
 import {Icon, TouchableRipple} from 'react-native-paper';
 
 const AttendanceSheetScreen = () => {

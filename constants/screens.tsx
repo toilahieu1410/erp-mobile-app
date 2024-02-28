@@ -32,7 +32,10 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
 
   INFORACCOUNT: {KEY: 'InforAccountScreen', NAME: 'Thông tin tài khoản'},
   CHANGEPASSWORD: {KEY: 'ChangePasswordScreen', NAME: 'Đổi mật khẩu'},
+
   ATTENDANCESHEET: {KEY: 'AttendanceSheetScreen', NAME: 'Bảng chấm công'},
+  ATTENDANCE: {KEY: 'AttendanceScreen', NAME: 'Chấm công'},
+  CHECKIN_WFH: {KEY: 'CheckInWFHScreen', NAME: 'Chấm công WFH'},
 
   PAYROLL: {KEY: 'PayRollScreen', NAME: 'Bảng lương'},
 };
