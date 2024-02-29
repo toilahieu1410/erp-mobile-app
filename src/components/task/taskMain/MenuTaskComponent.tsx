@@ -30,17 +30,25 @@ const MenuTaskComponent = () => {
               <Text className="text-black">Thêm mới</Text>
             </View>
           </TouchableRipple>
-          <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
-            <View
-              style={{width: 50, height: 50}}
-              className="bg-gray-200 rounded-lg items-center justify-center">
-              <Image
-                source={IMAGES.TO_DO_LIST}
-                style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
-              />
+          <TouchableRipple
+            rippleColor={'transparent'}
+            onPress={() =>
+              //@ts-ignore
+              navigator.navigate(SCREENS.TASK_LIST.KEY)
+            }>
+            <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
+              <View
+                style={{width: 50, height: 50}}
+                className="bg-gray-200 rounded-lg items-center justify-center">
+                <Image
+                  source={IMAGES.TO_DO_LIST}
+                  style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
+                />
+              </View>
+              <Text className="text-black">Danh sách</Text>
             </View>
-            <Text className="text-black">Danh sách</Text>
-          </View>
+          </TouchableRipple>
+
           {/* <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
               <View
                 style={{width: 50, height: 50}}

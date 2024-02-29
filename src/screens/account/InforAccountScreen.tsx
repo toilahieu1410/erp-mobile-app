@@ -1,12 +1,20 @@
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  PermissionsAndroid,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Appbar, Avatar, Icon, TouchableRipple} from 'react-native-paper';
+import {Avatar, TouchableRipple} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native-gesture-handler';
 import AppHeader from '../../components/navigators/AppHeader';
 import {COLORS} from '../../../constants/colors';
 import InforAccountComponent from '../../components/account/InforAccountComponent';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 const InforAccountScreen = () => {
   const [selectedImage, setSelectedImage] = useState(
@@ -14,15 +22,33 @@ const InforAccountScreen = () => {
   );
 
   const pickImageAsync = async () => {
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //     allowsEditing: true,
-    //     quality: 1
-    // });
-    // if (!result.canceled) {
-    // setSelectedImage(result.uri);
-    // }
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setSelectedImage(imageUri);
+      }
+    });
   };
   const navigator = useNavigation();
+
+  useEffect(() => {
+    try {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
+        title: 'Cho phép truy cập camera.',
+        message: 'Cần cấp quyền truy cập camera',
+        buttonNeutral: 'Để sau',
+        buttonNegative: 'Đồng ý',
+        buttonPositive: 'Hủy',
+      });
+    } catch (err) {}
+  }, []);
 
   // useEffect(() => {
   //   return navigator.getParent()?.setOptions({

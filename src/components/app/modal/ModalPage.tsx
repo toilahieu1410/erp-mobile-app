@@ -1,5 +1,5 @@
 import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {Children} from 'react';
+import React from 'react';
 
 type ModalPageProps = {
   showModal?: boolean | false;
@@ -21,7 +21,7 @@ const ModalPage = ({showModal, onVisibleModal, children}: ModalPageProps) => {
           }
         }}>
         <View className="w-full h-full">
-          <View className="flex justify-start items-center flex-row h-10 w-full bg-primary">
+          <View className="flex justify-start items-center flex-row h-10 w-full bg-primary z-30">
             <Pressable
               className="p-2"
               onPress={() => {
