@@ -15,40 +15,14 @@ import AppHeader from '../../components/navigators/AppHeader';
 import {COLORS} from '../../../constants/colors';
 import InforAccountComponent from '../../components/account/InforAccountComponent';
 import {launchImageLibrary} from 'react-native-image-picker';
+import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
 
 const InforAccountScreen = () => {
   const [selectedImage, setSelectedImage] = useState(
     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
   );
 
-  const pickImageAsync = async () => {
-    const options = {
-      mediaType: 'photo',
-      includeBase64: false,
-    };
-
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else {
-        let imageUri = response.uri || response.assets?.[0]?.uri;
-        setSelectedImage(imageUri);
-      }
-    });
-  };
   const navigator = useNavigation();
-
-  useEffect(() => {
-    try {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-        title: 'Cho phép truy cập camera.',
-        message: 'Cần cấp quyền truy cập camera',
-        buttonNeutral: 'Để sau',
-        buttonNegative: 'Đồng ý',
-        buttonPositive: 'Hủy',
-      });
-    } catch (err) {}
-  }, []);
 
   // useEffect(() => {
   //   return navigator.getParent()?.setOptions({
@@ -73,19 +47,21 @@ const InforAccountScreen = () => {
                 style={{backgroundColor: 'gray'}}
                 size={Dimensions.get('screen').width * 0.3}
                 source={{uri: selectedImage}}></Avatar.Image>
-              <TouchableRipple
-                onPress={pickImageAsync}
-                className="absolute p-0 bottom-3 right-0"
-                rippleColor="transparent">
-                <Avatar.Icon
-                  size={(Dimensions.get('screen').width * 0.3) / 4.5}
-                  icon="plus-circle-outline"
-                  color={COLORS.WHITE}
-                  style={{
-                    backgroundColor: '#027BE3', // Customize background color using theme
-                  }}
-                />
-              </TouchableRipple>
+              <View className="absolute p-0 bottom-3 right-0">
+                <SelectPhoto
+                  onSelect={value => {
+                    setSelectedImage(value.uri);
+                  }}>
+                  <Avatar.Icon
+                    size={(Dimensions.get('screen').width * 0.3) / 4.5}
+                    icon="plus-circle-outline"
+                    color={COLORS.WHITE}
+                    style={{
+                      backgroundColor: '#027BE3', // Customize background color using theme
+                    }}
+                  />
+                </SelectPhoto>
+              </View>
             </View>
           </View>
           <ScrollView>

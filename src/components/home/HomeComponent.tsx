@@ -60,9 +60,7 @@ const HomeComponent = ({
                   }}
                   size={50}
                   source={{uri: avatar!}}
-                  onError={err => {
-                    console.log(err);
-                  }}></Avatar.Image>
+                  onError={err => {}}></Avatar.Image>
                 <View>
                   <View className="flex flex-col ml-2">
                     <Text className="text-black font-bold">{useCreate}</Text>

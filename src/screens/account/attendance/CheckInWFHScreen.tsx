@@ -22,7 +22,6 @@ const CheckInWFHScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       } else {
-        console.log('Vị trí chưa cho phép quyền truy cập.');
       }
     } catch (err) {
       console.warn(err);
@@ -35,16 +34,13 @@ const CheckInWFHScreen = () => {
   const getLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
-        console.log(position.coords.latitude);
         const response = axios.get(
           `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`,
         );
-        console.log(response);
         setDatetime(new Date());
       },
       error => {
         // Xử lý lỗi
-        console.log(error.code, error.message);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );

@@ -149,8 +149,8 @@ const Editor = () => {
         <ScrollView>
           <View className="h-[50vh] border border-gray-400 rounded-lg">
             <RichEditor
-              //onFocus={() => console.log('focus editor')}
-              //onBlur={() => console.log('blur editor')}
+              //onFocus={() =>}
+              //onBlur={() => }
               ref={refEditor}
               androidHardwareAccelerationDisabled={true}
               onChange={text => {

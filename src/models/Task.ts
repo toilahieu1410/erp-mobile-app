@@ -6,14 +6,22 @@ export interface Task {
   customerName: string | null;
   description: string | null;
   status: string | null;
-  userCreate: string;
-  fullNameCreate: string;
-  avatarUserCreate: string;
-  watching: Watching[];
+  userCreate: string | null;
+  fullNameCreate: string | null;
+  avatarUserCreate: string | null;
+  watching: Watching[] | [];
+  Attachment: Attachment[] | [];
 }
 
 export interface Watching {
   username: string;
   fullName: string;
   avatar: string;
+}
+
+export interface Attachment {
+  uri: string;
+  size: string;
+  fileType: string;
+  fileName: string;
 }
