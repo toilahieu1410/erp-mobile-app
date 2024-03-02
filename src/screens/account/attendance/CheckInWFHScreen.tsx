@@ -1,12 +1,19 @@
-import {PermissionsAndroid, SafeAreaView, Text, View} from 'react-native';
+import {
+  Alert,
+  PermissionsAndroid,
+  SafeAreaView,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Button} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import AppHeader from '../../../components/navigators/AppHeader';
 import axios from 'axios';
+import {formatDateTime} from '../../../../utils/CommonFunction';
 
 const CheckInWFHScreen = () => {
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState<String>();
   const [dateTime, setDatetime] = useState<Date>();
   const requestCameraPermission = async () => {
     try {
@@ -31,12 +38,21 @@ const CheckInWFHScreen = () => {
     requestCameraPermission();
   }, []);
 
-  const getLocation = () => {
+  const getLocation = async () => {
+    setLocation('Đang lấy vị trí...');
     Geolocation.getCurrentPosition(
       position => {
         const response = axios.get(
           `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`,
         );
+        response
+          .then(res => {
+            setLocation(res.data.display_name);
+          })
+          .catch(err => {
+            setLocation('');
+            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí.');
+          });
         setDatetime(new Date());
       },
       error => {
@@ -54,6 +70,8 @@ const CheckInWFHScreen = () => {
           <Button onPress={getLocation} className="bg-primary">
             <Text className="text-white font-bold">Check in</Text>
           </Button>
+          <Text>Vị trí: {location}</Text>
+          <Text>Ngày giờ: {formatDateTime(dateTime)}</Text>
         </View>
       </View>
     </SafeAreaView>
