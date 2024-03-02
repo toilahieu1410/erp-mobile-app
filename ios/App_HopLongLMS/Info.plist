@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSOpenAccessUsageDescription</key>
+	<string>Ứng dụng cần truy cập kho quản lý file</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ứng dụng cần truy cập vị trí của bạn.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ứng dụng cần truy cập vị trí của bạn.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Cho phép truy cập thư viện ảnh của bạn.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

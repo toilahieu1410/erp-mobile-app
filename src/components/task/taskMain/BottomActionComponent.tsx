@@ -2,6 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useRef} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
 import ActionSheet from 'react-native-actionsheet';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../../../constants/screens';
 interface BottomActionTaskPropes {
   title: string;
   id: string;
@@ -9,6 +11,7 @@ interface BottomActionTaskPropes {
 
 const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
   const actionRef = useRef();
+  const navigator = useNavigation();
   return (
     <View>
       <TouchableRipple
@@ -25,7 +28,25 @@ const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
         cancelButtonIndex={3}
         destructiveButtonIndex={2}
         onPress={index => {
-          console.log(id);
+          switch (index) {
+            case 0:
+              // Done
+              break;
+            case 1:
+              // chi tiết
+              //@ts-ignore
+              navigator.navigate(SCREENS.DETAILTASK.KEY, {id: id});
+              break;
+            case 2:
+              // xóa
+              break;
+            case 3:
+              //cancel
+
+              break;
+            default:
+              break;
+          }
         }}
       />
     </View>

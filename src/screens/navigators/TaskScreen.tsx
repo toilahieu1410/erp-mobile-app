@@ -1,12 +1,5 @@
-import {
-  Button,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
 import {COLORS} from '../../../constants/colors';
 import AppHeader from '../../components/navigators/AppHeader';
@@ -176,9 +169,6 @@ const TaskScreen = () => {
               <MenuTaskComponent />
               <View className="my-4 px-2 flex flex-row flex-nowrap justify-between items-center">
                 <Text className="text-black text-lg font-bold">Công việc</Text>
-                <Text className="text-primary font-bold text-base">
-                  Xem thêm
-                </Text>
               </View>
               <View className="px-2">
                 {taskList.map(item => {

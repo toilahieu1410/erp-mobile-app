@@ -12,4 +12,6 @@ export const IMAGES = {
   TO_DO_LIST: require('../assets/image/app/to-do-list.png'),
   SET_TEXT_COLOR: require('../assets/image/app/setTextColor.png'),
   FILL_COLOR: require('../assets/image/app/fillColor.png'),
+  WFH: require('../assets/image/app/work-from-home.png'),
+  SCHEDULE: require('../assets/image/app/schedule.png'),
 };
