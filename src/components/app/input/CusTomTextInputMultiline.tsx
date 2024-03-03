@@ -21,7 +21,7 @@ const CusTomTextInputMultiline = ({
           scrollEnabled={true}
           textAlignVertical="top"
           onChangeText={onChangeText}
-          className="flex-1 bg-white h-full text-sm"
+          className="flex-1 bg-white text-sm h-[200px] max-h-[200px]"
         />
       </View>
     </View>
