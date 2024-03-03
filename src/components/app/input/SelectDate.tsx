@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {Icon} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
-import {formatDate} from '../../../../utils/CommonFunction';
+import moment from 'moment';
 type SelectDateTimeProps = {
   title?: string | null;
   value?: string | null;
@@ -11,7 +11,6 @@ type SelectDateTimeProps = {
 
 const SelectDate = ({title, value, onSelect}: SelectDateTimeProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [displayDate, setDisplayDate] = useState<String>();
   const [dateChoice, setDateChoice] = useState<Date>(new Date());
 
   return (
@@ -26,7 +25,7 @@ const SelectDate = ({title, value, onSelect}: SelectDateTimeProps) => {
           delayPressIn={150}>
           <View className="w-full overflow-hidden h-10 flex flex-row justify-between items-center p-2 border border-gray-400 rounded-lg focus:border-primary">
             <Text className="flex-1 text-black pr-2">
-              {formatDate(displayDate) && formatDate(displayDate)}
+              {moment(dateChoice).format('DD/MM/YYYY')}
             </Text>
             <Icon
               source={showModal ? `chevron-up` : `chevron-down`}
@@ -43,7 +42,6 @@ const SelectDate = ({title, value, onSelect}: SelectDateTimeProps) => {
           date={dateChoice}
           onConfirm={date => {
             setShowModal(false);
-            setDisplayDate(date.toISOString());
             setDateChoice(date);
             if (onSelect) {
               onSelect(date);

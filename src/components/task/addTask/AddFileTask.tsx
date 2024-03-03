@@ -112,13 +112,11 @@ const AddFileTask = () => {
             <View className="mt-4 flex flex-row flex-wrap">
               {documentFile.map((item, index) => (
                 <View
-                  className={`w-1/2 relative pb-2 pl-2 ${
-                    index % 2 != 0 && 'pr-2'
-                  }`}>
+                  className="w-full relative mb-2 flex flex-wrap">
                   {item.fileType.includes('image') && (
                     <Image
                       source={{uri: item.uri}}
-                      style={{width: '100%', height: 150}}
+                      style={{width: '100', height: 100}}
                     />
                   )}
                 </View>

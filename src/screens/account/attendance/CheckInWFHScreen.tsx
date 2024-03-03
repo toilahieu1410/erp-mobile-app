@@ -4,32 +4,45 @@ import {
   SafeAreaView,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Button} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import AppHeader from '../../../components/navigators/AppHeader';
 import axios from 'axios';
-import {formatDateTime} from '../../../../utils/CommonFunction';
+import moment from 'moment';
+
 
 const CheckInWFHScreen = () => {
   const [location, setLocation] = useState<String>();
+  const [errorrrr,seterror] = useState();
+
   const [dateTime, setDatetime] = useState<Date>();
+
+
   const requestCameraPermission = async () => {
+
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Quyền truy cập vị trí',
-          message: 'Bạn cần cấp quyền truy cập vị trí cho ứng dụng',
-          buttonNeutral: 'Để sau',
-          buttonNegative: 'Hủy',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      } else {
+
+      if (Platform.OS === 'ios') {
+        Geolocation.requestAuthorization('always');
+      }else{
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Quyền truy cập vị trí',
+            message: 'Bạn cần cấp quyền truy cập vị trí cho ứng dụng',
+            buttonNeutral: 'Để sau',
+            buttonNegative: 'Hủy',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        } else {
+        }
       }
+     
     } catch (err) {
       console.warn(err);
     }
@@ -50,13 +63,18 @@ const CheckInWFHScreen = () => {
             setLocation(res.data.display_name);
           })
           .catch(err => {
+            seterror(err);
             setLocation('');
-            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí.');
+            console.log(err);
+            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: '+err.message);
           });
         setDatetime(new Date());
       },
       error => {
-        // Xử lý lỗi
+        setLocation('');
+        console.log(error)
+        seterror(error)
+        Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: '+error.message);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
@@ -70,8 +88,10 @@ const CheckInWFHScreen = () => {
           <Button onPress={getLocation} className="bg-primary">
             <Text className="text-white font-bold">Check in</Text>
           </Button>
-          <Text>Vị trí: {location}</Text>
-          <Text>Ngày giờ: {formatDateTime(dateTime)}</Text>
+          <Text>Vị trí: {location}</Text> 
+          <Text>Ngày giờ: {moment(dateTime).format('DD/MM/YYYY')}</Text>
+          <Text>Ngày giờ: {JSON.stringify(errorrrr)}</Text>
+
         </View>
       </View>
     </SafeAreaView>
