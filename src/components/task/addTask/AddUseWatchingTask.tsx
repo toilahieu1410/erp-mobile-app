@@ -36,7 +36,7 @@ const AddUseWatchingTask = ({
           transform: [{translateY: showInputAnimation}],
         }}>
         {showInputSearch && (
-          <TextInput className="border-2 border-black"></TextInput>
+          <TextInput className="border-2 border-black" placeholder="Tìm kiếm" />
         )}
       </Animated.View>
       <Pressable onPress={toggleInput}>

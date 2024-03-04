@@ -16,7 +16,6 @@ const SelectMultiPhoto = ({
   const pickPhoToAsync = async () => {
     const options = {
       mediaType: mediaType,
-      includeBase64: false,
       selectionLimit: 5,
     };
     //@ts-ignore

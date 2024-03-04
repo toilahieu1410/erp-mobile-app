@@ -24,4 +24,5 @@ export interface Attachment {
   size: string;
   fileType: string;
   fileName: string;
+  choice: boolean | false;
 }

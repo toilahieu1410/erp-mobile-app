@@ -7,8 +7,8 @@ import SelectOption from '../../components/app/input/SelectOption';
 import SelectDateTime from '../../components/app/input/SelectDate';
 import CusTomTextInputMultiline from '../../components/app/input/CusTomTextInputMultiline';
 import ModalAddUserWatching from '../../components/task/addTask/ModalAddUserWatching';
-import {Task} from '../../models/Task';
-import AddFileTask from '../../components/task/addTask/AddFileTask';
+import {Attachment, Task} from '../../models/Task';
+import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
 
 const AddTaskScreen = () => {
   const [data, setData] = useState<Task>({
@@ -20,6 +20,9 @@ const AddTaskScreen = () => {
     {key: 'Visit', display: 'Visit'},
     {key: 'Tele sale', display: 'Tele sale'},
   ];
+
+  const [Attachment, setAttachment] = useState<Attachment[]>([]);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <AppHeader
@@ -58,8 +61,11 @@ const AddTaskScreen = () => {
                 </View>
               )}
 
-              <AddFileTask />
-              <ModalAddUserWatching></ModalAddUserWatching>
+              <AttachmentTaskComponent
+                data={Attachment}
+                onChangeValue={value => setAttachment(value)}
+              />
+              <ModalAddUserWatching />
 
               <SelectDateTime
                 title="DeadLine"
