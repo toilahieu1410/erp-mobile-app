@@ -11,9 +11,12 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Watching} from '../../../models/Task';
 import {IMAGES} from '../../../../constants/images';
 import {Icon, TouchableRipple} from 'react-native-paper';
+import {ScrollView} from 'react-native-gesture-handler';
+import ShowUserWatching from './AddWatching/ShowUserWatching';
+import SearchWatching from './AddWatching/SearchWatching';
 type ModalAddUserWatchingProps = {
   data?: Watching[];
-  onChangeData?: Watching[] | [];
+  onChangeData?: (value: Watching[]) => void;
 };
 
 const ModalAddUserWatching = ({
@@ -47,7 +50,7 @@ const ModalAddUserWatching = ({
   }, []);
   return (
     <View>
-      <View className="border-y border-y-gray-400  mb-4">
+      <View className="border-y border-y-gray-400 mb-4">
         <TouchableRipple
           onPress={() => {
             setShowModal(true);
@@ -86,7 +89,16 @@ const ModalAddUserWatching = ({
                   source={IMAGES.SEARCH}
                 />
               </Pressable>
-              <Pressable onPress={toggleInput} className="p-2">
+              <Pressable
+                onPress={() => {
+                  setShowModal(x => {
+                    return false;
+                  });
+                  if (onChangeData) {
+                    onChangeData(watchings);
+                  }
+                }}
+                className="p-2">
                 <Text className="text-white font-bold text-base">Xong</Text>
               </Pressable>
             </View>
@@ -98,44 +110,18 @@ const ModalAddUserWatching = ({
                 transform: [{translateY: showInputAnimation}],
               }}>
               {showInputSearch && (
-                <View className="flex flex-row justify-between items-center p-2">
-                  <TextInput
-                    autoFocus
-                    className="bg-white flex-1 text-base p-1 rounded-lg"
-                    placeholder="Tìm kiếm"
-                  />
-
-                  <TouchableRipple
-                    rippleColor="transparent"
-                    onPress={() => {
-                      toggleInput();
-                    }}>
-                    <Text className="text-white font-bold px-2 text-base">
-                      Hủy
-                    </Text>
-                  </TouchableRipple>
-                </View>
+                <SearchWatching
+                  onHide={value => {
+                    toggleInput();
+                  }}
+                />
               )}
             </Animated.View>
-            <View className="z-0">
-              <Pressable>
-                <View className="flex flex-row flex-nowrap justify-between items-center p-2 border-b border-b-gray-500">
-                  <Text className="text-base"></Text>
-                  <View className="px-2">
-                    <Icon source={'chevron-down'} size={30} />
-                  </View>
-                </View>
-              </Pressable>
-              <View>
-                <View className="absolute z-10 bg-slate-800">
-                  <Text>Test</Text>
-                </View>
+            <ScrollView>
+              <View className="z-0 flex-1">
+                <ShowUserWatching data={watchings} />
               </View>
-
-              <View className="z-0">
-                <Text>aaa</Text>
-              </View>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
