@@ -47,7 +47,7 @@ const ModalAddUserWatching = ({
 
   useEffect(() => {
     setWatchings(data);
-  }, []);
+  }, [showModal]);
   return (
     <View>
       <View className="border-y border-y-gray-400 mb-4">
@@ -55,12 +55,29 @@ const ModalAddUserWatching = ({
           onPress={() => {
             setShowModal(true);
           }}>
-          <View className="flex flex-row justify-between items-center p-2">
-            <View>
-              <Text className="w-full text-gray-500">Người theo dõi</Text>
-            </View>
-            <View>
-              <Icon size={25} source={'chevron-right'} />
+          <View>
+            <View className="flex flex-row justify-between items-center p-2">
+              <View>
+                <Text className="w-full text-gray-500 mb-2">
+                  Người theo dõi
+                </Text>
+                <View>
+                  {data.map((item, index) => (
+                    <View className="p-1 flex flex-row justify-start items-center">
+                      <Image
+                        source={{uri: item.avatar}}
+                        style={{width: 30, height: 30, borderRadius: 30}}
+                      />
+                      <Text className="px-1 text-black text-base">
+                        {item.fullName}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              <View>
+                <Icon size={25} source={'chevron-right'} />
+              </View>
             </View>
           </View>
         </TouchableRipple>
@@ -119,7 +136,19 @@ const ModalAddUserWatching = ({
             </Animated.View>
             <ScrollView>
               <View className="z-0 flex-1">
-                <ShowUserWatching data={watchings} />
+                {watchings.map((item, index) => (
+                  <ShowUserWatching
+                    data={item}
+                    key={index}
+                    onClose={() => {
+                      setWatchings(w => {
+                        const newData = [...watchings];
+                        newData.splice(index, 1);
+                        return newData;
+                      });
+                    }}
+                  />
+                ))}
               </View>
             </ScrollView>
           </View>

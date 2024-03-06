@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
 
@@ -30,7 +34,9 @@
       </activity>
       <meta-data 
         android:name="com.google.android.geo.API_KEY"
-        android:value="Your Google maps API Key Here"
+        android:value="Cmjtd|luur2108n1,7w=o5-gz8a"
       />
+
+      
     </application>
 </manifest>
