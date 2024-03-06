@@ -62,28 +62,13 @@ const PayRollScreen = () => {
       </View>
       <RBSheet
         ref={buttonSheet}
-        height={Dimensions.get('screen').height * 0.9}
+        height={Dimensions.get('screen').height * 0.85}
         openDuration={300}
         closeDuration={300}
-        closeOnDragDown={false}
-        closeOnPressMask={false}
-        customStyles={{
-          container: {
-            borderTopStartRadius: 30,
-            borderTopEndRadius: 30,
-          },
-        }}>
+        closeOnDragDown={true}
+        closeOnPressMask={false}>
         <View className="flex-1">
           <View className="relative w-full flex justify-center items-center flex-row p-3">
-            <TouchableRipple
-              rippleColor={'transparent'}
-              className="p-3 w-11  absolute left-0 top-0"
-              onPress={() =>
-                //@ts-ignore
-                buttonSheet.current?.close()
-              }>
-              <Icon source={'close'} size={25} />
-            </TouchableRipple>
             <Text className="font-bold text-black text-xl">
               Tháng 1 năm 2024
             </Text>
