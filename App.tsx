@@ -12,6 +12,7 @@ import {SCREENS} from './constants/screens';
 import MainStack from './src/screens/stack/MainStack';
 import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
+import { Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +34,7 @@ const RootNavigator = () => {
   return (
     <>
       <NavigationContainer>
-        <StatusBar backgroundColor="#027BE3" barStyle="light-content" />
+        <StatusBar backgroundColor="#027BE3" barStyle={Platform.OS ==='ios' ? 'dark-content':'light-content'} />
         {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
         {loginState.isAuthenticated === null ? (
           <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
