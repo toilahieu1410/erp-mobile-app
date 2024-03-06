@@ -13,21 +13,15 @@ import AppHeader from '../../../components/navigators/AppHeader';
 import axios from 'axios';
 import moment from 'moment';
 
-
 const CheckInWFHScreen = () => {
   const [location, setLocation] = useState<String>();
-  const [errorrrr,seterror] = useState();
-
   const [dateTime, setDatetime] = useState<Date>();
 
-
   const requestCameraPermission = async () => {
-
     try {
-
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization('always');
-      }else{
+      } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
@@ -42,7 +36,6 @@ const CheckInWFHScreen = () => {
         } else {
         }
       }
-     
     } catch (err) {
       console.warn(err);
     }
@@ -63,18 +56,14 @@ const CheckInWFHScreen = () => {
             setLocation(res.data.display_name);
           })
           .catch(err => {
-            seterror(err);
             setLocation('');
-            console.log(err);
-            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: '+err.message);
+            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: ' + err.message);
           });
         setDatetime(new Date());
       },
       error => {
         setLocation('');
-        console.log(error)
-        seterror(error)
-        Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: '+error.message);
+        Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: ' + error.message);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
@@ -88,10 +77,13 @@ const CheckInWFHScreen = () => {
           <Button onPress={getLocation} className="bg-primary">
             <Text className="text-white font-bold">Check in</Text>
           </Button>
-          <Text>Vị trí: {location}</Text> 
-          <Text>Ngày giờ: {moment(dateTime).format('DD/MM/YYYY')}</Text>
-          <Text>Ngày giờ: {JSON.stringify(errorrrr)}</Text>
-
+          <Text className="py-2">
+            <Text className="font-bold">Vị trí:</Text> {location}
+          </Text>
+          <Text className="py-2">
+            <Text className="font-bold">Thời gian:</Text>
+            {moment(dateTime).format('HH:mm DD/MM/yyyy')}
+          </Text>
         </View>
       </View>
     </SafeAreaView>

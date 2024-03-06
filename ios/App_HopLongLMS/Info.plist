@@ -4,12 +4,14 @@
 <dict>
 
 	<key>NSLocationWhenInUseUsageDescription</key>
-  <string>Program requires GPS to track cars and job orders</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>Program requires GPS to track cars and job orders</string>
-  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  <string>Program requires GPS to track cars and job orders</string>
-	
+	<string>Program requires GPS to track cars and job orders</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Program requires GPS to track cars and job orders</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Program requires GPS to track cars and job orders</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to the photo library for selecting images</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
