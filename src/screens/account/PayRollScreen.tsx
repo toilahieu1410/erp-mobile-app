@@ -6,17 +6,18 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
-import {Icon, TouchableRipple} from 'react-native-paper';
+import {TouchableRipple} from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import PayRollComponent from '../../components/account/PayRollComponent';
 import {fomatNumber} from '../../../utils/CommonFunction';
+import ModalPage from '../../components/app/modal/ModalPage';
 
 const PayRollScreen = () => {
   const slideAnimation = useRef(new Animated.Value(0)).current;
   const List = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const buttonSheet = useRef(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
   // Kiểm tra xem có thông tin về màn hình trước đó không
   useEffect(() => {
     Animated.timing(slideAnimation, {
@@ -47,7 +48,7 @@ const PayRollScreen = () => {
                   };
 
                   //@ts-ignore
-                  buttonSheet.current?.open();
+                  setShowModal(true);
 
                   //navigator.navigate(SCREENS.SALARYDETAIL.KEY, data);
                 }}>
@@ -60,13 +61,11 @@ const PayRollScreen = () => {
           );
         })}
       </View>
-      <RBSheet
-        ref={buttonSheet}
-        height={Dimensions.get('screen').height * 0.85}
-        openDuration={300}
-        closeDuration={300}
-        closeOnDragDown={true}
-        closeOnPressMask={false}>
+      <ModalPage
+        showModal={showModal}
+        onVisibleModal={value => {
+          setShowModal(value);
+        }}>
         <View className="flex-1">
           <View className="relative w-full flex justify-center items-center flex-row p-3">
             <Text className="font-bold text-black text-xl">
@@ -277,7 +276,7 @@ const PayRollScreen = () => {
             </ScrollView>
           </View>
         </View>
-      </RBSheet>
+      </ModalPage>
     </SafeAreaView>
   );
 };

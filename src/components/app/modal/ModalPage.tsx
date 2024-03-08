@@ -3,7 +3,7 @@ import React from 'react';
 
 type ModalPageProps = {
   showModal?: boolean | false;
-  onVisibleModal?: (showModal: Boolean) => void;
+  onVisibleModal?: (showModal: boolean) => void;
   children?: React.ReactNode;
 };
 
@@ -11,7 +11,7 @@ const ModalPage = ({showModal, onVisibleModal, children}: ModalPageProps) => {
   return (
     <View>
       <Modal
-        style={{width: '100%', height: '100%', backgroundColor: 'red'}}
+        style={{width: '100%', height: '100%'}}
         animationType="slide"
         visible={showModal}
         presentationStyle="pageSheet"

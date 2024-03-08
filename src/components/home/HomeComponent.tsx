@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
 import Lightbox from 'react-native-lightbox-v2';
 import RenderHTML from 'react-native-render-html';
+import ImageFullWidth from '../app/Image/ImageFullWidth';
 type cript = {
   avatar: string;
   useCreate: string;
@@ -21,24 +22,6 @@ const HomeComponent = ({
   thumbnail,
 }: cript) => {
   const navigator = useNavigation();
-  const [imageHeight, setImageHeight] = useState(0);
-  const getHeightImage = () => {
-    if (thumbnail != undefined && thumbnail != null && thumbnail.length > 0) {
-      Image.getSize(thumbnail, (width, height) => {
-        const aspectRatio = width / height;
-        const scaledHeight = Dimensions.get('screen').width / aspectRatio;
-        setImageHeight(scaledHeight);
-        return;
-      });
-    } else {
-      setImageHeight(0);
-      return;
-    }
-  };
-
-  useEffect(() => {
-    getHeightImage();
-  }, [Dimensions.get('screen').width]);
 
   return (
     <>
@@ -79,18 +62,7 @@ const HomeComponent = ({
           </TouchableRipple>
           <View>
             <Lightbox>
-              <Image
-                source={{uri: thumbnail}}
-                style={{
-                  width: '100%',
-                  resizeMode: 'contain',
-                  flex: 1,
-                  height: imageHeight,
-                }}
-                onError={err => {
-                  console.log(err);
-                }}
-              />
+              <ImageFullWidth uri={thumbnail} />
             </Lightbox>
           </View>
         </View>
