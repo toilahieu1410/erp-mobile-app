@@ -6,10 +6,7 @@ const NotConnectNet = () => {
   return (
     <SafeAreaView className="bg-white flex-1 justify-center items-center content-center">
       <View>
-        <Image
-          source={IMAGES.WARNING}
-          style={{width: '50%', aspectRatio: 16 / 9}}
-        />
+        <Image source={IMAGES.WARNING} style={{width: '50%', height: 50}} />
         <Text>No internet</Text>
       </View>
     </SafeAreaView>
