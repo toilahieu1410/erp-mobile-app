@@ -11,14 +11,14 @@ const SearchTaskScreen = () => {
   }, []);
   return (
     <SafeAreaView className="flex-1 bg-white">
-        <View className="flex flex-row flex-nowrap justify-start items-center pr-2 border-b border-b-gray-300 bg-white" style={{elevation:3,shadowColor:'#000000',shadowOpacity:0.8}}>
+        <View className="flex flex-row flex-nowrap justify-start items-center pr-2 py-2 bg-white border-b border-b-gray-200">
             <Pressable className="px-2" onPress={()=>{navigator.goBack()}}>
-            <Icon source={Platform.OS ==='ios' ? 'chevron-left' : 'arrow-left'} size={40} />
+            <Icon source={Platform.OS ==='ios' ? 'chevron-left' : 'arrow-left'} size={Platform.OS ==='ios' ? 40:25} />
             </Pressable>
-            <View className="flex-1 py-2">
+            <View className="flex-1">
                 <TextInput
                 ref={refInputSearch}
-                className="rounded-xl text-sm flex-1 px-2 py-0 bg-gray-200"
+                className="rounded-xl text-sm flex-1 px-2 bg-gray-200"
                 placeholder="Tìm kiếm công việc"
               />
             </View>
