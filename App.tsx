@@ -34,22 +34,26 @@ const RootNavigator = () => {
       })
       .catch((err: BaseResponse) => {});
 
-    NetInfo.addEventListener(state => {
-      setConnectedNet(state.isConnected!);
-      console.log(state.isConnected);
+    const netInfomation = NetInfo.addEventListener(state => {
+      if (state.isConnected === true) {
+        setConnectedNet(true);
+      } else {
+        setConnectedNet(false);
+      }
     });
+    return () => netInfomation();
   }, []);
 
-  if (isConnectedNet == true) {
-    return (
-      <>
-        <NavigationContainer>
-          <StatusBar
-            backgroundColor="#027BE3"
-            barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
-          />
-          {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
-          {loginState.isAuthenticated === null ? (
+  return (
+    <>
+      <NavigationContainer>
+        <StatusBar
+          backgroundColor="#027BE3"
+          barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
+        />
+        {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
+        {isConnectedNet == true ? (
+          loginState.isAuthenticated === null ? (
             <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
           ) : loginState.isAuthenticated == true ? (
             <MainStack />
@@ -58,29 +62,22 @@ const RootNavigator = () => {
               <Stack.Screen
                 name={SCREENS.LOGIN.KEY}
                 options={{headerShown: false}}
-                component={NotConnectNet}
+                component={LoginScreen}
               />
             </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      </>
-    );
-  } else {
-    <NavigationContainer>
-      <StatusBar
-        backgroundColor="#027BE3"
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
-      />
-      <Stack.Navigator>
-        <Stack.Screen
-          name={SCREENS.LOGIN.KEY}
-          options={{headerShown: false}}
-          component={LoginScreen}
-        />
-      </Stack.Navigator>
-      ;
-    </NavigationContainer>;
-  }
+          )
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen
+              name={'NotConnectNet'}
+              options={{headerShown: false}}
+              component={NotConnectNet}
+            />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </>
+  );
 };
 
 const App = () => {
