@@ -10,7 +10,6 @@ import React, {useEffect, useState} from 'react';
 import {Button} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import AppHeader from '../../../components/navigators/AppHeader';
-import axios from 'axios';
 import moment from 'moment';
 
 const CheckInWFHScreen = () => {
@@ -48,18 +47,19 @@ const CheckInWFHScreen = () => {
     setLocation('Đang lấy vị trí...');
     Geolocation.getCurrentPosition(
       position => {
-        const response = axios.get(
-          `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`,
-        );
-        response
-          .then(res => {
-            setLocation(res.data.display_name);
-          })
-          .catch(err => {
-            setLocation('');
-            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: ' + err.message);
-          });
         setDatetime(new Date());
+
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`,
+        )
+          .then(response => response.json())
+          .then(data => {
+            setLocation(data.display_name);
+          })
+          .catch(error => {
+            setLocation('');
+            Alert.alert('Đã xảy ra lỗi khi lấy ra vị trí: ' + error.message);
+          });
       },
       error => {
         setLocation('');
@@ -77,13 +77,17 @@ const CheckInWFHScreen = () => {
           <Button onPress={getLocation} className="bg-primary">
             <Text className="text-white font-bold">Check in</Text>
           </Button>
-          <Text className="py-2">
-            <Text className="font-bold">Vị trí:</Text> {location}
-          </Text>
-          <Text className="py-2">
-            <Text className="font-bold">Thời gian:</Text>
-            {moment(dateTime).format('HH:mm DD/MM/yyyy')}
-          </Text>
+          {location && (
+            <View>
+              <Text className="py-2 text-base">
+                <Text className="font-bold">Vị trí:</Text> {location}
+              </Text>
+              <Text className="py-2 text-base">
+                <Text className="font-bold">Thời gian:</Text>
+                {moment(dateTime).format('HH:mm DD/MM/yyyy')}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>
