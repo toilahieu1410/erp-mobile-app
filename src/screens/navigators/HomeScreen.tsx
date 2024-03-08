@@ -16,9 +16,9 @@ const HomeScreen = () => {
             'Thông báo hướng dẫn cách kiểm tra tình trạng voucher và cách kiểm tra sản phẩm GIGA.vn theo giá nội bộ <a href="https://www.w3schools.com/">Visit W3Schools.com!</a>',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Thị Hiền',
         },
         {
@@ -32,9 +32,9 @@ const HomeScreen = () => {
             'Thông báo ban hành Quy chế lương, thưởng, phụ cấp năm 2023- ok',
           UpdatedAt: '2023-12-04T15:13:54.067',
           Avatar:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=1slZKmKDk8CT2ts8_CATeiqPRVDTx_nNv',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -48,9 +48,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -64,9 +64,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -80,9 +80,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -96,9 +96,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -112,9 +112,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -128,9 +128,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -144,9 +144,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -160,9 +160,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -176,9 +176,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -192,9 +192,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -208,9 +208,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -224,9 +224,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -240,9 +240,9 @@ const HomeScreen = () => {
             'Thông báo tham dự lễ Thành hôn của Mrs. Dương Thanh Hằng - Bộ phận Kinh doanh, Hà Nội',
           UpdatedAt: null,
           Avatar:
-            'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           ThumbnailURL:
-            'https://drive.google.com/uc?id=110HiUrNM1T7PbtyG-kZzXJl9-HCFx2ZI',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
           FullNameUserCreate: 'Lâm Văn Đức',
         },
       ],
@@ -263,7 +263,7 @@ const HomeScreen = () => {
         <View>
           <Image
             source={{
-              uri: 'https://drive.google.com/uc?id=1pjiJvIJwbmtzztpk3xqjfYcxpqSOmwgj',
+              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
             }}
             style={{
               width: '100%',
