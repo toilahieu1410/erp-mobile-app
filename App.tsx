@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {LogBox, SafeAreaView, StatusBar, View} from 'react-native';
+import {Alert, LogBox, SafeAreaView, StatusBar} from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store} from './store/store';
 import FlashMessage from 'react-native-flash-message';
@@ -10,18 +10,17 @@ import {checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
 import {SCREENS} from './constants/screens';
 import MainStack from './src/screens/stack/MainStack';
-import {PaperProvider, Text} from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import NotConnectNet from './src/screens/error/NotConnectNet';
+import RNRestart from 'react-native-restart';
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   const loginState = useSelector((state: RootState) => state.Auth);
   const dispatch = useDispatch();
-  const [isConnectedNet, setConnectedNet] = useState<boolean>(true);
 
   useEffect(() => {
     //@ts-ignore
@@ -35,10 +34,12 @@ const RootNavigator = () => {
       .catch((err: BaseResponse) => {});
 
     const netInfomation = NetInfo.addEventListener(state => {
-      if (state.isConnected === true) {
-        setConnectedNet(true);
-      } else {
-        setConnectedNet(false);
+      if (state.isConnected != true) {
+        Alert.alert(
+          'Lỗi kết nối',
+          'Không thể kết nối với máy chủ. Vui lòng kiểm tra kết nối internet và thử lại.',
+          [{text: 'Thử lại', onPress: () => RNRestart.restart()}],
+        );
       }
     });
     return () => netInfomation();
@@ -52,26 +53,16 @@ const RootNavigator = () => {
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
         />
         {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
-        {isConnectedNet == true ? (
-          loginState.isAuthenticated === null ? (
-            <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
-          ) : loginState.isAuthenticated == true ? (
-            <MainStack />
-          ) : (
-            <Stack.Navigator>
-              <Stack.Screen
-                name={SCREENS.LOGIN.KEY}
-                options={{headerShown: false}}
-                component={LoginScreen}
-              />
-            </Stack.Navigator>
-          )
+        {loginState.isAuthenticated === null ? (
+          <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
+        ) : loginState.isAuthenticated == true ? (
+          <MainStack />
         ) : (
           <Stack.Navigator>
             <Stack.Screen
-              name={'NotConnectNet'}
+              name={SCREENS.LOGIN.KEY}
               options={{headerShown: false}}
-              component={NotConnectNet}
+              component={LoginScreen}
             />
           </Stack.Navigator>
         )}
