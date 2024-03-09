@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -17,6 +17,14 @@ import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
 
 const Stack = createNativeStackNavigator();
+
+const config = {
+  screen: {
+    HomeScreen: SCREENS.HOME.KEY,
+    PayRollScreen: SCREENS.PAYROLL.KEY,
+  },
+};
+const urlApp = 'hoplonglms://app';
 
 const RootNavigator = () => {
   const loginState = useSelector((state: RootState) => state.Auth);
@@ -47,7 +55,8 @@ const RootNavigator = () => {
 
   return (
     <>
-      <NavigationContainer>
+      <NavigationContainer
+        linking={{prefixes: [urlApp, 'https://hoplonglms.com']}}>
         <StatusBar
           backgroundColor="#027BE3"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
