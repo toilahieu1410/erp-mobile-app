@@ -4,9 +4,8 @@ import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
-import Lightbox from 'react-native-lightbox-v2';
 import RenderHTML from 'react-native-render-html';
-import ImageFullWidth from '../app/Image/ImageFullWidth';
+import ImageViewer from '../app/modal/ImageViewer';
 type cript = {
   avatar: string;
   useCreate: string;
@@ -22,6 +21,7 @@ const HomeComponent = ({
   thumbnail,
 }: cript) => {
   const navigator = useNavigation();
+  const [visible, setIsVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -61,9 +61,12 @@ const HomeComponent = ({
             </View>
           </TouchableRipple>
           <View>
-            <Lightbox>
+            <ImageViewer uri={thumbnail} />
+
+            {/* <Lightbox>
+
               <ImageFullWidth uri={thumbnail} />
-            </Lightbox>
+            </Lightbox> */}
           </View>
         </View>
         <View className="border-t-[1px] h-4 border-t-gray-300"></View>
