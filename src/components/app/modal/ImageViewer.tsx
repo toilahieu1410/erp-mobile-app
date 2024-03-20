@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {Icon} from 'react-native-paper';
 import ZoomImage from '../Image/ZoomImage';
+import { Button } from '../../../../node_modules/react-native/types/index';
 type ImageViewerProp = {
   uri?: string | undefined;
 };
@@ -49,7 +50,7 @@ const ImageViewer = ({uri}: ImageViewerProp) => {
         presentationStyle="fullScreen">
         <View className="relative w-full h-full bg-black">
           <Pressable
-            className="p-2 z-30 absolute top-0 right-0"
+            className="p-2 z-30 absolute top-5 right-0"
             onPress={() => {
               setShowModal(false);
             }}>
@@ -58,6 +59,9 @@ const ImageViewer = ({uri}: ImageViewerProp) => {
           <View className="flex-1 bg-black h-full justify-center items-center content-center">
             <ZoomImage uri={uri} aspectRatio={ratio} />
           </View>
+          <Button title="tat modal" onPress={() => {
+              setShowModal(false);
+            }}></Button>
         </View>
       </Modal>
     </View>

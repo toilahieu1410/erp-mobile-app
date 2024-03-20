@@ -96,7 +96,7 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Khách hàng</Text>
+              <Text className="text-gray-300">Khách hàng</Text>
               <Text className="text-black">
                 {data.customer + '(' + data.customerCode + ')'}
               </Text>

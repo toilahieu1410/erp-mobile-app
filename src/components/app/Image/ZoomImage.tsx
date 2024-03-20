@@ -38,8 +38,9 @@ const ZoomImage = ({uri, aspectRatio}) => {
             uri: 'https://miro.medium.com/max/1080/1*7SYuZvH2pZnM0H79V4ttPg.jpeg',
           }}
           style={{
-            width: 500,
-            height: 300,
+            width: '100%',
+            height: 'auto',
+            aspectRatio:aspectRatio,
             transform: [{scale: scale}],
           }}
           resizeMode="contain"
