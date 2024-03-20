@@ -11,9 +11,12 @@ import {Button} from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import AppHeader from '../../../components/navigators/AppHeader';
 import moment from 'moment';
+import DeviceInfo from 'react-native-device-info';
 
 const CheckInWFHScreen = () => {
   const [location, setLocation] = useState<String>();
+  const [idDevice, setIdDevice] = useState<String>();
+
   const [dateTime, setDatetime] = useState<Date>();
 
   const requestCameraPermission = async () => {
@@ -67,6 +70,10 @@ const CheckInWFHScreen = () => {
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
+
+    DeviceInfo.getUniqueId().then(uniqueId => {
+      setIdDevice(uniqueId);
+    });
   };
 
   return (
@@ -81,6 +88,9 @@ const CheckInWFHScreen = () => {
             <View>
               <Text className="py-2 text-base">
                 <Text className="font-bold">Vị trí:</Text> {location}
+              </Text>
+              <Text className="py-2 text-base">
+                <Text className="font-bold">id device:</Text> {idDevice}
               </Text>
               <Text className="py-2 text-base">
                 <Text className="font-bold">Thời gian:</Text>

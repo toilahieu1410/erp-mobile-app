@@ -17,7 +17,6 @@ type ImageViewerProp = {
 const ImageViewer = ({uri}: ImageViewerProp) => {
   const [ratio, setRatio] = useState(0);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Image.getSize(
@@ -57,7 +56,7 @@ const ImageViewer = ({uri}: ImageViewerProp) => {
             <Icon source={'close'} size={30} color="white" />
           </Pressable>
           <View className="flex-1 bg-black h-full justify-center items-center content-center">
-            <ZoomImage uri={uri} />
+            <ZoomImage uri={uri} aspectRatio={ratio} />
           </View>
         </View>
       </Modal>

@@ -42,9 +42,10 @@ const SelectOption = ({option, title, value, onSelect}: SelectOptionProps) => {
             />
           </View>
         </TouchableOpacity>
-        <View className={`relative z-10 ${showOption ? 'block' : 'hidden'}`}>
+        <View
+          className={`relative z-10 ${showOption ? 'inline-block' : 'hidden'}`}>
           <View
-            className="max-h-40 w-full border border-gray-300 rounded-lg my-1 bg-white"
+            className="absolute max-h-40 w-full border border-gray-300 rounded-lg my-1 bg-white"
             style={{
               shadowColor: '#000000',
               shadowOffset: {

@@ -63,7 +63,9 @@ const ModalAddUserWatching = ({
                 </Text>
                 <View>
                   {data.map((item, index) => (
-                    <View className="p-1 flex flex-row justify-start items-center">
+                    <View
+                      className="p-1 flex flex-row justify-start items-center"
+                      key={index}>
                       <Image
                         source={{uri: item.avatar}}
                         style={{width: 30, height: 30, borderRadius: 30}}
