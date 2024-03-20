@@ -21,7 +21,6 @@ const HomeComponent = ({
   thumbnail,
 }: cript) => {
   const navigator = useNavigation();
-  const [visible, setIsVisible] = useState<boolean>(false);
 
   return (
     <>

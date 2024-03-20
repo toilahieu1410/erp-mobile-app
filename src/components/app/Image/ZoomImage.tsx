@@ -6,16 +6,9 @@ import {
   State,
 } from 'react-native-gesture-handler';
 
-const ZoomImage = ({uri}) => {
-  const scale = useRef(new Animated.Value(1)).current;
-  const onZoomStateChange = event => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      Animated.spring(scale, {
-        toValue: 1,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
+const ZoomImage = ({uri, aspectRatio}) => {
+  const scale = new Animated.Value(1);
+
   const onZoomEvent = Animated.event(
     [
       {
@@ -26,14 +19,23 @@ const ZoomImage = ({uri}) => {
       useNativeDriver: true,
     },
   );
+
+  const onZoomStateChange = event => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      Animated.spring(scale, {
+        toValue: 1,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
   return (
-    <View>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <PinchGestureHandler
         onGestureEvent={onZoomEvent}
         onHandlerStateChange={onZoomStateChange}>
         <Animated.Image
           source={{
-            uri: uri,
+            uri: 'https://miro.medium.com/max/1080/1*7SYuZvH2pZnM0H79V4ttPg.jpeg',
           }}
           style={{
             width: 500,
