@@ -12,7 +12,7 @@ import Geolocation from 'react-native-geolocation-service';
 import AppHeader from '../../../components/navigators/AppHeader';
 import moment from 'moment';
 import DeviceInfo from 'react-native-device-info';
-
+import NetInfo from '@react-native-community/netinfo';
 const CheckInWFHScreen = () => {
   const [location, setLocation] = useState<String>();
   const [idDevice, setIdDevice] = useState<String>();
@@ -43,6 +43,10 @@ const CheckInWFHScreen = () => {
     }
   };
   useEffect(() => {
+    NetInfo.addEventListener(state => {
+      console.log('Is connected to router?', state.isInternetReachable);
+      console.log(state.details);
+    });
     requestCameraPermission();
   }, []);
 

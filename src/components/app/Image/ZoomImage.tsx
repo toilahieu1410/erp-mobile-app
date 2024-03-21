@@ -1,12 +1,12 @@
 import {Animated, View} from 'react-native';
-import React, {useRef} from 'react';
-import {
-  PanGestureHandler,
-  PinchGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
+import React from 'react';
+import {PinchGestureHandler, State} from 'react-native-gesture-handler';
+type ZoomImageProps = {
+  uri?: string;
+  aspectRatio?: number | string | undefined;
+};
 
-const ZoomImage = ({uri, aspectRatio}) => {
+const ZoomImage = ({uri, aspectRatio}: ZoomImageProps) => {
   const scale = new Animated.Value(1);
 
   const onZoomEvent = Animated.event(
@@ -20,7 +20,7 @@ const ZoomImage = ({uri, aspectRatio}) => {
     },
   );
 
-  const onZoomStateChange = event => {
+  const onZoomStateChange = (event: {nativeEvent: {oldState: number}}) => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       Animated.spring(scale, {
         toValue: 1,
@@ -35,12 +35,12 @@ const ZoomImage = ({uri, aspectRatio}) => {
         onHandlerStateChange={onZoomStateChange}>
         <Animated.Image
           source={{
-            uri: 'https://miro.medium.com/max/1080/1*7SYuZvH2pZnM0H79V4ttPg.jpeg',
+            uri: uri,
           }}
           style={{
             width: '100%',
             height: 'auto',
-            aspectRatio:aspectRatio,
+            aspectRatio: aspectRatio,
             transform: [{scale: scale}],
           }}
           resizeMode="contain"
