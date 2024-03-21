@@ -10,6 +10,8 @@ import React from 'react';
 import {RouteProp} from '@react-navigation/native';
 import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
+import {Icon} from 'react-native-paper';
+import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
 
 type RootStackParamList = {
   DetailTask: {id: string};
@@ -77,9 +79,12 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
         centerTitle={true}
         showButtonBack={true}
         actions={
-          <Pressable>
-            <Text className="text-black font-bold text-sm px-2">Edit</Text>
-          </Pressable>
+          <View className="flex flex-row justify-end items-center">
+            <ChoiceMenu></ChoiceMenu>
+            <Pressable>
+              <Text className="text-black font-bold text-sm px-2">Edit</Text>
+            </Pressable>
+          </View>
         }
       />
       <View style={{flex: 1}}>
@@ -109,7 +114,9 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
               <Text className="text-gray">Trạng thái</Text>
-              <Text className="text-black">{data.status}</Text>
+              <Text className="text-black px-2 py-1 rounded-md bg-gray-300 w-16 text-center">
+                {data.status}
+              </Text>
             </View>
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
               <Text className="text-gray">Tài liệu</Text>
@@ -160,6 +167,7 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
               <Text className="text-black">{data.type}</Text>
             </View>
           </View>
+          <ChoiceMenu></ChoiceMenu>
         </ScrollView>
       </View>
     </SafeAreaView>
