@@ -5,12 +5,13 @@ import {
   View,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {RouteProp} from '@react-navigation/native';
 import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
-import {Icon} from 'react-native-paper';
+import {Divider, Icon, Menu} from 'react-native-paper';
 import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
 
 type RootStackParamList = {
@@ -80,7 +81,32 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
         showButtonBack={true}
         actions={
           <View className="flex flex-row justify-end items-center">
-            <ChoiceMenu></ChoiceMenu>
+            <ChoiceMenu>
+              <Menu.Item
+                titleStyle={{color: 'green'}}
+                onPress={() => {}}
+                title="Done"
+              />
+              <Menu.Item
+                titleStyle={{color: 'red'}}
+                onPress={() => {
+                  Alert.alert(data.title, 'Bạn có chắc chắn xóa ?', [
+                    {
+                      text: 'Đồng ý',
+                      style: 'destructive',
+                      onPress: () => console.log('oke'),
+                    },
+                    {
+                      text: 'Hủy',
+                      style: 'cancel',
+                      onPress: () => console.log('hủy'),
+                    },
+                  ]);
+                }}
+                title="Xóa"
+              />
+              <Divider />
+            </ChoiceMenu>
             <Pressable>
               <Text className="text-black font-bold text-sm px-2">Edit</Text>
             </Pressable>
@@ -96,35 +122,35 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
           </View>
           <View>
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Loại công việc</Text>
+              <Text className="text-gray-400">Loại công việc</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray-300">Khách hàng</Text>
+              <Text className="text-gray-400">Khách hàng</Text>
               <Text className="text-black">
                 {data.customer + '(' + data.customerCode + ')'}
               </Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Mô tả</Text>
+              <Text className="text-gray-400">Mô tả</Text>
               <Text className="text-black">{data.descreption}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Trạng thái</Text>
+              <Text className="text-gray-400">Trạng thái</Text>
               <Text className="text-black px-2 py-1 rounded-md bg-gray-300 w-16 text-center">
                 {data.status}
               </Text>
             </View>
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Tài liệu</Text>
+              <Text className="text-gray-400">Tài liệu</Text>
               {/* <AttachmentTaskComponent data={data.} /> */}
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Người theo dõi</Text>
+              <Text className="text-gray-400">Người theo dõi</Text>
               <View>
                 {data.watching.map((item, index) => (
                   <View
@@ -143,31 +169,30 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Ngày cập nhật</Text>
+              <Text className="text-gray-400">Ngày cập nhật</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Ngày tạo</Text>
+              <Text className="text-gray-400">Ngày tạo</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Người tạo</Text>
+              <Text className="text-gray-400">Người tạo</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Ngày cập nhật</Text>
+              <Text className="text-gray-400">Ngày cập nhật</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
 
             <View className="bg-white border-b-gray-300 border-b py-3 px-2">
-              <Text className="text-gray">Người cập nhật</Text>
+              <Text className="text-gray-400">Người cập nhật</Text>
               <Text className="text-black">{data.type}</Text>
             </View>
           </View>
-          <ChoiceMenu></ChoiceMenu>
         </ScrollView>
       </View>
     </SafeAreaView>
