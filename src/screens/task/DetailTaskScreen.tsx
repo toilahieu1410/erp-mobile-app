@@ -92,15 +92,15 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
                 onPress={() => {
                   Alert.alert(data.title, 'Bạn có chắc chắn xóa ?', [
                     {
-                      text: 'Đồng ý',
-                      style: 'destructive',
-                      onPress: () => console.log('oke'),
-                    },
-                    {
                       text: 'Hủy',
-                      style: 'cancel',
+                      style: 'destructive',
                       onPress: () => console.log('hủy'),
                     },
+                    {
+                      text: 'Đồng ý',
+                      onPress: () => console.log('oke'),
+                    },
+                  
                   ]);
                 }}
                 title="Xóa"

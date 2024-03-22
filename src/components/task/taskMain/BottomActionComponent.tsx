@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {View,Alert} from 'react-native';
 import React, {useRef} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
 import ActionSheet from 'react-native-actionsheet';
@@ -39,6 +39,18 @@ const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
               break;
             case 2:
               // xóa
+              Alert.alert(title, 'Bạn có chắc chắn xóa ?', [
+               
+                {
+                  text: 'Hủy',
+                  style: 'destructive',
+                  onPress: () => console.log('hủy'),
+                },
+                {
+                  text: 'Đồng ý',
+                  onPress: () => console.log('oke'),
+                },
+              ]);
               break;
             case 3:
               //cancel
@@ -55,4 +67,3 @@ const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
 
 export default BottomActionComponent;
 
-const styles = StyleSheet.create({});
