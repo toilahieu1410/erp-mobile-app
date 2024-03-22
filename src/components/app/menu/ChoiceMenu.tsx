@@ -1,7 +1,12 @@
 import {Pressable, View} from 'react-native';
 import React, {useState} from 'react';
 import {Divider, Icon, Menu} from 'react-native-paper';
-const ChoiceMenu = () => {
+
+type ChoiceMenuProps = {
+  children: React.ReactNode;
+};
+
+const ChoiceMenu = ({children}: ChoiceMenuProps) => {
   const [visible, setVisible] = useState(false);
 
   const openMenu = () => setVisible(true);
@@ -19,13 +24,7 @@ const ChoiceMenu = () => {
             <Icon source={'dots-vertical'} size={25}></Icon>
           </Pressable>
         }>
-        <Menu.Item
-          titleStyle={{color: 'green'}}
-          onPress={() => {}}
-          title="Done"
-        />
-        <Menu.Item titleStyle={{color: 'red'}} onPress={() => {}} title="Xóa" />
-        <Divider />
+        {children}
         <Menu.Item onPress={closeMenu} title="Hủy" />
       </Menu>
     </View>
