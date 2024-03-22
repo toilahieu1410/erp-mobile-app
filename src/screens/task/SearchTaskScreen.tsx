@@ -12,8 +12,11 @@ const SearchTaskScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View
-        className="flex flex-row flex-nowrap justify-start items-center pr-2 bg-white py-2"
-        style={{elevation: 3, shadowColor: '#000000', shadowOpacity: 0.8}}>
+        className="flex flex-row flex-nowrap justify-start items-center pr-2 bg-white py-2 border-y border-y-gray-200"
+        style={{
+        elevation: 2
+      }}
+      >
         <Pressable
           className="px-2"
           onPress={() => {
@@ -27,7 +30,8 @@ const SearchTaskScreen = () => {
         <View className="flex-1">
           <TextInput
             ref={refInputSearch}
-            className="rounded-xl text-sm flex-1 px-2 py-0 bg-gray-200"
+            className="rounded-xl bg-gray-200 text-base px-2"
+            style={{paddingBottom:3 , paddingTop:3,vericalAlight:'middle'}}
             placeholder="Tìm kiếm công việc"
           />
         </View>
