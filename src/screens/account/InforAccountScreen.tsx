@@ -1,20 +1,12 @@
-import {
-  Dimensions,
-  PermissionsAndroid,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Avatar, TouchableRipple} from 'react-native-paper';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {Avatar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native-gesture-handler';
 import AppHeader from '../../components/navigators/AppHeader';
 import {COLORS} from '../../../constants/colors';
 import InforAccountComponent from '../../components/account/InforAccountComponent';
-import {launchImageLibrary} from 'react-native-image-picker';
 import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
 
 const InforAccountScreen = () => {

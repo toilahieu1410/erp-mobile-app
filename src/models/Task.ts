@@ -11,6 +11,7 @@ export interface Task {
   avatarUserCreate: string | null;
   watching: Watching[] | [];
   Attachment: Attachment[] | [];
+  deadline: Date | null;
 }
 
 export interface Watching {

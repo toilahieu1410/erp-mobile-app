@@ -8,22 +8,19 @@ import {
   Alert,
 } from 'react-native';
 import React from 'react';
-import {RouteProp} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
 import {Divider, Icon, Menu} from 'react-native-paper';
 import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
+import {SCREENS} from '../../../constants/screens';
 
-type RootStackParamList = {
-  DetailTask: {id: string};
-};
+const DetailTaskScreen: React.FC = () => {
+  // Sử dụng hook useRoute để lấy params từ route
+  const route = useRoute();
+  const navigator = useNavigation();
 
-type DetailTaskScreenProps = {
-  route: RouteProp<RootStackParamList, 'DetailTask'>;
-};
-const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
-  route,
-}: DetailTaskScreenProps) => {
+  //@ts-ignore
   const {id} = route.params;
 
   const data = {
@@ -107,7 +104,11 @@ const DetailTaskScreen: React.FC<DetailTaskScreenProps> = ({
               />
               <Divider />
             </ChoiceMenu>
-            <Pressable>
+            <Pressable
+              onPress={() => {
+                //@ts-ignore
+                navigator.navigate(SCREENS.EDITTASK.KEY, {id: data.id});
+              }}>
               <Text className="text-black font-bold text-sm px-2">Edit</Text>
             </Pressable>
           </View>

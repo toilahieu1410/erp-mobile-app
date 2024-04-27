@@ -5,13 +5,13 @@ import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 type SelectDateTimeProps = {
   title?: string | null;
-  value?: string | null;
+  value?: Date | null;
   onSelect?: (date: Date) => void;
 };
 
 const SelectDate = ({title, value, onSelect}: SelectDateTimeProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [dateChoice, setDateChoice] = useState<Date>(new Date());
+  const [dateChoice, setDateChoice] = useState<Date>(value || new Date());
 
   return (
     <View className="mb-4">

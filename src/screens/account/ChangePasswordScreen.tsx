@@ -4,21 +4,15 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   Text,
-  TextInput,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Button, Icon, TouchableRipple} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
+import React, {useState} from 'react';
+import {Button} from 'react-native-paper';
 import AppHeader from '../../components/navigators/AppHeader';
-import {COLORS} from '../../../constants/colors';
 import InputChangePassword from '../../components/account/ChangePassword/InputChangePassword';
 
 const ChangePasswordScreen = () => {
-  const navigator = useNavigation();
   const [password, setPassword] = useState<string>();
   const [newPassword, setNewPassword] = useState<string>();
   const [comfirmPassword, setComfirmPassword] = useState<string>();

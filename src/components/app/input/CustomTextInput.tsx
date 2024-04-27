@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
 type CustomInputProps = {
   label?: string | null;
-  value?: string | undefined;
+  value?: string | null;
   onChangeText?: ((text: string) => void) | undefined;
 };
 const CustomTextInput = ({label, value, onChangeText}: CustomInputProps) => {
