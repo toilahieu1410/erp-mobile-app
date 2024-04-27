@@ -15,4 +15,5 @@ export const IMAGES = {
   WFH: require('../assets/image/app/work-from-home.png'),
   SCHEDULE: require('../assets/image/app/schedule.png'),
   WARNING: require('../assets/image/app/warning.png'),
+  MENU: require('../assets/image/navigator/menu.png'),
 };

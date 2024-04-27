@@ -6,6 +6,7 @@ import TaskScreen from '../navigators/TaskScreen';
 import AddTaskScreen from '../task/AddTaskScreen';
 import DetailTaskScreen from '../task/DetailTaskScreen';
 import TaskListScreen from '../task/TaskListScreen';
+import EditTaskScreen from '../task/EditTaskScreen';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,20 @@ const TaskStack = () => {
         }}
         component={DetailTaskScreen}
       />
+      <Stack.Screen
+        name={SCREENS.EDITTASK.KEY}
+        options={{
+          title: SCREENS.EDITTASK.NAME,
+          headerTitleAlign: 'center',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={EditTaskScreen}
+      />
+
       <Stack.Screen
         name={SCREENS.TASK_LIST.KEY}
         options={{

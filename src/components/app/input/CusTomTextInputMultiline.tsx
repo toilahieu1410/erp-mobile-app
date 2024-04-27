@@ -2,7 +2,7 @@ import {Text, TextInput, View} from 'react-native';
 import React from 'react';
 type CustomInputProps = {
   label?: string | null;
-  value?: string | undefined;
+  value?: string | null;
   onChangeText?: ((text: string) => void) | undefined;
 };
 const CusTomTextInputMultiline = ({
