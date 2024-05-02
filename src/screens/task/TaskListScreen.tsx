@@ -1,70 +1,217 @@
-import {Alert, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
-import {
-  Agenda,
-  AgendaEntry,
-  DateData,
-  LocaleConfig,
-} from 'react-native-calendars';
+import CalendarStrip from 'react-native-calendar-strip';
+import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
+import {Task} from '../../models/Task';
 
 const TaskListScreen = () => {
-  LocaleConfig.locales['fr'] = {
-    monthNames: [
-      'Tháng Giêng',
-      'Tháng Hai',
-      'Tháng Ba',
-      'Tháng Tư',
-      'Tháng Năm',
-      'Tháng Sáu',
-      'Tháng Bảy',
-      'Tháng Tám',
-      'Tháng Chín',
-      'Tháng Mười',
-      'Tháng Mười Một',
-      'Tháng Mười Hai',
-    ],
-    monthNamesShort: [
-      'Thg 1',
-      'Thg 2',
-      'Thg 3',
-      'Thg 4',
-      'Thg 5',
-      'Thg 6',
-      'Thg 7',
-      'Thg 8',
-      'Thg 9',
-      'Thg 10',
-      'Thg 11',
-      'Thg 12',
-    ],
-    dayNames: [
-      'Chủ Nhật',
-      'Thứ Hai',
-      'Thứ Ba',
-      'Thứ Tư',
-      'Thứ Năm',
-      'Thứ Sáu',
-      'Thứ Bảy',
-    ],
-    dayNamesShort: ['CN', 'Th 2', 'Th 3', 'Th 4', 'Th 5', 'Th 6', 'Th 7'],
-    today: 'Hôm nay',
-  };
-
-  LocaleConfig.defaultLocale = 'fr';
   const [selected, setSelected] = useState(new Date());
+  const locale = {
+    name: 'vi',
+    config: {
+      months:
+        'Tháng 1_Tháng 2_Tháng 3_Tháng 4_Tháng 5_Tháng 6_Tháng 7_Tháng 8_Tháng 9_Tháng 10_Tháng 11_Tháng 12'.split(
+          '_',
+        ),
+      monthsShort: 'Th1_Th2_Th3_Th4_Th5_Th6_Th7_Th8_Th9_Th10_Th11_Th12'.split(
+        '_',
+      ),
+      weekdays: 'Chủ Nhật_Thứ Hai_Thứ Ba_Thứ Tư_Thứ Năm_Thứ Sáu_Thứ Bảy'.split(
+        '_',
+      ),
+      weekdaysShort: 'CN_T2_T3_T4_T5_T6_T7'.split('_'),
+      weekdaysMin: 'CN_T2_T3_T4_T5_T6_T7'.split('_'),
+      longDateFormat: {
+        LT: 'HH:mm',
+        LTS: 'HH:mm:ss',
+        L: 'DD/MM/YYYY',
+        LL: 'D MMMM YYYY',
+        LLL: 'D MMMM YYYY LT',
+        LLLL: 'dddd, D MMMM YYYY LT',
+      },
+      calendar: {
+        sameDay: '[Hôm nay] LT',
+        nextDay: '[Ngày mai] LT',
+        nextWeek: 'dddd [tuần tới] LT',
+        lastDay: '[Hôm qua] LT',
+        lastWeek: 'dddd [tuần trước] LT',
+        sameElse: 'L',
+      },
+      relativeTime: {
+        future: 'trong %s',
+        past: '%s trước',
+        s: 'vài giây',
+        m: 'một phút',
+        mm: '%d phút',
+        h: 'một giờ',
+        hh: '%d giờ',
+        d: 'một ngày',
+        dd: '%d ngày',
+        M: 'một tháng',
+        MM: '%d tháng',
+        y: 'một năm',
+        yy: '%d năm',
+      },
 
-  const renderEmptyItem = () => {};
-
-  const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
-    return (
-      <View>
-        {reservation?.data.map(item => {
-          return <Text className="py-9">{item.text}</Text>;
-        })}
-      </View>
-    );
+      week: {
+        dow: 1, // Monday is the first day of the week.
+        doy: 4, // The week that contains Jan 4th is the first week of the year.
+      },
+    },
   };
+
+  const taskList: ReadonlyArray<Task> = [
+    {
+      id: 'KAP-1',
+      title: 'Gặp khách hàng tại Đình Thôn',
+      status: 'todo',
+      userCreate: 'Duclv',
+      fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate:
+        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+      watching: [
+        {
+          username: 'VinhLQ',
+          fullName: 'Lâm Quang Vinh',
+          avatar:
+            'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+        },
+        {
+          username: 'Duclv',
+          fullName: 'Lâm Văn Đức',
+          avatar:
+            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+        },
+        {
+          username: 'HienLT',
+          fullName: 'Lâm Thị Hiền',
+          avatar:
+            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+        },
+        {
+          username: 'TanNM',
+          fullName: 'Nguyễn Minh Tân',
+          avatar:
+            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+        },
+        {
+          username: 'VinhLQ',
+          fullName: 'Lâm Quang Vinh',
+          avatar:
+            'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+        },
+      ],
+      type: null,
+      customer: null,
+      customerName: null,
+      description: null,
+      Attachment: [],
+      deadline: null,
+    },
+    {
+      id: 'KAP-2',
+      title: 'Ký hợp đồng tại Mỹ đình',
+      status: 'done',
+      userCreate: 'Duclv',
+      fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate:
+        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+      watching: [
+        {
+          username: 'HienLT',
+          fullName: 'Lâm Thị Hiền',
+          avatar:
+            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+        },
+        {
+          username: 'Duclv',
+          fullName: 'Lâm Văn Đức',
+          avatar:
+            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+        },
+        {
+          username: 'TanNM',
+          fullName: 'Nguyễn Minh Tân',
+          avatar:
+            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+        },
+      ],
+      type: null,
+      customer: null,
+      customerName: null,
+      description: null,
+      Attachment: [],
+      deadline: null,
+    },
+    {
+      id: 'KAP-3',
+      title: 'Khảo sát thị trường mới',
+      status: 'todo',
+      userCreate: 'Duclv',
+      fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate:
+        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+      watching: [
+        {
+          username: 'HienLT',
+          fullName: 'Lâm Thị Hiền',
+          avatar:
+            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+        },
+        {
+          username: 'TanNM',
+          fullName: 'Nguyễn Minh Tân',
+          avatar:
+            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+        },
+      ],
+      type: null,
+      customer: null,
+      customerName: null,
+      description: null,
+      Attachment: [],
+      deadline: null,
+    },
+    {
+      id: 'KAP-4',
+      title: 'Khảo sát thị trường mới',
+      status: 'done',
+      userCreate: 'Duclv',
+      fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate:
+        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+      watching: [
+        {
+          username: 'HienLT',
+          fullName: 'Lâm Thị Hiền',
+          avatar:
+            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+        },
+      ],
+      type: null,
+      customer: null,
+      customerName: null,
+      description: null,
+      Attachment: [],
+      deadline: null,
+    },
+    {
+      id: 'KAP-5',
+      title: 'Khảo sát thị trường mới',
+      status: 'todo',
+      fullNameCreate: 'Lâm Văn Đức',
+      avatarUserCreate: 'a',
+      userCreate: 'Duclv',
+      watching: [],
+      type: null,
+      customer: null,
+      customerName: null,
+      description: null,
+      Attachment: [],
+      deadline: null,
+    },
+  ];
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -74,33 +221,51 @@ const TaskListScreen = () => {
         centerTitle={true}
       />
       <View className="flex-1">
-        <Agenda
-          items={{
-            '2024-04-27': [
-              {
-                data: [{text: 'item 1'}, {text: 'item 2'}, {text: 'item 3'}],
-              },
-            ],
-            '2024-04-28': [
-              {
-                data: [
-                  {text: 'item 1'},
-                  {text: 'item 2'},
-                  {text: 'item 3'},
-                  {text: 'item 4'},
-                ],
-              },
-            ],
+        <CalendarStrip
+          selectedDate={selected}
+          calendarAnimation={{type: 'sequence', duration: 30}}
+          style={{paddingTop: 10, paddingBottom: 10}}
+          innerStyle={[]}
+          calendarHeaderStyle={{color: 'black'}}
+          dateNumberStyle={{color: 'black'}}
+          dateNameStyle={{color: 'black'}}
+          highlightDateNumberStyle={{color: '#32a3f4'}}
+          highlightDateNameStyle={{color: '#32a3f4'}}
+          disabledDateNameStyle={{color: 'grey'}}
+          disabledDateNumberStyle={{color: 'grey'}}
+          scrollable={true}
+          leftSelector={[]}
+          rightSelector={[]}
+          locale={locale}
+          scrollerPaging={true}
+          onDateSelected={date => {
+            setSelected(date.toDate());
           }}
-          renderEmptyData={() => {
-            return <Text></Text>;
-          }}
-          renderItem={renderItem}
-          selected={new Date().toString()}
         />
+
+        <View style={styles.body}>
+          <ScrollView>
+            <View>
+              {taskList.flatMap((task, index) => {
+                return <TaskFlatListComponent task={task} key={index} />;
+              })}
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderTopWidth: 0.5,
+    borderTopColor: '#DDDDDD',
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+});
 
 export default TaskListScreen;

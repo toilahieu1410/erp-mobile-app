@@ -12,7 +12,11 @@ import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTas
 
 const AddTaskScreen = () => {
   const [data, setData] = useState<Task>({
+    id: 'null',
+    title: null,
     type: null,
+    watching: [],
+    Attachment: [],
   });
 
   const countries = [
@@ -92,17 +96,11 @@ const AddTaskScreen = () => {
               <ModalAddUserWatching
                 data={watchings}
                 onChangeData={value => {
-                  console.log(value);
                   setWatchings(value);
                 }}
               />
 
-              <SelectDateTime
-                title="DeadLine"
-                onSelect={date => {
-                  console.log(date);
-                }}
-              />
+              <SelectDateTime title="DeadLine" onSelect={date => {}} />
             </View>
           )}
         </ScrollView>

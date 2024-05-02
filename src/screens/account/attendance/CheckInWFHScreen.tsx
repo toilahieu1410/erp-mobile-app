@@ -43,10 +43,7 @@ const CheckInWFHScreen = () => {
     }
   };
   useEffect(() => {
-    NetInfo.addEventListener(state => {
-      console.log('Is connected to router?', state.isInternetReachable);
-      console.log(state.details);
-    });
+    NetInfo.addEventListener(state => {});
     requestCameraPermission();
   }, []);
 
