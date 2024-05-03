@@ -1,28 +1,28 @@
 import {SafeAreaView, ScrollView, Text, View} from 'react-native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
-import {Icon, TouchableRipple} from 'react-native-paper';
+import {TouchableRipple} from 'react-native-paper';
 import CustomTextInput from '../../components/app/input/CustomTextInput';
-import SelectOption from '../../components/app/input/SelectOption';
 import SelectDateTime from '../../components/app/input/SelectDate';
 import CusTomTextInputMultiline from '../../components/app/input/CusTomTextInputMultiline';
 import ModalAddUserWatching from '../../components/task/addTask/ModalAddUserWatching';
 import {Attachment, Task, Watching} from '../../models/Task';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
+import Select from '../../components/app/input/Select';
 
 const AddTaskScreen = () => {
   const [data, setData] = useState<Task>({
     id: 'null',
-    title: null,
-    type: null,
+    title: undefined,
+    type: undefined,
     watching: [],
     Attachment: [],
   });
 
   const countries = [
-    {key: 'Task', display: 'Task'},
-    {key: 'Visit', display: 'Visit'},
-    {key: 'Tele sale', display: 'Tele sale'},
+    {value: 'Task', label: 'Task'},
+    {value: 'Visit', label: 'Visit'},
+    {value: 'Tele sale', label: 'Tele sale'},
   ];
 
   const [Attachment, setAttachment] = useState<Attachment[]>([]);
@@ -65,20 +65,25 @@ const AddTaskScreen = () => {
       />
       <View className="flex-1 my-2 h-full ">
         <ScrollView className="px-2">
-          <SelectOption
+          <Select
+            title={'Loại công việc'}
             option={countries}
-            title="Loại công việc"
             value={data?.type}
-            onSelect={(key, name) => {
+            onSelect={selected => {
               setData({
                 ...data,
-                type: key, // Update the age property
+                type: selected.value,
               });
             }}
           />
+
           {data.type && (
             <View>
-              <CustomTextInput label="Tiêu đề" />
+              <CustomTextInput
+                label="Tiêu đề"
+                onChangeText={() => {}}
+                value={data.title}
+              />
               <CustomTextInput label="Khách hàng" />
               {data.type == 'Task' ? (
                 <CusTomTextInputMultiline label="Mô tả" />

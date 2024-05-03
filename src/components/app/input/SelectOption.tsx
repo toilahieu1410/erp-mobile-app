@@ -27,7 +27,7 @@ const SelectOption = ({option, title, value, onSelect}: SelectOptionProps) => {
   return (
     <View className="mb-4 z-50">
       {title && <Text className="text-black text-base">{title}</Text>}
-      <View>
+      <View style={{position: 'relative'}}>
         <TouchableOpacity
           onPress={() => {
             setShowOption(!showOption);
@@ -42,11 +42,11 @@ const SelectOption = ({option, title, value, onSelect}: SelectOptionProps) => {
             />
           </View>
         </TouchableOpacity>
-        <View
-          className={`relative z-10 ${showOption ? 'inline-block' : 'hidden'}`}>
+        <View className={`${showOption ? 'inline-block' : 'hidden'}`}>
           <View
             className="absolute max-h-40 w-full border border-gray-300 rounded-lg my-1 bg-white"
             style={{
+              zIndex: 999,
               shadowColor: '#000000',
               shadowOffset: {
                 width: 0,

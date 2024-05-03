@@ -1,14 +1,14 @@
 export interface Task {
   id: string;
-  title?: string | null;
-  type?: string | null;
-  customer?: string | null;
-  customerName?: string | null;
-  description?: string | null;
-  status?: string | null;
-  userCreate?: string | null;
-  fullNameCreate?: string | null;
-  avatarUserCreate?: string | null;
+  title?: string | undefined;
+  type?: string | undefined;
+  customer?: string | undefined;
+  customerName?: string | undefined;
+  description?: string | undefined;
+  status?: string | undefined;
+  userCreate?: string | undefined;
+  fullNameCreate?: string | undefined;
+  avatarUserCreate?: string | undefined;
   watching: Watching[] | [];
   Attachment: Attachment[] | [];
   deadline?: Date | null;

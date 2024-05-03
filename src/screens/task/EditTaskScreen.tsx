@@ -10,6 +10,7 @@ import CusTomTextInputMultiline from '../../components/app/input/CusTomTextInput
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
 import ModalAddUserWatching from '../../components/task/addTask/ModalAddUserWatching';
 import SelectDateTime from '../../components/app/input/SelectDate';
+import Select from '../../components/app/input/Select';
 const EditTaskScreen = () => {
   const route = useRoute();
   //@ts-ignore
@@ -63,9 +64,9 @@ const EditTaskScreen = () => {
   });
 
   const countries = [
-    {key: 'Task', display: 'Task'},
-    {key: 'Visit', display: 'Visit'},
-    {key: 'Tele sale', display: 'Tele sale'},
+    {value: 'Task', label: 'Task'},
+    {value: 'Visit', label: 'Visit'},
+    {value: 'Tele sale', label: 'Tele sale'},
   ];
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -81,14 +82,14 @@ const EditTaskScreen = () => {
       />
       <View className="flex-1 my-2 h-full ">
         <ScrollView className="px-2">
-          <SelectOption
+          <Select
+            title={'Loại công việc'}
             option={countries}
-            title="Loại công việc"
             value={data?.type}
-            onSelect={(key, name) => {
+            onSelect={selected => {
               setData({
                 ...data,
-                type: key, // Update the age property
+                type: selected.value,
               });
             }}
           />
