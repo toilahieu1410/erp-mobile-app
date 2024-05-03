@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   isSelected: {
-    backgroundColor: '#7BC9FF',
+    backgroundColor: '#cce5ff',
   },
 });
