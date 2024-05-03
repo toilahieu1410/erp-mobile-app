@@ -91,13 +91,10 @@ const DetailTaskScreen: React.FC = () => {
                     {
                       text: 'Hủy',
                       style: 'destructive',
-                      onPress: () => console.log('hủy'),
                     },
                     {
                       text: 'Đồng ý',
-                      onPress: () => console.log('oke'),
                     },
-                  
                   ]);
                 }}
                 title="Xóa"

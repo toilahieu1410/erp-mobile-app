@@ -1,11 +1,11 @@
 import {SafeAreaView, TextInput, View, Pressable} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {LegacyRef, useEffect} from 'react';
 import {Icon} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {Platform} from 'react-native';
 const SearchTaskScreen = () => {
   const navigator = useNavigation();
-  const refInputSearch = React.useRef<TextInput>();
+  const refInputSearch = React.useRef();
   useEffect(() => {
     refInputSearch.current?.focus();
   }, []);
@@ -14,9 +14,8 @@ const SearchTaskScreen = () => {
       <View
         className="flex flex-row flex-nowrap justify-start items-center pr-2 bg-white py-2 border-y border-y-gray-200"
         style={{
-        elevation: 2
-      }}
-      >
+          elevation: 2,
+        }}>
         <Pressable
           className="px-2"
           onPress={() => {
@@ -31,7 +30,7 @@ const SearchTaskScreen = () => {
           <TextInput
             ref={refInputSearch}
             className="rounded-xl bg-gray-200 text-base px-2"
-            style={{paddingBottom:3 , paddingTop:3,vericalAlight:'middle'}}
+            style={{paddingBottom: 3, paddingTop: 3, vericalAlight: 'middle'}}
             placeholder="Tìm kiếm công việc"
           />
         </View>

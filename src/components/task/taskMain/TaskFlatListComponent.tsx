@@ -33,9 +33,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
                 }}
                 size={20}
                 source={{uri: watchingItem.avatar!}}
-                onError={err => {
-                  console.log(err);
-                }}
+                onError={err => {}}
               />
             </View>,
           );
@@ -88,9 +86,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
                 }}
                 size={40}
                 source={{uri: task.avatarUserCreate!}}
-                onError={err => {
-                  console.log(err);
-                }}
+                onError={err => {}}
               />
               <View className="flex-1">
                 <Text
@@ -101,7 +97,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
               </View>
             </View>
             <View>
-              <BottomActionComponent title={task.title} id={task.id} />
+              <BottomActionComponent title={task.title!} id={task.id} />
             </View>
           </View>
           <View className="h-[35%] w-full bg-gray-200 flex flex-row flex-nowrap justify-between items-center ml-[3px] p-2 rounded-md border-l-2 border-l-primary">
