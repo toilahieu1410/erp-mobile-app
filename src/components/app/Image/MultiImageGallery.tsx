@@ -7,9 +7,18 @@ type MultiImageGalleryProps = {
   images?: ArrImageProps[] | [];
 };
 
+type RenderProps = {
+  images?: ArrImageProps[] | [];
+  onPress?: ((index: number) => void) | undefined;
+};
+
 const MultiImageGallery = ({images}: MultiImageGalleryProps) => {
   const [visible, setIsVisible] = useState<boolean>(false);
-
+  const [indexShowImage, setIndexShowImage] = useState<number>(0);
+  const onPressImage = (index: number) => {
+    setIndexShowImage(index);
+    setIsVisible(true);
+  };
   return (
     <View>
       <Pressable
@@ -17,16 +26,26 @@ const MultiImageGallery = ({images}: MultiImageGalleryProps) => {
           setIsVisible(true);
         }}>
         <View>
-          {images!.length == 1 ? <Render_1 images={images} /> : null}
-          {images!.length == 2 ? <Render_2 images={images} /> : null}
-          {images!.length == 3 ? <Render_3 images={images} /> : null}
-          {images!.length == 4 ? <Render_4 images={images} /> : null}
-          {images!.length > 4 ? <Render_orther images={images} /> : null}
+          {images!.length == 1 ? (
+            <Render_1 images={images} onPress={onPressImage} />
+          ) : null}
+          {images!.length == 2 ? (
+            <Render_2 images={images} onPress={onPressImage} />
+          ) : null}
+          {images!.length == 3 ? (
+            <Render_3 images={images} onPress={onPressImage} />
+          ) : null}
+          {images!.length == 4 ? (
+            <Render_4 images={images} onPress={onPressImage} />
+          ) : null}
+          {images!.length > 4 ? (
+            <Render_orther images={images} onPress={onPressImage} />
+          ) : null}
         </View>
       </Pressable>
       <ImageView
         images={images!}
-        imageIndex={0}
+        imageIndex={indexShowImage}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}
       />
@@ -34,120 +53,195 @@ const MultiImageGallery = ({images}: MultiImageGalleryProps) => {
   );
 };
 
-const Render_1 = ({images}: MultiImageGalleryProps) => {
+const Render_1 = ({images, onPress}: RenderProps) => {
   return (
-    <View>
+    <Pressable
+      onPress={() => {
+        if (onPress) {
+          onPress(0);
+        }
+      }}>
       <ImageFullWidth uri={images![0].uri} />
-    </View>
+    </Pressable>
   );
 };
 
-const Render_2 = ({images}: MultiImageGalleryProps) => {
+const Render_2 = ({images, onPress}: RenderProps) => {
   return (
     <View style={styles.view_render_2}>
-      <View style={[styles.row, {marginRight: 2}]}>
+      <Pressable
+        style={[styles.row, {marginRight: 2}]}
+        onPress={() => {
+          if (onPress) {
+            onPress(0);
+          }
+        }}>
         <Image source={{uri: images![0].uri}} style={styles.image_render_2} />
-      </View>
-      <View style={[styles.row, {marginLeft: 2}]}>
+      </Pressable>
+      <Pressable
+        style={[styles.row, {marginLeft: 2}]}
+        onPress={() => {
+          if (onPress) {
+            onPress(1);
+          }
+        }}>
         <Image source={{uri: images![1].uri}} style={styles.image_render_2} />
-      </View>
+      </Pressable>
     </View>
   );
 };
 
-const Render_3 = ({images}: MultiImageGalleryProps) => {
+const Render_3 = ({images, onPress}: RenderProps) => {
   return (
     <View style={styles.view_render_3}>
       <View style={{flex: 1.5, marginRight: 4}}>
-        <View style={styles.first_row_render_3}>
+        <Pressable
+          style={styles.first_row_render_3}
+          onPress={() => {
+            if (onPress) {
+              onPress(0);
+            }
+          }}>
           <Image source={{uri: images![0].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
       <View style={{flex: 1, flexDirection: 'column'}}>
-        <View style={styles.item_render_3}>
+        <Pressable
+          style={styles.item_render_3}
+          onPress={() => {
+            if (onPress) {
+              onPress(1);
+            }
+          }}>
           <Image source={{uri: images![1].uri}} style={styles.image_render_2} />
-        </View>
-        <View style={styles.item2_render_3}>
+        </Pressable>
+        <Pressable
+          style={styles.item2_render_3}
+          onPress={() => {
+            if (onPress) {
+              onPress(2);
+            }
+          }}>
           <Image source={{uri: images![2].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
     </View>
   );
 };
 
-const Render_4 = ({images}: MultiImageGalleryProps) => {
+const Render_4 = ({images, onPress}: RenderProps) => {
   return (
     <View style={styles.view_render_4}>
       <View style={{flex: 1, marginRight: 2, flexDirection: 'column'}}>
-        <View style={{flex: 1, marginBottom: 2}}>
+        <Pressable
+          style={{flex: 1, marginBottom: 2}}
+          onPress={() => {
+            if (onPress) {
+              onPress(0);
+            }
+          }}>
           <Image source={{uri: images![0].uri}} style={styles.image_render_2} />
-        </View>
-        <View style={{flex: 1, marginTop: 2}}>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            if (onPress) {
+              onPress(1);
+            }
+          }}
+          style={{flex: 1, marginTop: 2}}>
           <Image source={{uri: images![1].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
       <View style={{flex: 1, marginLeft: 2}}>
-        <View style={{flex: 1, marginBottom: 2}}>
+        <Pressable
+          style={{flex: 1, marginBottom: 2}}
+          onPress={() => {
+            if (onPress) {
+              onPress(2);
+            }
+          }}>
           <Image source={{uri: images![2].uri}} style={styles.image_render_2} />
-        </View>
-        <View style={{flex: 1, marginTop: 2}}>
+        </Pressable>
+        <Pressable
+          style={{flex: 1, marginTop: 2}}
+          onPress={() => {
+            if (onPress) {
+              onPress(3);
+            }
+          }}>
           <Image source={{uri: images![3].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
     </View>
   );
 };
 
-const Render_orther = ({images}: MultiImageGalleryProps) => {
+const Render_orther = ({images, onPress}: RenderProps) => {
   return (
     <View style={styles.view_render_4}>
       <View style={{flex: 1, marginRight: 2, flexDirection: 'column'}}>
-        <View style={{flex: 1, marginBottom: 2}}>
+        <Pressable
+          onPress={() => {
+            if (onPress) {
+              onPress(0);
+            }
+          }}
+          style={{flex: 1, marginTop: 2}}>
           <Image source={{uri: images![0].uri}} style={styles.image_render_2} />
-        </View>
-        <View style={{flex: 1, marginTop: 2}}>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            if (onPress) {
+              onPress(1);
+            }
+          }}
+          style={{flex: 1, marginTop: 2}}>
           <Image source={{uri: images![1].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
       <View style={{flex: 1, marginLeft: 2}}>
-        <View style={{flex: 1, marginBottom: 2}}>
+        <Pressable
+          style={{flex: 1, marginBottom: 2}}
+          onPress={() => {
+            if (onPress) {
+              onPress(2);
+            }
+          }}>
           <Image source={{uri: images![2].uri}} style={styles.image_render_2} />
-        </View>
-        <View style={{flex: 1, marginTop: 2, position: 'relative'}}>
-          <Text
+        </Pressable>
+        <Pressable
+          style={{flex: 1, marginTop: 2, position: 'relative'}}
+          onPress={() => {
+            if (onPress) {
+              onPress(3);
+            }
+          }}>
+          <View
             style={{
-              fontSize: 35,
               position: 'absolute',
               zIndex: 10,
-              color: 'white',
               backgroundColor: 'rgba(0, 0, 0, 0.4)',
               width: '100%',
               height: '100%',
-              textAlign: 'center',
-              verticalAlign: 'middle',
-              alignSelf: 'center',
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
             }}>
-            + {images!.length - 4}
-          </Text>
+            <Text
+              style={{
+                fontSize: 35,
+                color: 'white',
+              }}>
+              + {images!.length - 4}
+            </Text>
+          </View>
           <Image source={{uri: images![3].uri}} style={styles.image_render_2} />
-        </View>
+        </Pressable>
       </View>
     </View>
   );
 };
-
-// <View style={styles.item_render_4}>
-//         <Image source={{uri: images![0].uri}} style={styles.image_render_2} />
-//       </View>
-//       <View style={styles.item_render_4}>
-//         <Image source={{uri: images![1].uri}} style={styles.image_render_2} />
-//       </View>
-//       <View style={styles.item_render_4}>
-//         <Image source={{uri: images![2].uri}} style={styles.image_render_2} />
-//       </View>
-//       <View style={styles.item_render_4}>
-//         <Image source={{uri: images![3].uri}} style={styles.image_render_2} />
-//       </View>
 
 export default MultiImageGallery;
 

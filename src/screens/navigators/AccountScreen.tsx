@@ -31,19 +31,19 @@ const AccountScreen = () => {
       },
     },
 
-    {
-      icon: (
-        <Image
-          source={IMAGES.CLOCKCHECK}
-          style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
-      ),
-      title: SCREENS.ATTENDANCE.NAME,
-      type: 'menu',
-      onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.ATTENDANCE.KEY);
-      },
-    },
+    // {
+    //   icon: (
+    //     <Image
+    //       source={IMAGES.CLOCKCHECK}
+    //       style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
+    //   ),
+    //   title: SCREENS.ATTENDANCE.NAME,
+    //   type: 'menu',
+    //   onClick: () => {
+    //     //@ts-ignore
+    //     navigation.navigate(SCREENS.ATTENDANCE.KEY);
+    //   },
+    // },
     {
       icon: (
         <Image
