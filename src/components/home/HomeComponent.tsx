@@ -1,20 +1,19 @@
-import {Dimensions, Pressable, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Dimensions, Text, View} from 'react-native';
+import React from 'react';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
 import RenderHTML from 'react-native-render-html';
-import ImageFullWidth from '../app/Image/ImageFullWidth';
-import Lightbox from 'react-native-lightbox-v2';
-import ImageView from 'react-native-image-viewing';
+import MultiImageGallery from '../app/Image/MultiImageGallery';
+import {ArrImageProps} from '../../models/ArrImageProps';
 
 type cript = {
   avatar: string;
   useCreate: string;
   dateCreate: string;
   title: string;
-  thumbnail: string;
+  thumbnail: ArrImageProps[] | [];
 };
 const HomeComponent = ({
   avatar,
@@ -24,18 +23,6 @@ const HomeComponent = ({
   thumbnail,
 }: cript) => {
   const navigator = useNavigation();
-  const images = [
-    {
-      uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
-    },
-    {
-      uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
-    },
-    {
-      uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
-    },
-  ];
-  const [visible, setIsVisible] = useState(false);
 
   return (
     <>
@@ -75,43 +62,13 @@ const HomeComponent = ({
             </View>
           </TouchableRipple>
           <View>
-            <Pressable
-              onPress={() => {
-                setIsVisible(true);
-              }}>
-              <Text>Test</Text>
-            </Pressable>
-            <ImageView
-              images={images}
-              imageIndex={0}
-              visible={visible}
-              onRequestClose={() => setIsVisible(false)}
-            />
-
-            {/* <Lightbox
-              renderContent={() => (
-                <View>
-                  <ImageFullWidth uri={thumbnail} />
-                </View>
-              )}>
-              <View>
-                <ImageFullWidth uri={thumbnail} />
-              </View>
-            </Lightbox> */}
+            <MultiImageGallery images={thumbnail} />
           </View>
         </View>
         <View className="border-t-[1px] h-4 border-t-gray-300"></View>
       </View>
     </>
   );
-};
-
-HomeComponent.propTypes = {
-  avatar: PropTypes.string,
-  useCreate: PropTypes.string,
-  dateCreate: PropTypes.string,
-  title: PropTypes.string,
-  thumbnail: PropTypes.string,
 };
 
 export default HomeComponent;
