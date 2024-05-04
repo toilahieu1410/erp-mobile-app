@@ -1,18 +1,19 @@
-import {Dimensions, Pressable, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {Dimensions, Text, View} from 'react-native';
+import React from 'react';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
 import RenderHTML from 'react-native-render-html';
 import MultiImageGallery from '../app/Image/MultiImageGallery';
+import {ArrImageProps} from '../../models/ArrImageProps';
 
 type cript = {
   avatar: string;
   useCreate: string;
   dateCreate: string;
   title: string;
-  thumbnail: any;
+  thumbnail: ArrImageProps[] | [];
 };
 const HomeComponent = ({
   avatar,
@@ -22,8 +23,6 @@ const HomeComponent = ({
   thumbnail,
 }: cript) => {
   const navigator = useNavigation();
-
-  const [visible, setIsVisible] = useState(false);
 
   return (
     <>
@@ -64,37 +63,12 @@ const HomeComponent = ({
           </TouchableRipple>
           <View>
             <MultiImageGallery images={thumbnail} />
-            {/* <Pressable
-              onPress={() => {
-                setIsVisible(true);
-              }}>
-              <Text>Test</Text>
-            </Pressable> */}
-
-            {/* <Lightbox
-              renderContent={() => (
-                <View>
-                  <ImageFullWidth uri={thumbnail} />
-                </View>
-              )}>
-              <View>
-                <ImageFullWidth uri={thumbnail} />
-              </View>
-            </Lightbox> */}
           </View>
         </View>
         <View className="border-t-[1px] h-4 border-t-gray-300"></View>
       </View>
     </>
   );
-};
-
-HomeComponent.propTypes = {
-  avatar: PropTypes.string,
-  useCreate: PropTypes.string,
-  dateCreate: PropTypes.string,
-  title: PropTypes.string,
-  thumbnail: PropTypes.string,
 };
 
 export default HomeComponent;

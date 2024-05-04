@@ -2,12 +2,9 @@ import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import ImageFullWidth from './ImageFullWidth';
 import ImageView from 'react-native-image-viewing';
+import {ArrImageProps} from '../../../models/ArrImageProps';
 type MultiImageGalleryProps = {
-  images?: arrImageProp[] | [];
-};
-
-type arrImageProp = {
-  uri?: string | undefined;
+  images?: ArrImageProps[] | [];
 };
 
 const MultiImageGallery = ({images}: MultiImageGalleryProps) => {
