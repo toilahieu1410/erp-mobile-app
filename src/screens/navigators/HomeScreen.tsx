@@ -17,8 +17,24 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Thị Hiền',
         },
         {
@@ -33,8 +49,17 @@ const HomeScreen = () => {
           UpdatedAt: '2023-12-04T15:13:54.067',
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -49,8 +74,14 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -65,8 +96,11 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -81,8 +115,23 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -97,8 +146,14 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -113,8 +168,23 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1573273787173-0eb81a833b34',
+            },
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -129,8 +199,17 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -145,8 +224,17 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1569569970363-df7b6160d111',
+            },
+            {
+              uri: 'https://media.istockphoto.com/id/517188688/vi/anh/phong-c%E1%BA%A3nh-n%C3%BAi-non.jpg?s=612x612&w=0&k=20&c=WWWaejSo6EWGZMZSK7QK6LCfwd0rL2KB3ImCX2VkW4A=',
+            },
+            {
+              uri: 'https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-04.jpg.webp',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -161,8 +249,11 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [
+            {
+              uri: 'https://images.unsplash.com/photo-1571501679680-de32f1e7aad4',
+            },
+          ],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -177,8 +268,7 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -193,8 +283,7 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -209,8 +298,7 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -225,8 +313,7 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
         {
@@ -241,8 +328,7 @@ const HomeScreen = () => {
           UpdatedAt: null,
           Avatar:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
-          ThumbnailURL:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUBntF15IRvE7KShuizPnnaSOcTL1roH_AGw&usqp=CAU',
+          ThumbnailURL: [],
           FullNameUserCreate: 'Lâm Văn Đức',
         },
       ],
