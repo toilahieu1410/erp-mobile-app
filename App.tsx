@@ -15,16 +15,9 @@ import SplashScreen from 'react-native-splash-screen';
 import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
+import linking from './config/linking';
 
 const Stack = createNativeStackNavigator();
-
-const config = {
-  screen: {
-    HomeScreen: SCREENS.HOME.KEY,
-    PayRollScreen: SCREENS.PAYROLL.KEY,
-  },
-};
-const urlApp = 'hoplonglms://app';
 
 const RootNavigator = () => {
   const loginState = useSelector((state: RootState) => state.Auth);
@@ -55,8 +48,7 @@ const RootNavigator = () => {
 
   return (
     <>
-      <NavigationContainer
-        linking={{prefixes: [urlApp, 'https://hoplonglms.com']}}>
+      <NavigationContainer linking={linking}>
         <StatusBar
           backgroundColor="#027BE3"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}

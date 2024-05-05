@@ -45,7 +45,7 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="http" />
             <data android:scheme="https" />
-            <data android:host="www.hoplonglms.com" />
+            <data android:host="hoplonglms.com" />
         </intent-filter>
       </activity>
       <meta-data 
