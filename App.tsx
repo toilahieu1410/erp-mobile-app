@@ -37,7 +37,11 @@ const config = {
 };
 
 const linking = {
-  prefixes: ['hoplonglms://app'],
+  prefixes: [
+    'hoplonglms://',
+    'https://hoplonglms.com',
+    'http://hoplonglms.com',
+  ],
   config,
 };
 
