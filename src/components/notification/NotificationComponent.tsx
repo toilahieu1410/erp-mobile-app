@@ -1,4 +1,4 @@
-import {Image, Text, View} from 'react-native';
+import {Image, Linking, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -25,7 +25,7 @@ const NotificationComponent = ({
     <TouchableRipple
       onPress={() =>
         //@ts-ignore
-        navigator.navigate(redirect)
+        Linking.openURL('https://reactnavigation.org/docs/deep-linking')
       }>
       <View className="px-2 py-4 flex flex-nowrap flex-row">
         <View>

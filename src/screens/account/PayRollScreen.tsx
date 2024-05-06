@@ -1,16 +1,7 @@
-import {
-  Alert,
-  Animated,
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {Animated, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
 import {TouchableRipple} from 'react-native-paper';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import PayRollComponent from '../../components/account/PayRollComponent';
 import {fomatNumber} from '../../../utils/CommonFunction';
 import ModalPage from '../../components/app/modal/ModalPage';
@@ -36,31 +27,35 @@ const PayRollScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <AppHeader title="Bảng lương" centerTitle={true} showButtonBack={true} />
       <View className="flex-1 w-full">
-        {List.map(item => {
-          return (
-            <Animated.View
-              style={{transform: [{translateX: slideFromLeft}]}}
-              key={item}>
-              <TouchableRipple
-                onPress={() => {
-                  const data = {
-                    thang: item,
-                    nam: 2023,
-                  };
+        <ScrollView>
+          <View>
+            {List.map(item => {
+              return (
+                <Animated.View
+                  style={{transform: [{translateX: slideFromLeft}]}}
+                  key={item}>
+                  <TouchableRipple
+                    onPress={() => {
+                      const data = {
+                        thang: item,
+                        nam: 2023,
+                      };
 
-                  //@ts-ignore
-                  setShowModal(true);
+                      //@ts-ignore
+                      setShowModal(true);
 
-                  //navigator.navigate(SCREENS.SALARYDETAIL.KEY, data);
-                }}>
-                <View className="py-4 px-2 border-b border-gray-300 flex flex-row flex-nowrap justify-between items-center">
-                  <Text className="text-black text-sm">Tháng {item}</Text>
-                  <Text className="text-black text-sm">0 đ</Text>
-                </View>
-              </TouchableRipple>
-            </Animated.View>
-          );
-        })}
+                      //navigator.navigate(SCREENS.SALARYDETAIL.KEY, data);
+                    }}>
+                    <View className="py-4 px-2 border-b border-gray-300 flex flex-row flex-nowrap justify-between items-center">
+                      <Text className="text-black text-sm">Tháng {item}</Text>
+                      <Text className="text-black text-sm">0 đ</Text>
+                    </View>
+                  </TouchableRipple>
+                </Animated.View>
+              );
+            })}
+          </View>
+        </ScrollView>
       </View>
       <ModalPage
         showModal={showModal}

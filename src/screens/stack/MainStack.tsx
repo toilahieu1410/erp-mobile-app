@@ -6,6 +6,7 @@ import ChangePasswordScreen from '../account/ChangePasswordScreen';
 import {APPHEADER} from '../../../constants/appHeaderNavigator';
 import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
+import PayRollScreen from '../account/PayRollScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -53,6 +54,19 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
+      />
+      <Stack.Screen
+        name={SCREENS.PAYROLL.KEY}
+        options={{
+          title: SCREENS.PAYROLL.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={PayRollScreen}
       />
     </Stack.Navigator>
   );
