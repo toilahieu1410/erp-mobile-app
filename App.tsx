@@ -15,7 +15,31 @@ import SplashScreen from 'react-native-splash-screen';
 import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
-import linking from './config/linking';
+
+const config = {
+  screens: {
+    ChangePasswordScreen: {
+      path: 'changepassword',
+    },
+    PayRollScreen: {
+      path: 'payroll',
+    },
+
+    // Profile: {
+    //   path: 'profile/:id',
+    //   parse: {
+    //     id: id => `${id}`,
+    //   },
+    // },
+    // Notifications: 'notifications',
+    // Settings: 'settings',
+  },
+};
+
+const linking = {
+  prefixes: ['hoplonglms://app'],
+  config,
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -48,7 +72,7 @@ const RootNavigator = () => {
 
   return (
     <>
-      <NavigationContainer linking={linking}>
+      <NavigationContainer linking={linking} independent={true}>
         <StatusBar
           backgroundColor="#027BE3"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
