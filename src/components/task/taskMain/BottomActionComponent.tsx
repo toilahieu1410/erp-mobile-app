@@ -3,7 +3,8 @@ import React, {useRef} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
 import ActionSheet from 'react-native-actionsheet';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../../constants/screens';
+import {SCREENS} from '../../../constants/screens';
+
 interface BottomActionTaskPropes {
   title: string;
   id: string;

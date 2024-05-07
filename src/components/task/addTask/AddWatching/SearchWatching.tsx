@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import {Watching} from '../../../../models/Task';
 import {Icon} from 'react-native-paper';
-import {COLORS} from '../../../../../constants/colors';
+import {COLORS} from '../../../../constants/colors';
 type SearchWatchingProps = {
   data?: Watching[];
   onHide?: (value: boolean) => void;

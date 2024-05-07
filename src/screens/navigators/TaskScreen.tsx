@@ -1,14 +1,14 @@
 import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
-import {COLORS} from '../../../constants/colors';
+import {COLORS} from '../../constants/colors';
 import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../../constants/images';
+import {IMAGES} from '../../constants/images';
 import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
 import {Task} from '../../models/Task';
 import ProcessTaskTodayComponent from '../../components/task/taskMain/ProcessTaskTodayComponent';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent';
 
 const TaskScreen = () => {

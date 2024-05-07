@@ -8,7 +8,7 @@ import {RootState, store} from './store/store';
 import FlashMessage from 'react-native-flash-message';
 import {checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
-import {SCREENS} from './constants/screens';
+import {SCREENS} from './src/constants/screens';
 import MainStack from './src/screens/stack/MainStack';
 import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
