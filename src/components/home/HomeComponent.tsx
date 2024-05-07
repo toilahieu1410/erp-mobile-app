@@ -3,7 +3,7 @@ import React from 'react';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 import RenderHTML from 'react-native-render-html';
 import MultiImageGallery from '../app/Image/MultiImageGallery';
 import {ArrImageProps} from '../../models/ArrImageProps';

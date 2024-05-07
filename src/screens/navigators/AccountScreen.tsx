@@ -6,14 +6,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../slice/Auth';
 import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../../constants/images';
-import {COLORS} from '../../../constants/colors';
+import {IMAGES} from '../../constants/images';
+import {COLORS} from '../../constants/colors';
 
 const AccountScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
   interface item {
     icon?: React.ReactElement;
     title: String;
@@ -100,6 +101,7 @@ const AccountScreen = () => {
       },
     },
   ];
+  
   return (
     <>
       <SafeAreaView className="flex-1 w-full bg-white">

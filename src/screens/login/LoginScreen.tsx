@@ -39,7 +39,7 @@ const LoginScreen = () => {
               <View className="flex-[2] justify-end items-center">
                 <View className="h-44">
                   <Image
-                    source={require('../../../assets/image/logo.jpg')}
+                    source={require('../../assets/images/logo.jpg')}
                     style={{
                       resizeMode: 'contain',
                       aspectRatio: 1,

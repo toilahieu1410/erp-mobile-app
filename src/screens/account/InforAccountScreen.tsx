@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native-gesture-handler';
 import AppHeader from '../../components/navigators/AppHeader';
-import {COLORS} from '../../../constants/colors';
+import {COLORS} from '../../constants/colors';
 import InforAccountComponent from '../../components/account/InforAccountComponent';
 import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
 

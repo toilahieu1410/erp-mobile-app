@@ -13,7 +13,7 @@ import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
 import {Divider, Icon, Menu} from 'react-native-paper';
 import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 
 const DetailTaskScreen: React.FC = () => {
   // Sử dụng hook useRoute để lấy params từ route

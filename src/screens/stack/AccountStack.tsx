@@ -1,9 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 import AccountScreen from '../navigators/AccountScreen';
 import InforAccountScreen from '../account/InforAccountScreen';
-import {APPHEADER} from '../../../constants/appHeaderNavigator';
+import {APPHEADER} from '../../constants/appHeaderNavigator';
 import CheckInWFHScreen from '../account/attendance/CheckInWFHScreen';
 const Stack = createStackNavigator();
 

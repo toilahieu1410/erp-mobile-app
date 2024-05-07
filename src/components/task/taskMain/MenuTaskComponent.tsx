@@ -1,10 +1,10 @@
 import {Image, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
-import {IMAGES} from '../../../../constants/images';
-import {COLORS} from '../../../../constants/colors';
+import {IMAGES} from '../../../constants/images';
+import {COLORS} from '../../../constants/colors';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../../constants/screens';
+import {SCREENS} from '../../../constants/screens';
 
 const MenuTaskComponent = () => {
   const navigator = useNavigation();

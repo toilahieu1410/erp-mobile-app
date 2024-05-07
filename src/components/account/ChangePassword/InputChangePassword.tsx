@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {Icon, TouchableRipple} from 'react-native-paper';
-import {COLORS} from '../../../../constants/colors';
+import {COLORS} from '../../../constants/colors';
 type InputChangePasswordProps = {
   label?: string | null;
   value?: string | undefined;
