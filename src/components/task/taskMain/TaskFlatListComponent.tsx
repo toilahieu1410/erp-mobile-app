@@ -4,7 +4,7 @@ import {Avatar, TouchableRipple} from 'react-native-paper';
 import {Task} from '../../../models/Task';
 import BottomActionComponent from './BottomActionComponent';
 import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../../../constants/screens';
+import {SCREENS} from '../../../constants/screens';
 
 interface TaskProps {
   task: Task;

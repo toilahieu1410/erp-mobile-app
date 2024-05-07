@@ -1,6 +1,6 @@
 import {Image} from 'react-native';
 import React, {useState} from 'react';
-import {IMAGES} from '../../../../constants/images';
+import {IMAGES} from '../../../constants/images';
 
 type ImageFullWidthProps = {
   uri?: string;

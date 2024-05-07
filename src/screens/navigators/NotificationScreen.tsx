@@ -3,7 +3,7 @@ import React from 'react';
 import AppHeader from '../../components/navigators/AppHeader';
 import {Avatar} from 'react-native-paper';
 import NotificationComponent from '../../components/notification/NotificationComponent';
-import {SCREENS} from '../../../constants/screens';
+import {SCREENS} from '../../constants/screens';
 
 const NotificationScreen = () => {
   return (
