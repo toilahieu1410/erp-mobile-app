@@ -8,6 +8,9 @@ import {COLORS} from '../../constants/colors';
 import {login} from '../../slice/Auth';
 
 const InputLoginComponent = () => {
+
+  const dispatch = useDispatch();
+  
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const [focusUsername, setFocusUsername] = useState(false);
@@ -15,8 +18,8 @@ const InputLoginComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
 
+  console.log(username,'undefined')
   const onLogin = () => {
     if (username == undefined || username == null || username.length == 0) {
       showMessage({
@@ -99,7 +102,7 @@ const InputLoginComponent = () => {
         onBlur={() => {
           setFocusPassword(false);
         }}
-        className="rounded-xl bg-white border border-white py-0 focus:border-primary"
+        className=" bg-white border border-white focus:border-primary"
         autoCorrect={false}
         secureTextEntry={!showPassword}
         placeholder="Mật khẩu"

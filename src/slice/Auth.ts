@@ -15,6 +15,7 @@ const initialState: AuthState = {
   isAuthenticated: null,
   user: {},
 };
+
 export const checkToken = createAsyncThunk<boolean>(
   'authen/checkToken',
   async () => {

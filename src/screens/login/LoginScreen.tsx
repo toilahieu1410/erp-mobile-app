@@ -15,7 +15,8 @@ import InputLoginComponent from '../../components/login/InputLoginComponent';
 
 const LoginScreen = () => {
   const windowHeight = Dimensions.get('window').height;
-  const loginState = useSelector((state: RootState) => state.Auth);
+  const loginState = useSelector((state: RootState) => state.Auth)
+  
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

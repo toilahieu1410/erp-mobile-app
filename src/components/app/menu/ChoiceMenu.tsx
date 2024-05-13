@@ -1,6 +1,6 @@
-import {Pressable, View} from 'react-native';
-import React, {useState} from 'react';
-import {Divider, Icon, Menu} from 'react-native-paper';
+import React, {useState} from 'react'
+import {Pressable, View} from 'react-native'
+import {Divider, Icon, Menu} from 'react-native-paper'
 
 type ChoiceMenuProps = {
   children: React.ReactNode;

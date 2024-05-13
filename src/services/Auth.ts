@@ -4,6 +4,7 @@ import {Token} from '../services/Token';
 import http from '../../store/http';
 
 const AuthenticateService = {
+  
   async Login(data: unknown): Promise<BaseResponse<Token>> {
     const url = `/api/Authentication/Login`;
     try {

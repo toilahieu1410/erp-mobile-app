@@ -7,6 +7,7 @@ import {APPHEADER} from '../../constants/appHeaderNavigator';
 import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
+import ConfirmScreen from '../work/ConfirmScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -67,6 +68,19 @@ const MainStack = () => {
           },
         }}
         component={PayRollScreen}
+      />
+       <Stack.Screen
+        name={SCREENS.XIN_XAC_NHAN.KEY}
+        options={{
+          title: SCREENS.XIN_XAC_NHAN.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={ConfirmScreen}
       />
     </Stack.Navigator>
   );

@@ -37,4 +37,8 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   CHECKIN_WFH: {KEY: 'CheckInWFHScreen', NAME: 'Chấm công WFH'},
 
   PAYROLL: {KEY: 'PayRollScreen', NAME: 'Bảng lương'},
+
+  //============================== Các loại đơn, đề nghị =======================================
+  XIN_XAC_NHAN: {KEY: 'ConfirmScreen', NAME: 'Xin Xác nhận'},
 };
+

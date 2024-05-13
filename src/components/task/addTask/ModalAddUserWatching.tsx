@@ -14,6 +14,7 @@ import {Icon, TouchableRipple} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShowUserWatching from './AddWatching/ShowUserWatching';
 import SearchWatching from './AddWatching/SearchWatching';
+
 type ModalAddUserWatchingProps = {
   data?: Watching[];
   onChangeData?: (value: Watching[]) => void;

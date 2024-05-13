@@ -84,7 +84,7 @@ const RootNavigator = () => {
         {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
         {loginState.isAuthenticated === null ? (
           <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
-        ) : loginState.isAuthenticated == true ? (
+        ) : loginState.isAuthenticated == false ? (
           <MainStack />
         ) : (
           <Stack.Navigator>
@@ -99,6 +99,7 @@ const RootNavigator = () => {
     </>
   );
 };
+
 
 const App = () => {
   LogBox.ignoreAllLogs();

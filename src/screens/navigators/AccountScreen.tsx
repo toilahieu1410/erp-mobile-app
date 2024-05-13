@@ -1,34 +1,35 @@
-import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Avatar, Icon, TouchableRipple} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {logout} from '../../slice/Auth';
-import {BaseResponse} from '../../models/BaseResponse';
-import {showMessage} from 'react-native-flash-message';
-import {SCREENS} from '../../constants/screens';
-import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../constants/images';
-import {COLORS} from '../../constants/colors';
+import React, {useEffect, useState} from 'react'
+import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native'
+
+import {Avatar, TouchableRipple} from 'react-native-paper'
+import Icon from 'react-native-vector-icons/Ionicons'
+import {useNavigation} from '@react-navigation/native'
+import {useDispatch, useSelector} from 'react-redux'
+import {logout} from '../../slice/Auth'
+import {BaseResponse} from '../../models/BaseResponse'
+import {showMessage} from 'react-native-flash-message'
+import {SCREENS} from '../../constants/screens'
+import AppHeader from '../../components/navigators/AppHeader'
+
+interface Item {
+  icon?: React.ReactElement;
+  title: String;
+  type: 'menu' | 'text';
+  onClick?: () => void;
+}
 
 const AccountScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
-  interface item {
-    icon?: React.ReactElement;
-    title: String;
-    type: String;
-    onClick?: Function;
-  }
-  const ListItem: item[] = [
+
+  const ListItem: Item[] = [
     {
-      icon: <Icon size={30} color="#027BE3" source={'information'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name='person-outline' />,
       title: SCREENS.INFORACCOUNT.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.INFORACCOUNT.KEY);
+        navigation?.navigate(SCREENS.INFORACCOUNT.KEY);
       },
     },
 
@@ -46,20 +47,16 @@ const AccountScreen = () => {
     //   },
     // },
     {
-      icon: (
-        <Image
-          source={IMAGES.DOLLAR}
-          style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
-      ),
+      icon: <Icon size={25} color="#027BE3" name='logo-usd' />,
+      
       title: SCREENS.PAYROLL.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.PAYROLL.KEY);
+        navigation?.navigate(SCREENS.PAYROLL.KEY);
       },
     },
     {
-      icon: <Icon size={30} color="#027BE3" source={'account-group'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name='people-sharp' />,
       title: 'Nhóm của tôi',
       type: 'menu',
       onClick: () => {
@@ -72,16 +69,15 @@ const AccountScreen = () => {
     },
 
     {
-      icon: <Icon size={30} color="#027BE3" source={'shield-account'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name='shield-half-sharp' />,
       title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.CHANGEPASSWORD.KEY);
+        navigation?.navigate(SCREENS.CHANGEPASSWORD.KEY);
       },
     },
     {
-      icon: <Icon size={30} color="#027BE3" source={'exit-to-app'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name='enter-outline' />,
       title: 'Đăng xuất',
       type: 'menu',
       onClick: () => {
@@ -98,6 +94,18 @@ const AccountScreen = () => {
               type: 'danger',
             });
           });
+      },
+    },
+    {
+      title: 'Tác vụ',
+      type: 'text'
+    },
+    {
+      icon: <Icon size={25} color="#027BE3" name='enter-outline' />,
+      title: SCREENS.XIN_XAC_NHAN.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.XIN_XAC_NHAN.KEY);
       },
     },
   ];
@@ -131,10 +139,7 @@ const AccountScreen = () => {
               return item.type === 'menu' ? (
                 <TouchableRipple
                   key={index}
-                  onPress={() => {
-                    //@ts-ignore
-                    item.onClick();
-                  }}>
+                  onPress={item.onClick}>
                   <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
                     <View className="flex flex-row items-center">
                       {item.icon}
@@ -144,16 +149,16 @@ const AccountScreen = () => {
                     </View>
                     <View>
                       <Icon
-                        size={30}
+                        size={20}
                         color="#027BE3"
-                        source="chevron-right"></Icon>
+                        name='chevron-forward-outline' />
                     </View>
                   </View>
                 </TouchableRipple>
               ) : (
                 <Text
                   key={index}
-                  className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-300 pt-4">
+                  className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-200 pt-4">
                   {item.title}
                 </Text>
               );

@@ -1,13 +1,14 @@
-import {ImagePikerModal} from '../../../models/ImagePicker';
-import {Pressable, View} from 'react-native';
-import React from 'react';
-import {launchImageLibrary} from 'react-native-image-picker';
+import React from 'react'
+import {Pressable, View} from 'react-native'
+import {ImagePikerModal} from '../../../models/ImagePicker'
+import {launchImageLibrary} from 'react-native-image-picker'
 
 type SelectMultiPhotoProps = {
   children?: React.ReactNode;
   onSelect?: (value: ImagePikerModal[]) => void;
   mediaType: 'photo' | 'video' | 'mixed';
-};
+}
+
 const SelectMultiPhoto = ({
   children,
   onSelect,
