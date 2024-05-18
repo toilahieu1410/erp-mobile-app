@@ -1,10 +1,18 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { heightScale } from '../../../screens/size';
 
+import {Dimensions} from 'react-native';
+
+
+export const height = Dimensions.get('window').height
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  height: {
+    height: height
   },
   headerContainer: {
     flex: 1,

@@ -11,9 +11,14 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Button as ButtonCreate, NativeBaseProvider} from 'native-base';
-import {styles} from '../../assets/css/ConfirmScreen/style';
+
+import {styles} from '../../../assets/css/ConfirmScreen/style';
 import moment from 'moment';
-import DatePickerDay from '../picker/datePicker';
+import DatePickerDay from '../../picker/datePicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Token } from '../../../services/Token';
+import AuthenticateService from '../../../services/Auth';
+
 
 interface CreateConfirmProps {
   onPress: () => void;
@@ -22,7 +27,9 @@ interface CreateConfirmProps {
 interface PickerItem {
   id: number;
   name: string;
+  value: string;
 }
+
 
 const newDate = new Date();
 
@@ -30,35 +37,46 @@ const loaiXacNhan: PickerItem[] = [
   {
     id: 1,
     name: 'Tăng ca (OT)',
+    value: 'tangca',
   },
   {
     id: 2,
     name: 'Quên chấm công, không thể chấm công',
+    value: 'quenchamcong',
   },
   {
     id: 3,
-    name: 'Tăng ca (OT)',
+    name: 'Ra ngoài việc riêng (làm bù)',
+    value: 'lamviecrieng',
   },
   {
     id: 4,
-    name: 'Tăng ca (OT)',
+    name: 'Xin đi muộn',
+    value: 'xindimuon',
   },
   {
     id: 5,
     name: 'Tăng ca (OT)',
+    value: 'tangca',
   },
 ];
 
+
+
 const CreateConfirm: React.FC<CreateConfirmProps> = () => {
-  const [username, setUsername] = useState('hieunm');
+  const [username, setUsername] = useState('');
   const [macongty, setMacongty] = useState('hoplong');
-  const [email, setEmail] = useState('testgmail@gmail.com');
-  const [phone, setPhone] = useState('0123456789');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [selectConfirm, setSelectConfirm] = useState<PickerItem | null>(null);
   const [lyDo, setLyDo] = useState('');
   const [disable, setDisable] = useState(true);
   const [dateTime, setDateTime] = useState(newDate);
   const [show, setShow] = useState(false);
+
+
+
+
 
   const onChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || dateTime;
@@ -69,6 +87,8 @@ const CreateConfirm: React.FC<CreateConfirmProps> = () => {
       setDateTime(currentDate);
     }
   };
+
+ 
 
   const handleConfirm = (itemValue: PickerItem) => {
     setSelectConfirm(itemValue);
@@ -81,6 +101,25 @@ const CreateConfirm: React.FC<CreateConfirmProps> = () => {
       setDisable(true);
     }
   }, [lyDo]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token')
+     
+        if(token) {
+          const response = await AuthenticateService.GetUser()
+          const user = response.value
+          setUsername(user.userName)
+          setEmail(user.email)
+          setPhone(user.phoneNumber)
+        }
+      } catch (error) {
+        console.error('Error', error)
+      }
+    }
+    fetchUserData()
+  }, [])
 
   return (
     <KeyboardAvoidingView
@@ -113,21 +152,23 @@ const CreateConfirm: React.FC<CreateConfirmProps> = () => {
               </Text>
             </View>
             <View style={styles.flex}>
-            <Text style={styles.textHeader}>Loại xác nhận:</Text>
+              <Text style={styles.textHeader}>Loại xác nhận:</Text>
               <Text>&nbsp;&nbsp;</Text>
               <Picker
-              mode="dropdown"
-              style={styles.pickerDropdown}
-              selectedValue={selectConfirm}
-              onValueChange={(itemValue, itemIndex) => handleConfirm(loaiXacNhan[itemIndex - 1])}>
-              <Picker.Item label={'Loại xác nhận'} value="" />
-              {loaiXacNhan &&
-                loaiXacNhan.map(item => (
-                  <Picker.Item label={item.name} value={item} />
-                ))}
-            </Picker>
+                mode="dropdown"
+                style={styles.pickerDropdown}
+                selectedValue={selectConfirm}
+                onValueChange={(itemValue, itemIndex) =>
+                  handleConfirm(loaiXacNhan[itemIndex - 1])
+                }>
+                <Picker.Item label={'Loại xác nhận'} value="" />
+                {loaiXacNhan &&
+                  loaiXacNhan.map(item => (
+                    <Picker.Item label={item.name} value={item} />
+                  ))}
+              </Picker>
             </View>
-         
+
             <View style={styles.flex}>
               <Text style={styles.textHeader}>Ngày cần xác nhận:</Text>
               <Text>&nbsp;&nbsp;</Text>
@@ -145,6 +186,14 @@ const CreateConfirm: React.FC<CreateConfirmProps> = () => {
                   mode={'date'}
                 />
               )}
+            </View>
+            <View style={styles.flex}>
+              <Text style={styles.textHeader}>Người nhận bàn giao:</Text>
+              <Text>&nbsp;&nbsp;</Text>
+              <View>
+              {/* {renderLabel()} */}
+            
+              </View>
             </View>
             <View style={styles.flex}>
               <TextInput

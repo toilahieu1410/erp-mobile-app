@@ -5,22 +5,24 @@ import {styles} from '../../assets/css/ConfirmScreen/style'
 import ButtonChange from '../../components/navigators/buttonChange'
 import CreateConfirm from '../../components/work/confirm/CreateConfirm'
 import ListConfirm from '../../components/work/confirm/ListConfirm'
+import CreateWorkFromHome from '../../components/work/workhome/CreateWorkFromHome'
+import ListWorkFromHome from '../../components/work/workhome/ListWorkFromHome'
 
 
-const ConfirmScreen= () => {
+const WorkFromHomeScreen = () => {
 
-  const [page, setPage] = useState('taoDonXacNhan');
+  const [page, setPage] = useState('taoDeNghiWFH');
   const [buttonCreate, setButtonCreate] = useState(false);
   const [buttonList, setButtonList] = useState(true);
 
   return (
     <SafeAreaView>
-      <AppHeader title="Xin xác nhận" showButtonBack={true} />
+      <AppHeader title="Xin làm việc tại nhà" showButtonBack={true} />
       <View style={styles.flexTitle}>
         <ButtonChange
           disable={buttonCreate}
           onPress={() => {
-            setPage('taoDonXacNhan');
+            setPage('taoDeNghiWFH');
             setButtonList(true);
             setButtonCreate(false);
           }}
@@ -29,7 +31,7 @@ const ConfirmScreen= () => {
         <ButtonChange
           disable={buttonList}
           onPress={() => {
-            setPage('danhSachXacNhan');
+            setPage('danhSachWFH');
             setButtonList(false);
             setButtonCreate(true);
           }}
@@ -38,18 +40,18 @@ const ConfirmScreen= () => {
       </View>
       <View>
 
-        {page === 'taoDonXacNhan' && (
-          <CreateConfirm
+        {page === 'taoDeNghiWFH' && (
+          <CreateWorkFromHome
             onPress={() => {
-              setPage('danhSachXacNhan');
+              setPage('danhSachWFH');
               setButtonList(!buttonList);
               setButtonCreate(!buttonCreate);
             }}
           />
         )}
-        {page === 'danhSachXacNhan' && (
+        {page === 'danhSachWFH' && (
           <ScrollView>
-            <ListConfirm navigation />
+            <ListWorkFromHome navigation />
           </ScrollView>
         )}
       </View>
@@ -57,4 +59,4 @@ const ConfirmScreen= () => {
   );
 };
 
-export default ConfirmScreen;
+export default WorkFromHomeScreen;

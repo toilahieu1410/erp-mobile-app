@@ -1,24 +1,30 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from "jwt-decode";
+
+interface DecodedToken {
+  name: string;
+  // Các trường khác nếu cần
+}
 
 export class Token {
   accessToken: string;
   expireAccessToken: string;
   refreshToken: string;
   expireRefreshToken: string;
-  data: any;
+  value: any;
 
   constructor(
     accessToken: string,
     expireAccessToken: string,
     refreshToken: string,
     expireRefreshToken: string,
-    data: any,
+    value: any,
   ) {
     this.accessToken = accessToken;
     this.expireAccessToken = expireAccessToken;
     this.refreshToken = refreshToken;
     this.expireRefreshToken = expireRefreshToken;
-    this.data = data;
+    this.value = value;
   }
 
   static async saveToken(token: Token) {
@@ -39,13 +45,28 @@ export class Token {
           parsedToken.expireAccessToken,
           parsedToken.refreshToken,
           parsedToken.expireRefreshToken,
-          parsedToken.data,
+          parsedToken.value,
         );
       } else {
         return null; // No token found
       }
     } catch (error) {
       return null;
+    }
+  }
+
+  static async getDecodeToken(): Promise<DecodedToken | null> {
+    try {
+      const storedToken = await AsyncStorage.getItem('token'); 
+      if(storedToken) {
+        const parsedToken = JSON.parse(storedToken);
+        const decoded: DecodedToken = jwtDecode(parsedToken.accessToken);
+        return decoded;
+      } else {
+        return null
+      }
+    } catch (error) {
+      return null
     }
   }
 

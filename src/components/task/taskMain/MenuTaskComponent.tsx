@@ -1,8 +1,7 @@
 import {Image, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
-import {IMAGES} from '../../../constants/images';
-import {COLORS} from '../../../constants/colors';
+import {COLORS, IMAGES} from '../../../constants/screens';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
 

@@ -4,9 +4,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Alert, LogBox, SafeAreaView, StatusBar} from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
-import {RootState, store} from './store/store';
+import {RootState, store, persistor} from './store/store';
 import FlashMessage from 'react-native-flash-message';
-import {checkToken} from './src/slice/Auth';
+import {checkLogin, checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
 import {SCREENS} from './src/constants/screens';
 import MainStack from './src/screens/stack/MainStack';
@@ -15,6 +15,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const config = {
   screens: {
@@ -48,8 +49,14 @@ const linking = {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
-  const loginState = useSelector((state: RootState) => state.Auth);
   const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(
+    (state: RootState) => state.auth.authReducer.isAuthenticated,
+  );
+  const loading = useSelector(
+    (state: RootState) => state.auth.authReducer.loading,
+  );
 
   useEffect(() => {
     //@ts-ignore
@@ -74,6 +81,10 @@ const RootNavigator = () => {
     return () => netInfomation();
   }, []);
 
+  if (loading) {
+    return null; // or a loading spinner
+  }
+
   return (
     <>
       <NavigationContainer linking={linking} independent={true}>
@@ -81,12 +92,11 @@ const RootNavigator = () => {
           backgroundColor="#027BE3"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
         />
-        {/* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */}
-        {loginState.isAuthenticated === null ? (
-          <SafeAreaView className="flex-1 bg-white"></SafeAreaView>
-        ) : loginState.isAuthenticated == false ? (
-          <MainStack />
+        {isLoggedIn ? (
+            <MainStack />
         ) : (
+          /* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */
+
           <Stack.Navigator>
             <Stack.Screen
               name={SCREENS.LOGIN.KEY}
@@ -100,13 +110,15 @@ const RootNavigator = () => {
   );
 };
 
-
 const App = () => {
   LogBox.ignoreAllLogs();
   return (
     <PaperProvider>
       <Provider store={store}>
-        <RootNavigator></RootNavigator>
+        <PersistGate loading={null} persistor={persistor}>
+          <RootNavigator />
+        </PersistGate>
+
         <FlashMessage position="top" />
       </Provider>
     </PaperProvider>

@@ -1,9 +1,8 @@
 import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
-import {COLORS} from '../../constants/colors';
+import {COLORS, IMAGES} from '../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../constants/images';
 import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
 import {Task} from '../../models/Task';
 import ProcessTaskTodayComponent from '../../components/task/taskMain/ProcessTaskTodayComponent';
@@ -13,6 +12,7 @@ import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent'
 
 const TaskScreen = () => {
   const navigation = useNavigation();
+  
   const taskList: ReadonlyArray<Task> = [
     {
       id: 'KAP-1',

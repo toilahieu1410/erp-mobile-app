@@ -1,7 +1,8 @@
 import React from 'react'
-import { Platform, StyleSheet } from 'react-native'
+import { Platform, StyleSheet,Dimensions } from 'react-native'
 import { heightScale, moderateScale, widthScale } from '../../../screens/size';
 
+const height = Dimensions.get('window').height
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   scroll: {
-    height:'100%',
+    height:height + moderateScale(70),
   },
   colorText: {
     color: '#03347D',
@@ -108,12 +109,16 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   dropdown: {
+    
     width: '100%',
     height: 45,
     borderBottomColor: '#cccccc59',
     borderBottomWidth: 1,
     flexShrink: 1,
     fontSize: moderateScale(20),
+  },
+  dropdownSearch: {
+    minWidth:moderateScale(170),
   },
   datepicker: {
     color: '#000',
@@ -146,6 +151,31 @@ export const styles = StyleSheet.create({
     color: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
 

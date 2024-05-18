@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native'
 import React from 'react'
 import {Icon} from 'react-native-paper'
-import {COLORS} from '../../constants/colors'
+import {COLORS} from '../../constants/screens'
 import PropTypes from 'prop-types'
 
 type InforAccountComponentPops = {

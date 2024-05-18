@@ -15,7 +15,7 @@ import InputLoginComponent from '../../components/login/InputLoginComponent';
 
 const LoginScreen = () => {
   const windowHeight = Dimensions.get('window').height;
-  const loginState = useSelector((state: RootState) => state.Auth)
+  const loginState = useSelector((state: RootState) => state.auth)
   
   return (
     <>
@@ -59,7 +59,7 @@ const LoginScreen = () => {
                   Vui lòng đăng nhập để tiếp tục
                 </Text>
               </View>
-              <InputLoginComponent />
+              <InputLoginComponent navigation/>
             </View>
             <View className="w-full flex flex-nowrap flex-row items-center justify-center py-3 my-3">
               <Text className="font-bold text-base tracking-wide text-black">

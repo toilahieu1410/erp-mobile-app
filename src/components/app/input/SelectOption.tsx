@@ -1,19 +1,23 @@
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Icon} from 'react-native-paper';
+
 type SelectOptionProps = {
   title?: string | null;
   value?: string | null;
   option: OptionProps[] | [];
   onSelect?: ((key: string, display: string) => void) | undefined;
 };
+
 type OptionProps = {
   key: string;
   display: string;
 };
+
 const SelectOption = ({option, title, value, onSelect}: SelectOptionProps) => {
   const [displayName, setDisplayName] = useState<string | undefined>();
   const [showOption, setShowOption] = useState<boolean>(false);
+  
   useEffect(() => {
     if (value != null && value != undefined && value.length > 0) {
       for (let i = 0; i < option.length; i++) {

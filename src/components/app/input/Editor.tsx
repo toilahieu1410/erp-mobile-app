@@ -11,7 +11,7 @@ import RNFS from 'react-native-fs';
 import React, {useRef, useState} from 'react';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import ImagePicker from 'react-native-image-crop-picker';
-import {IMAGES} from '../../../constants/images';
+import {IMAGES} from '../../../constants/screens';
 
 const Editor = () => {
   const refEditor = React.useRef();

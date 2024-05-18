@@ -1,13 +1,16 @@
 export interface BaseResponse<T = object> {
-  data: T;
+  value: T;
   isSuccess: boolean;
-  isFail: boolean;
+  isFailure: boolean;
   statusCode: number;
-  message: string;
+  error: {
+    code: string;
+    message: string;
+  };
 }
 
 export interface ListData<T = object> {
-  data: T[];
+  value: T[];
   totalPage: number;
   pageSize: number;
   pageNumber: number;

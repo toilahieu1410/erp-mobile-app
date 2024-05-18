@@ -39,6 +39,49 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   PAYROLL: {KEY: 'PayRollScreen', NAME: 'Bảng lương'},
 
   //============================== Các loại đơn, đề nghị =======================================
+  //Xac nhan
   XIN_XAC_NHAN: {KEY: 'ConfirmScreen', NAME: 'Xin Xác nhận'},
+
+  DETAIL_XAC_NHAN: {KEY: 'ItemDetailConfirm', NAME: 'Chi tiết đơn Xác nhận'},
+
+  //Nghi phep
+  XIN_NGHI_PHEP: {KEY: 'TakeLeaveScreen', NAME: 'Xin nghỉ phép'},
+
+  DETAIL_NGHI_PHEP: {KEY: 'ItemDetailTakeLeave', NAME: 'Chi tiết đơn nghỉ phép'},
+
+  //work from home
+  WORK_FROM_HOME: {KEY: 'WorkFromHomeScreen', NAME: 'Xin làm việc tại nhà'},
+
+    //đề nghị thanh toán thường
+  OFFERPAYMENTS: {KEY: 'OfferPaymentsScreen', NAME: 'Đề nghị thanh toán thường'},
+
 };
 
+
+export const COLORS = {
+  WHITE: '#FFFFFF',
+  BLACK: '#000000',
+  PRIMARY: '#027BE3',
+  GRAY: 'gray',
+  RED: 'Red',
+};
+
+export const IMAGES = {
+  HOME: require('../assets/images/navigator/home.png'),
+  USER: require('../assets/images/navigator/user.png'),
+  NOTIFICATION: require('../assets/images/navigator/notify.png'),
+  TASK: require('../assets/images/navigator/work.png'),
+  SEARCH: require('../assets/images/app/search.png'),
+  DOLLAR: require('../assets/images/app/dollar.png'),
+  SPLASHSCREEN: require('../assets/images/splash.jpg'),
+  CLOCKCHECK: require('../assets/images/app/clock-check.png'),
+  ADD_TO_DO_LIST: require('../assets/images/app/add-to-do-list.png'),
+  OVERVIEW_TO_DO: require('../assets/images/app/overview-to-do.png'),
+  TO_DO_LIST: require('../assets/images/app/to-do-list.png'),
+  SET_TEXT_COLOR: require('../assets/images/app/setTextColor.png'),
+  FILL_COLOR: require('../assets/images/app/fillColor.png'),
+  WFH: require('../assets/images/app/work-from-home.png'),
+  SCHEDULE: require('../assets/images/app/schedule.png'),
+  WARNING: require('../assets/images/app/warning.png'),
+  MENU: require('../assets/images/navigator/menu.png'),
+};

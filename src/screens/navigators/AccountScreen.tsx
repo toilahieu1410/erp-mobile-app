@@ -1,15 +1,24 @@
-import React, {useEffect, useState} from 'react'
-import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native'
+import React, {useEffect, useState} from 'react';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 
-import {Avatar, TouchableRipple} from 'react-native-paper'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {useNavigation} from '@react-navigation/native'
-import {useDispatch, useSelector} from 'react-redux'
-import {logout} from '../../slice/Auth'
-import {BaseResponse} from '../../models/BaseResponse'
-import {showMessage} from 'react-native-flash-message'
-import {SCREENS} from '../../constants/screens'
-import AppHeader from '../../components/navigators/AppHeader'
+import {Avatar, TouchableRipple} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../../slice/Auth';
+import {BaseResponse} from '../../models/BaseResponse';
+import {showMessage} from 'react-native-flash-message';
+import {SCREENS} from '../../constants/screens';
+import AppHeader from '../../components/navigators/AppHeader';
+import {heightScale} from '../size';
+import {styles} from '../../assets/css/AccountScreen/style';
 
 interface Item {
   icon?: React.ReactElement;
@@ -22,10 +31,9 @@ const AccountScreen = () => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
-
   const ListItem: Item[] = [
     {
-      icon: <Icon size={25} color="#027BE3" name='person-outline' />,
+      icon: <Icon size={25} color="#027BE3" name="person-outline" />,
       title: SCREENS.INFORACCOUNT.NAME,
       type: 'menu',
       onClick: () => {
@@ -47,8 +55,8 @@ const AccountScreen = () => {
     //   },
     // },
     {
-      icon: <Icon size={25} color="#027BE3" name='logo-usd' />,
-      
+      icon: <Icon size={25} color="#027BE3" name="logo-usd" />,
+
       title: SCREENS.PAYROLL.NAME,
       type: 'menu',
       onClick: () => {
@@ -56,7 +64,7 @@ const AccountScreen = () => {
       },
     },
     {
-      icon: <Icon size={25} color="#027BE3" name='people-sharp' />,
+      icon: <Icon size={25} color="#027BE3" name="people-sharp" />,
       title: 'Nhóm của tôi',
       type: 'menu',
       onClick: () => {
@@ -69,7 +77,7 @@ const AccountScreen = () => {
     },
 
     {
-      icon: <Icon size={25} color="#027BE3" name='shield-half-sharp' />,
+      icon: <Icon size={25} color="#027BE3" name="shield-half-sharp" />,
       title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
@@ -77,19 +85,24 @@ const AccountScreen = () => {
       },
     },
     {
-      icon: <Icon size={25} color="#027BE3" name='enter-outline' />,
+      icon: <Icon size={25} color="#027BE3" name="enter-outline" />,
       title: 'Đăng xuất',
       type: 'menu',
       onClick: () => {
         //@ts-ignore
         dispatch(logout())
           .unwrap()
-          //@ts-ignore
-          .then(res => {})
+          .then(() => {
+            showMessage({
+              message: 'Đăng xuất thành công!',
+              type: 'info',
+            });
+            navigation.replace(SCREENS.LOGIN.KEY)
+          })
           .catch((err: BaseResponse) => {
             showMessage({
               message: 'Đăng xuất thất bại !',
-              description: err.message,
+              description: err.error.message,
               duration: 5000,
               type: 'danger',
             });
@@ -98,21 +111,48 @@ const AccountScreen = () => {
     },
     {
       title: 'Tác vụ',
-      type: 'text'
+      type: 'text',
     },
     {
-      icon: <Icon size={25} color="#027BE3" name='enter-outline' />,
+      icon: <Icon size={25} color="#027BE3" name="reader-outline" />,
       title: SCREENS.XIN_XAC_NHAN.NAME,
       type: 'menu',
       onClick: () => {
         navigation?.navigate(SCREENS.XIN_XAC_NHAN.KEY);
       },
     },
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.XIN_NGHI_PHEP.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.XIN_NGHI_PHEP.KEY);
+      },
+    },
+
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.WORK_FROM_HOME.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.WORK_FROM_HOME.KEY);
+      },
+    },
+
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.OFFERPAYMENTS.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.OFFERPAYMENTS.KEY);
+      },
+    },
   ];
-  
+
+
   return (
     <>
-      <SafeAreaView className="flex-1 w-full bg-white">
+      <SafeAreaView className="flex-1 w-full ">
         <AppHeader title="Tài khoản" centerTitle={true}></AppHeader>
         <View className="flex-1"></View>
         <View className="h-full">
@@ -134,36 +174,37 @@ const AccountScreen = () => {
               </Text>
             </View>
           </View>
-          <View className="h-full">
-            {ListItem.map((item, index) => {
-              return item.type === 'menu' ? (
-                <TouchableRipple
-                  key={index}
-                  onPress={item.onClick}>
-                  <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
-                    <View className="flex flex-row items-center">
-                      {item.icon}
-                      <Text className="text-base px-3 font-semibold text-black">
-                        {item.title}
-                      </Text>
+          <ScrollView>
+            <View className="bg-white flex" style={styles.height}>
+              {ListItem.map((item, index) => {
+                return item.type === 'menu' ? (
+                  <TouchableRipple key={index} onPress={item.onClick}>
+                    <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
+                      <View className="flex flex-row items-center">
+                        {item.icon}
+                        <Text className="text-base px-3 font-semibold text-black">
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View>
+                        <Icon
+                          size={20}
+                          color="#027BE3"
+                          name="chevron-forward-outline"
+                        />
+                      </View>
                     </View>
-                    <View>
-                      <Icon
-                        size={20}
-                        color="#027BE3"
-                        name='chevron-forward-outline' />
-                    </View>
-                  </View>
-                </TouchableRipple>
-              ) : (
-                <Text
-                  key={index}
-                  className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-200 pt-4">
-                  {item.title}
-                </Text>
-              );
-            })}
-          </View>
+                  </TouchableRipple>
+                ) : (
+                  <Text
+                    key={index}
+                    className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-200 pt-4">
+                    {item.title}
+                  </Text>
+                );
+              })}
+            </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </>
