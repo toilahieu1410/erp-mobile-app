@@ -1,71 +1,115 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import AuthenticateService from '../services/Auth';
+import {AuthenticateService} from '../services/Auth';
 import {FulfilledAction, PendingAction, RejectedAction} from '../type';
 import {BaseResponse} from '../models/BaseResponse';
 import {Token} from '../services/Token';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AuthState {
   loading: boolean;
   isAuthenticated: boolean | null;
   user: any;
+  error: string | null;
 }
 
 const initialState: AuthState = {
   loading: false,
   isAuthenticated: null,
   user: {},
+  error: null
 };
+
 export const checkToken = createAsyncThunk<boolean>(
-  'authen/checkToken',
-  async () => {
+  'auth/checkToken',
+  async (_, {rejectWithValue}) => {
     try {
-      const check = await AuthenticateService.CheckToken();
-      if (check) {
+      const token = await Token.getToken();
+      if (token) {
         return true;
       } else {
         return false;
       }
     } catch (error) {
-      return false;
+      return rejectWithValue('Error checking token')
     }
   },
 );
 
-export const login = createAsyncThunk<BaseResponse<Token>, unknown>(
-  'authen/login',
-  async (data: unknown, {rejectWithValue}) => {
+export const login = createAsyncThunk<BaseResponse<Token>, {username: string; password: string}>(
+  'auth/login',
+  async (data, {rejectWithValue}) => {
     try {
-      const res = await AuthenticateService.Login(data);
-      await Token.saveToken(res.data);
-      return res;
+      const response = await AuthenticateService.Login(data)
+      await Token.saveToken(response.value)
+      console.log(response,'ádasdas')
+      return response
     } catch (err) {
       throw rejectWithValue(err);
     }
   },
 );
 
-export const logout = createAsyncThunk('authen/logout', async () => {
+export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await Token.removeToken();
-  } catch (err) {}
+    return true
+  } catch (err) {
+    throw err
+  }
 });
 
-const authenticateSlice = createSlice({
-  name: 'login',
+
+export const checkLogin = createAsyncThunk<boolean>(
+  'auth/checkLogin',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(login.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
-      })
-      .addCase(logout.fulfilled, (state, action) => {
-        state.isAuthenticated = false;
-      })
-
-      .addCase(checkToken.fulfilled, (state, action) => {
-        state.isAuthenticated = action.payload;
-      })
+    .addCase(login.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(login.fulfilled, (state, action) => {
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.user = action.payload.value;
+    })
+    .addCase(login.rejected, (state, action) => {
+      state.isAuthenticated = false;
+      state.loading = false;
+    })
+    .addCase(logout.fulfilled, (state) => {
+      state.isAuthenticated = false;
+    })
+    .addCase(logout.rejected, (state, action) => {
+      state.error = action.error.message || null;
+    })
+    .addCase(checkLogin.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(checkLogin.fulfilled, (state, action) => {
+      state.isAuthenticated = action.payload;
+      state.loading = false;
+    })
+    .addCase(checkLogin.rejected, (state, action) => {
+      state.isAuthenticated = false;
+      state.loading = false;
+    })
 
       .addMatcher<PendingAction>(
         action => action.type.endsWith('/pending'),
@@ -88,6 +132,6 @@ const authenticateSlice = createSlice({
   },
 });
 
-const authenticateReducer = authenticateSlice.reducer;
 
-export default authenticateReducer;
+
+export default authSlice.reducer;

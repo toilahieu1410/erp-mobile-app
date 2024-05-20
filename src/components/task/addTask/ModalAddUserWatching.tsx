@@ -9,11 +9,12 @@ import {
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {Watching} from '../../../models/Task';
-import {IMAGES} from '../../../constants/images';
+import {IMAGES} from '../../../constants/screens';
 import {Icon, TouchableRipple} from 'react-native-paper';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShowUserWatching from './AddWatching/ShowUserWatching';
 import SearchWatching from './AddWatching/SearchWatching';
+
 type ModalAddUserWatchingProps = {
   data?: Watching[];
   onChangeData?: (value: Watching[]) => void;

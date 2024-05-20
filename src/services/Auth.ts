@@ -1,30 +1,31 @@
 import {BaseResponse} from '../models/BaseResponse';
 import {Token} from '../services/Token';
-
 import http from '../../store/http';
 
-const AuthenticateService = {
-  async Login(data: unknown): Promise<BaseResponse<Token>> {
-    const url = `/api/Authentication/Login`;
-    try {
-      const res = await http.post(url, data);
-      return res.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      throw err.response.data;
-    }
+export const AuthenticateService = {
+  
+  async Login(data: {username: string; password: string}): Promise<BaseResponse<Token>> {
+    const response = await http.post('/auth', data)
+    return response.data
   },
 
-  async GetUser() {
-    const url = `/api/Authentication/GetUser`;
-    try {
-      const res = await http.get(url);
-      return res.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      throw err.response.data;
-    }
+
+
+  async GetUser(): Promise<BaseResponse<any>> {
+    const response = await http.get('user/GetUser')
+    return response.data
   },
+
+
+  // async GetUser() {
+  //   const url = `/api/Authentication/GetUser`;
+  //   try {
+  //     const res = await http.get(url);
+  //     return res.data;
+  //   } catch (err: any) {
+  //     throw err.response.data;
+  //   }
+  // },
 
   async GetToken(): Promise<Token | null> {
     try {

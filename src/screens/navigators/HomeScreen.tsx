@@ -1,6 +1,7 @@
 import {FlatList, Image, SafeAreaView, View} from 'react-native';
 import HomeComponent from '../../components/home/HomeComponent';
 import AppHeader from '../../components/navigators/AppHeader';
+
 const HomeScreen = () => {
   const List = {
     data: {

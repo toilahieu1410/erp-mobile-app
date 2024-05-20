@@ -1,6 +1,7 @@
-import {Text, View} from 'react-native';
-import React from 'react';
-import {fomatNumber} from '../../../utils/CommonFunction';
+import React from 'react'
+import {Text, View} from 'react-native'
+import {fomatNumber} from '../../../utils/CommonFunction'
+
 type PayRollComponentProps = {
   title?: string | undefined;
   subTitle?: string | undefined;

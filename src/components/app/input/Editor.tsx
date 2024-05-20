@@ -11,7 +11,8 @@ import RNFS from 'react-native-fs';
 import React, {useRef, useState} from 'react';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import ImagePicker from 'react-native-image-crop-picker';
-import {IMAGES} from '../../../constants/images';
+import {IMAGES} from '../../../constants/screens';
+
 const Editor = () => {
   const refEditor = React.useRef();
   const [text, setText] = useState();
@@ -41,6 +42,7 @@ const Editor = () => {
   const insertLink = () => {
     refEditor.current?.insertLink('Example Link', 'https://example.com');
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
