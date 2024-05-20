@@ -1,10 +1,10 @@
-import {Animated, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import AppHeader from '../../components/navigators/AppHeader';
-import {TouchableRipple} from 'react-native-paper';
-import PayRollComponent from '../../components/account/PayRollComponent';
-import {fomatNumber} from '../../../utils/CommonFunction';
-import ModalPage from '../../components/app/modal/ModalPage';
+import React, {useEffect, useRef, useState} from 'react'
+import {Animated, SafeAreaView, ScrollView, Text, View} from 'react-native'
+import {TouchableRipple} from 'react-native-paper'
+import AppHeader from '../../components/navigators/AppHeader'
+import PayRollComponent from '../../components/account/PayRollComponent'
+import {fomatNumber} from '../../../utils/CommonFunction'
+import ModalPage from '../../components/app/modal/ModalPage'
 
 const PayRollScreen = () => {
   const slideAnimation = useRef(new Animated.Value(0)).current;

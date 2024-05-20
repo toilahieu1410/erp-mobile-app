@@ -1,10 +1,10 @@
 export interface Task {
   id: string;
   title?: string | undefined;
-  type?: string | undefined;
-  customer?: string | undefined;
-  customerName?: string | undefined;
-  description?: string | undefined;
+  type?: string | null;
+  customer?: string | null;
+  customerName?: string | null;
+  description?: string | null;
   status?: string | undefined;
   userCreate?: string | undefined;
   fullNameCreate?: string | undefined;

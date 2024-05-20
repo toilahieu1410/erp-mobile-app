@@ -1,6 +1,15 @@
-import {Dimensions, Image, SafeAreaView, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Avatar, Icon, TouchableRipple} from 'react-native-paper';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
+
+import {Avatar, TouchableRipple} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../slice/Auth';
@@ -8,27 +17,27 @@ import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
 import {SCREENS} from '../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
-import {IMAGES} from '../../constants/images';
-import {COLORS} from '../../constants/colors';
+import {heightScale} from '../size';
+import {styles} from '../../assets/css/AccountScreen/style';
+
+interface Item {
+  icon?: React.ReactElement;
+  title: String;
+  type: 'menu' | 'text';
+  onClick?: () => void;
+}
 
 const AccountScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
-  interface item {
-    icon?: React.ReactElement;
-    title: String;
-    type: String;
-    onClick?: Function;
-  }
-  const ListItem: item[] = [
+  const ListItem: Item[] = [
     {
-      icon: <Icon size={30} color="#027BE3" source={'information'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name="person-outline" />,
       title: SCREENS.INFORACCOUNT.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.INFORACCOUNT.KEY);
+        navigation?.navigate(SCREENS.INFORACCOUNT.KEY);
       },
     },
 
@@ -46,20 +55,16 @@ const AccountScreen = () => {
     //   },
     // },
     {
-      icon: (
-        <Image
-          source={IMAGES.DOLLAR}
-          style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}></Image>
-      ),
+      icon: <Icon size={25} color="#027BE3" name="logo-usd" />,
+
       title: SCREENS.PAYROLL.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.PAYROLL.KEY);
+        navigation?.navigate(SCREENS.PAYROLL.KEY);
       },
     },
     {
-      icon: <Icon size={30} color="#027BE3" source={'account-group'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name="people-sharp" />,
       title: 'Nhóm của tôi',
       type: 'menu',
       onClick: () => {
@@ -72,39 +77,82 @@ const AccountScreen = () => {
     },
 
     {
-      icon: <Icon size={30} color="#027BE3" source={'shield-account'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name="shield-half-sharp" />,
       title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
-        //@ts-ignore
-        navigation.navigate(SCREENS.CHANGEPASSWORD.KEY);
+        navigation?.navigate(SCREENS.CHANGEPASSWORD.KEY);
       },
     },
     {
-      icon: <Icon size={30} color="#027BE3" source={'exit-to-app'}></Icon>,
+      icon: <Icon size={25} color="#027BE3" name="enter-outline" />,
       title: 'Đăng xuất',
       type: 'menu',
       onClick: () => {
         //@ts-ignore
         dispatch(logout())
           .unwrap()
-          //@ts-ignore
-          .then(res => {})
+          .then(() => {
+            showMessage({
+              message: 'Đăng xuất thành công!',
+              type: 'info',
+            });
+            navigation.replace(SCREENS.LOGIN.KEY)
+          })
           .catch((err: BaseResponse) => {
             showMessage({
               message: 'Đăng xuất thất bại !',
-              description: err.message,
+              description: err.error.message,
               duration: 5000,
               type: 'danger',
             });
           });
       },
     },
+    {
+      title: 'Tác vụ',
+      type: 'text',
+    },
+    {
+      icon: <Icon size={25} color="#027BE3" name="reader-outline" />,
+      title: SCREENS.XIN_XAC_NHAN.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.XIN_XAC_NHAN.KEY);
+      },
+    },
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.XIN_NGHI_PHEP.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.XIN_NGHI_PHEP.KEY);
+      },
+    },
+
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.WORK_FROM_HOME.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.WORK_FROM_HOME.KEY);
+      },
+    },
+
+    {
+      icon: <Icon size={25} color={'#027BE3'} name="file-tray-full-outline" />,
+      title: SCREENS.OFFERPAYMENTS.NAME,
+      type: 'menu',
+      onClick: () => {
+        navigation?.navigate(SCREENS.OFFERPAYMENTS.KEY);
+      },
+    },
   ];
-  
+
+
   return (
     <>
-      <SafeAreaView className="flex-1 w-full bg-white">
+      <SafeAreaView className="flex-1 w-full ">
         <AppHeader title="Tài khoản" centerTitle={true}></AppHeader>
         <View className="flex-1"></View>
         <View className="h-full">
@@ -126,39 +174,37 @@ const AccountScreen = () => {
               </Text>
             </View>
           </View>
-          <View className="h-full">
-            {ListItem.map((item, index) => {
-              return item.type === 'menu' ? (
-                <TouchableRipple
-                  key={index}
-                  onPress={() => {
-                    //@ts-ignore
-                    item.onClick();
-                  }}>
-                  <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
-                    <View className="flex flex-row items-center">
-                      {item.icon}
-                      <Text className="text-base px-3 font-semibold text-black">
-                        {item.title}
-                      </Text>
+          <ScrollView>
+            <View className="bg-white flex" style={styles.height}>
+              {ListItem.map((item, index) => {
+                return item.type === 'menu' ? (
+                  <TouchableRipple key={index} onPress={item.onClick}>
+                    <View className="flex flex-row items-center justify-between w-full px-5 my-2 py-1">
+                      <View className="flex flex-row items-center">
+                        {item.icon}
+                        <Text className="text-base px-3 font-semibold text-black">
+                          {item.title}
+                        </Text>
+                      </View>
+                      <View>
+                        <Icon
+                          size={20}
+                          color="#027BE3"
+                          name="chevron-forward-outline"
+                        />
+                      </View>
                     </View>
-                    <View>
-                      <Icon
-                        size={30}
-                        color="#027BE3"
-                        source="chevron-right"></Icon>
-                    </View>
-                  </View>
-                </TouchableRipple>
-              ) : (
-                <Text
-                  key={index}
-                  className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-300 pt-4">
-                  {item.title}
-                </Text>
-              );
-            })}
-          </View>
+                  </TouchableRipple>
+                ) : (
+                  <Text
+                    key={index}
+                    className="font-bold text-[18px] px-6 py-2 border-t-2 border-t-gray-200 pt-4">
+                    {item.title}
+                  </Text>
+                );
+              })}
+            </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </>

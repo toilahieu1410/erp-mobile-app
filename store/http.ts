@@ -25,17 +25,15 @@ class Http {
     );
 
     this.instance.interceptors.response.use(
-      response => {
-        return response;
-      },
+    (response) => response,
       async error => {
         const refreshToken = await this.GetRefreshToken();
         if (error.response && error.response.status === 401 && refreshToken) {
           try {
             await this.RefreshToken(refreshToken).then(async data => {
-              await Token.saveToken(data.data);
+              await Token.saveToken(data.value);
               const config = error.config;
-              config.headers.Authorization = `Bearer ${data.data.accessToken}`;
+              config.headers.Authorization = `Bearer ${data.value.accessToken}`;
               return axios(config);
             });
           } catch (error) {
@@ -49,17 +47,11 @@ class Http {
   }
 
   async RefreshToken(refreshToken: string): Promise<BaseResponse<Token>> {
-    const data = {
-      token: refreshToken,
-    };
+  
     const url = `/api/Authentication/GetAccessToken`;
-    try {
-      const res = await this.instance.post(url, data);
-      return res.data;
-    } catch (err: unknown) {
-      // @ts-ignore
-      throw err?.response.data;
-    }
+    const data = { token: refreshToken };
+    const res = await this.instance.post(url, data);
+    return res.data;
   }
 
   async GetRefreshToken() {

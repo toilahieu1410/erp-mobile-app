@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from 'react-native-paper';
 import AppHeader from '../../components/navigators/AppHeader';
 import InputChangePassword from '../../components/account/ChangePassword/InputChangePassword';
@@ -16,6 +16,7 @@ const ChangePasswordScreen = () => {
   const [password, setPassword] = useState<string>();
   const [newPassword, setNewPassword] = useState<string>();
   const [comfirmPassword, setComfirmPassword] = useState<string>();
+
 
   return (
     <>

@@ -1,8 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {IMAGES} from '../constants/images';
+
 import {SCREENS} from '../constants/screens';
 import {Image, Text, View} from 'react-native';
-import {COLORS} from '../constants/colors';
+import {COLORS, IMAGES} from '../constants/screens';
 import NotificationScreen from './navigators/NotificationScreen';
 import HomeStack from './stack/HomeStack';
 import AccountStack from './stack/AccountStack';
