@@ -19,16 +19,39 @@ const initialState: AuthState = {
   error: null
 };
 
+const tokenKey = 'token'
+const dateLogoutKey = 'dateLogout'
+
 export const checkToken = createAsyncThunk<boolean>(
   'auth/checkToken',
   async (_, {rejectWithValue}) => {
     try {
       const token = await Token.getToken();
-      if (token) {
-        return true;
-      } else {
-        return false;
+      const dateLogout = await AsyncStorage.getItem(dateLogoutKey)
+      const now = Date.now()
+      if(dateLogout && parseInt(dateLogout) < now) {
+        await Token.removeToken()
+        await AsyncStorage.removeItem(dateLogoutKey)
+        return false
       }
+      if(token) {
+        return true
+      } else {
+        return false
+      }
+      // Code này để điều kiện mỗi khi mở lại app sẽ auto về form đăng nhập
+      // if (token) {
+      //   const expireAccessToken = new Date(token.expireAccessToken).getTime();
+      //   const expireRefreshToken = new Date(token.expireRefreshToken).getTime();
+      //   if (now < expireAccessToken || now < expireRefreshToken) {
+      //     return true;
+      //   } else {
+      //     await Token.removeToken();
+      //     return false;
+      //   }
+      // } else {
+      //   return false;
+      // }
     } catch (error) {
       return rejectWithValue('Error checking token')
     }
@@ -40,8 +63,18 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
   async (data, {rejectWithValue}) => {
     try {
       const response = await AuthenticateService.Login(data)
-      await Token.saveToken(response.value)
-      console.log(response,'ádasdas')
+      const dateLogout = Date.now() + 86400000 //24hours
+      await AsyncStorage.setItem(dateLogoutKey, dateLogout.toString())
+      const tokenData = new Token(
+        response.value.accessToken,
+        '',
+        response.value.refreshToken,
+        '',
+        response.value
+      );
+ 
+      console.log('Token data to save:', tokenData);
+      await Token.saveToken(tokenData);
       return response
     } catch (err) {
       throw rejectWithValue(err);
@@ -52,6 +85,7 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
 export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await Token.removeToken();
+    await AsyncStorage.removeItem(dateLogoutKey);
     return true
   } catch (err) {
     throw err
@@ -63,7 +97,15 @@ export const checkLogin = createAsyncThunk<boolean>(
   'auth/checkLogin',
   async (_, { rejectWithValue }) => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem(tokenKey);
+      const dateLogout = await AsyncStorage.getItem(dateLogoutKey)
+      const now = Date.now()
+      if(dateLogout && parseInt(dateLogout) < now) {
+        await Token.removeToken()
+        await AsyncStorage.removeItem(dateLogoutKey)
+        return false
+      }
+      console.log(dateLogout ,'333333')
       if (token) {
         return true;
       } else {
@@ -98,6 +140,17 @@ const authSlice = createSlice({
     })
     .addCase(logout.rejected, (state, action) => {
       state.error = action.error.message || null;
+    })
+    .addCase(checkToken.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(checkToken.fulfilled, (state, action) => {
+      state.isAuthenticated = action.payload;
+      state.loading = false;
+    })
+    .addCase(checkToken.rejected, (state) => {
+      state.isAuthenticated = false;
+      state.loading = false;
     })
     .addCase(checkLogin.pending, (state) => {
       state.loading = true;

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import {useForm, Controller} from 'react-hook-form';
@@ -9,6 +9,7 @@ import {showMessage} from 'react-native-flash-message';
 import {BaseResponse} from '../../models/BaseResponse';
 import {COLORS} from '../../constants/screens';
 import {login} from '../../slice/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface FormData {
   username: string;
@@ -16,13 +17,14 @@ interface FormData {
 }
 
 const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
+
   const dispatch = useAppDispatch();
 
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,7 +33,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
     handleSubmit,
     formState: {errors},
   } = useForm<FormData>();
-  const [showPass, setShowPass] = useState(true);
+
   const authState = useSelector((state: RootState) => state.auth);
 
   const onLogin = (data: FormData) => {
@@ -54,6 +56,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
         }
       });
   };
+
 
   React.useEffect(() => {
     if (authState.error) {
@@ -121,6 +124,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
             returnKeyType="next"
             activeUnderlineColor="transparent"
             underlineColor="transparent"
+            ref={usernameRef}
             left={
               <TextInput.Icon
                 icon="account-outline"
@@ -175,7 +179,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
                 />
               ) : null
             }
-            ref={usernameRef}
+            ref={passwordRef}
             onSubmitEditing={() => {
               //@ts-ignore
               passwordRef.current?.focus();
@@ -186,46 +190,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
       />
       {errors.username && <Text>Chưa nhập mật khẩu</Text>}
 
-      {/* <TextInput
-        value={password}
-        onChangeText={value => {
-          setPassword(value);
-        }}
-        onFocus={() => {
-          setFocusPassword(true);
-        }}
-        onBlur={() => {
-          setFocusPassword(false);
-        }}
-        className=" bg-white border border-white focus:border-primary"
-        autoCorrect={false}
-        secureTextEntry={!showPassword}
-        placeholder="Mật khẩu"
-        activeUnderlineColor="transparent"
-        underlineColor="transparent"
-        placeholderTextColor={focusPassword ? COLORS.PRIMARY : COLORS.GRAY}
-        textColor={focusPassword ? COLORS.PRIMARY : COLORS.GRAY}
-        left={
-          <TextInput.Icon
-            icon="lock-outline"
-            rippleColor="transparent"
-            color={focusPassword ? COLORS.PRIMARY : COLORS.GRAY}
-          />
-        }
-        right={
-          focusPassword == true ? (
-            <TextInput.Icon
-              icon={showPassword == false ? 'eye-off' : 'eye'}
-              onPress={() => {
-                setShowPassword(!showPassword);
-              }}
-              color={COLORS.PRIMARY}
-              rippleColor="transparent"
-            />
-          ) : null
-        }
-        ref={passwordRef}
-      /> */}
+   
       <View className="mt-6">
         <Button
           className="bg-primary rounded-lg py-[2px] shadow-sm"
@@ -239,4 +204,3 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
 
 export default InputLoginComponent;
 
-const styles = StyleSheet.create({});

@@ -10,89 +10,53 @@ import {
   Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import {Button as ButtonCreate, NativeBaseProvider} from 'native-base';
-
+import {Button, NativeBaseProvider} from 'native-base';
+import {showMessage} from 'react-native-flash-message';
 import {styles} from '../../../assets/css/ConfirmScreen/style';
 import moment from 'moment';
 import DatePickerDay from '../../picker/datePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Token } from '../../../services/Token';
-import AuthenticateService from '../../../services/Auth';
 
-
-interface CreateConfirmProps {
-  onPress: () => void;
-}
-
-interface PickerItem {
-  id: number;
-  name: string;
-  value: string;
-}
-
+import AppHeader from '../../navigators/AppHeader';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {moderateScale} from '../../../screens/size';
+import ConfirmService from '../../../services/listWorks/serviceConfirm';
 
 const newDate = new Date();
 
-const loaiXacNhan: PickerItem[] = [
-  {
-    id: 1,
-    name: 'Tăng ca (OT)',
-    value: 'tangca',
-  },
-  {
-    id: 2,
-    name: 'Quên chấm công, không thể chấm công',
-    value: 'quenchamcong',
-  },
-  {
-    id: 3,
-    name: 'Ra ngoài việc riêng (làm bù)',
-    value: 'lamviecrieng',
-  },
-  {
-    id: 4,
-    name: 'Xin đi muộn',
-    value: 'xindimuon',
-  },
-  {
-    id: 5,
-    name: 'Tăng ca (OT)',
-    value: 'tangca',
-  },
-];
+interface XacNhanType {
+  value: number;
+  display: string;
+}
 
-
-
-const CreateConfirm: React.FC<CreateConfirmProps> = () => {
-  const [username, setUsername] = useState('');
-  const [macongty, setMacongty] = useState('hoplong');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [selectConfirm, setSelectConfirm] = useState<PickerItem | null>(null);
+const CreateConfirm = () => {
+  const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
+  const [confirmType, setConfirmType] = useState<XacNhanType[]>([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [lyDo, setLyDo] = useState('');
   const [disable, setDisable] = useState(true);
   const [dateTime, setDateTime] = useState(newDate);
-  const [show, setShow] = useState(false);
+  const [showDate, setShowDate] = useState(false);
 
+  const [showStartPicker, setShowStartPicker] = useState<'date' | 'time' | null>(
+    null,
+  );
+  const [showEndPicker, setShowEndPicker] = useState<'date' | 'time' | null>(
+    null,
+  );
 
-
-
-
-  const onChange = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || dateTime;
-    setShow(Platform.OS === 'ios');
-    if (currentDate < newDate) {
-      Alert.alert('Lỗi', 'Ngày cần xác nhận không được nhỏ hơn ngày hiện tại');
-    } else {
-      setDateTime(currentDate);
-    }
-  };
-
- 
-
-  const handleConfirm = (itemValue: PickerItem) => {
-    setSelectConfirm(itemValue);
-  };
+  useEffect(() => {
+    const fetchConfirmTypes = async () => {
+      try {
+        const types = await ConfirmService.getConfirmTypes();
+        setConfirmType(types);
+      } catch (error) {
+        console.error('Error' + error);
+      }
+    };
+    fetchConfirmTypes();
+  }, []);
 
   useEffect(() => {
     if (lyDo !== '') {
@@ -102,119 +66,269 @@ const CreateConfirm: React.FC<CreateConfirmProps> = () => {
     }
   }, [lyDo]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token')
-     
-        if(token) {
-          const response = await AuthenticateService.GetUser()
-          const user = response.value
-          setUsername(user.userName)
-          setEmail(user.email)
-          setPhone(user.phoneNumber)
-        }
-      } catch (error) {
-        console.error('Error', error)
+  const onChangeDate = (event: any, selectedDate?: Date) => {
+    const currentDate = selectedDate || dateTime;
+    setShowDate(Platform.OS === 'ios');
+    setDateTime(currentDate);
+  };
+
+
+  const handleConfirm = (itemValue: XacNhanType | null) => {
+    setSelectConfirm(itemValue);
+    if (itemValue && [1, 4, 5].includes(itemValue.value)) {
+      setStartDate(newDate);
+      setEndDate(newDate);
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+
+  //       if (token) {
+  //         const response = await AuthenticateService.GetUser();
+  //         const user = response.value;
+  //         setUsername(user.userName);
+  //         setEmail(user.email);
+  //         setPhone(user.phoneNumber);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error', error);
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, []);
+
+  const handleSubmit = async () => {
+    if (!selectConfirm) {
+      Alert.alert('Error', 'Loại xác nhận là bắt buộc');
+      return;
+    }
+    try {
+      const payload: any = {
+        content: lyDo,
+        type: selectConfirm.value,
+        startDate: startDate ? moment(startDate).format('DD/MM/YYYY HH:mm') : "",
+        endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : "",
+        dateNeedConfirm: moment(dateTime).format('DD/MM/YYYY'),
+      };
+      console.log(payload, 'ssss');
+      const result = await ConfirmService.createConfirm(payload);
+      showMessage({
+        message: 'Success',
+        description: 'Tạo đơn thành công',
+        type: 'success'
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Error',
+        description: 'Tạo đơn thất bại',
+        type: 'danger'
+      })
+    }
+  };
+
+  const showDatePicker = (picker: 'startDate' | 'endDate', mode: 'date' | 'time') => {
+    if (picker === 'startDate') {
+      setShowStartPicker(mode);
+      setShowEndPicker(null);
+    } else {
+      setShowEndPicker(mode);
+      setShowStartPicker(null);
+    }
+  };
+
+  const handleDateChange = (
+    event: any,
+    selectedDate: Date | undefined,
+    picker: 'startDate' | 'endDate',
+    mode: 'date' | 'time',
+  ) => {
+    if (picker === 'startDate') {
+      const currentDate = selectedDate || startDate;
+      if (mode === 'date') {
+        setShowStartPicker('time');
+        setStartDate(currentDate);
+      } else {
+        setShowStartPicker(null);
+        setStartDate(currentDate);
+      }
+    } else {
+      const currentDate = selectedDate || endDate;
+      if (mode === 'date') {
+        setShowEndPicker('time');
+        setEndDate(currentDate);
+      } else {
+        setShowEndPicker(null);
+        setEndDate(currentDate);
       }
     }
-    fetchUserData()
-  }, [])
+  };
+
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled>
+      <AppHeader
+        title="Danh sách đơn xác nhận"
+        showButtonBack={true}
+        centerTitle={true}
+        actions={
+          <NativeBaseProvider>
+            <Button
+              backgroundColor={'transparent'}
+              disabled={disable}
+              size={moderateScale(50)}
+              onPress={handleSubmit}>
+              <Text style={{color:'#333'}}>Lưu</Text>
+            </Button>
+          </NativeBaseProvider>
+        }
+      />
       <ScrollView>
         <View style={styles.scroll}>
           <View style={styles.card}>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Người đề nghị:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{username}</Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Email:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{email}</Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>SDT:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{phone}</Text>
-            </View>
-            <View style={styles.border}></View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Ngày tạo đơn:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>
-                {moment(newDate).format('DD/MM/YYYY')}
-              </Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Loại xác nhận:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Picker
-                mode="dropdown"
-                style={styles.pickerDropdown}
-                selectedValue={selectConfirm}
-                onValueChange={(itemValue, itemIndex) =>
-                  handleConfirm(loaiXacNhan[itemIndex - 1])
-                }>
-                <Picker.Item label={'Loại xác nhận'} value="" />
-                {loaiXacNhan &&
-                  loaiXacNhan.map(item => (
-                    <Picker.Item label={item.name} value={item} />
-                  ))}
-              </Picker>
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Ngày tạo đơn:</Text>
+              <View style={styles.flexTime}>
+                <Text
+                  style={[
+                    styles.dateText,
+                    styles.btnDate,
+                    {color: '#2179A9', fontWeight: '500'},
+                  ]}>
+                  {moment(newDate).format('DD/MM/YYYY')}
+                </Text>
+                <Icon name="today-outline" size={20} color={'#2179A9'} />
+              </View>
             </View>
 
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Ngày cần xác nhận:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <TouchableOpacity
-                style={styles.btnDate}
-                onPress={() => setShow(!show)}>
-                <Text style={styles.colorText}>
-                  {moment(dateTime).format('DD/MM/YYYY')}
-                </Text>
-              </TouchableOpacity>
-              {show && (
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Ngày cần xác nhận:</Text>
+              <View style={styles.flexTime}>
+                <TouchableOpacity
+                  style={styles.btnDate}
+                  onPress={() => setShowDate(!showDate)}>
+                  <Text style={styles.dateText}>
+                    {moment(dateTime).format('DD/MM/YYYY')}
+                  </Text>
+                </TouchableOpacity>
+                <Icon name="today-outline" size={20} color={'#2179A9'} />
+              </View>
+
+              {showDate && (
                 <DatePickerDay
-                  onChange={onChange}
+                  onChange={onChangeDate}
                   date={dateTime}
                   mode={'date'}
                 />
               )}
             </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Người nhận bàn giao:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <View>
-              {/* {renderLabel()} */}
-            
-              </View>
+
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Loại xác nhận:</Text>
+
+              <Picker
+                mode="dropdown"
+                style={styles.pickerDropdown}
+                selectedValue={selectConfirm}
+                onValueChange={itemValue => handleConfirm(itemValue)}>
+                 <Picker.Item label={'Loại xác nhận'} value="" /> 
+                {confirmType &&
+                  confirmType.map(item => (
+                    <Picker.Item label={item.display} value={item} />
+                  ))}
+              </Picker>
             </View>
-            <View style={styles.flex}>
+            {selectConfirm?.value === 1 ||
+            selectConfirm?.value === 4 ||
+            selectConfirm?.value === 5 ? (
+              <View style={[styles.flexTitle, styles.inputContainer]}>
+                <View style={styles.flexFromTo}>
+                  <Text style={styles.label}>Từ</Text>
+                  <View
+                    style={[styles.flexTime, {marginTop: moderateScale(20)}]}>
+                    <TouchableOpacity
+                      style={styles.btnDate}
+                      onPress={() => showDatePicker('startDate', 'date')}>
+                      <Text style={styles.dateTextFromTo}>
+                        {moment(startDate).format('DD/MM/YYYY HH:mm')}
+                      </Text>
+                    </TouchableOpacity>
+                    <Icon name="today-outline" size={20} color={'#2179A9'} />
+                  </View>
+
+                  {showStartPicker === 'date' && (
+                    <DatePickerDay
+                      date={startDate || newDate}
+                      mode={'date'}
+                      onChange={(event, date) =>
+                        handleDateChange(event, date, 'startDate', 'date')
+                      }
+                    />
+                  )}
+                  {showStartPicker === 'time' && (
+                    <DatePickerDay
+                      date={startDate || newDate}
+                      mode={'time'}
+                      onChange={(event, date) =>
+                        handleDateChange(event, date, 'startDate', 'time')
+                      }
+                    />
+                  )}
+                </View>
+                <View style={styles.flexFromTo}>
+                  <Text style={styles.label}>Đến</Text>
+                  <View
+                    style={[styles.flexTime, {marginTop: moderateScale(20)}]}>
+                    <TouchableOpacity
+                      style={styles.btnDate}
+                      onPress={() => showDatePicker('endDate', 'date')}>
+                      <Text style={styles.dateTextFromTo}>
+                        {moment(endDate).format('DD/MM/YYYY HH:mm')}
+                      </Text>
+                    </TouchableOpacity>
+                    <Icon name="today-outline" size={20} color={'#2179A9'} />
+                    {showEndPicker === 'date' && (
+                      <DatePickerDay
+                        date={endDate || newDate}
+                        mode={'date'}
+                        onChange={(event, date) =>
+                          handleDateChange(event, date, 'endDate', 'date')
+                        }
+                      />
+                    )}
+                    {showEndPicker === 'time' && (
+                      <DatePickerDay
+                        date={endDate || newDate}
+                        mode={'time'}
+                        onChange={(event, date) =>
+                          handleDateChange(event, date, 'endDate', 'time')
+                        }
+                      />
+                    )}
+                  </View>
+                </View>
+              </View>
+            ) : null}
+            <View style={styles.inputContainer}>
+              <View style={styles.flexTitle}>
+                <Text style={styles.label}>Nội dung xác nhận</Text>
+                <Text style={styles.charCount}>{lyDo.length}/100</Text>
+              </View>
               <TextInput
                 style={styles.input}
                 multiline={true}
+                value={lyDo}
                 onChangeText={setLyDo}
-                placeholder="Nội dung cần xác nhận"
-                underlineColorAndroid="transparent"
+                placeholder=""
+                maxLength={100}
               />
-            </View>
-            <View style={[styles.flex, {justifyContent: 'center'}]}>
-              <NativeBaseProvider>
-                <ButtonCreate
-                  disabled={disable}
-                  // onPress={(e) => console.log(e)}
-                  style={
-                    disable ? styles.buttonAddDisable : styles.buttonAddEnable
-                  }>
-                  <Text style={styles.textColor}>Tạo đề nghị</Text>
-                </ButtonCreate>
-              </NativeBaseProvider>
             </View>
           </View>
         </View>

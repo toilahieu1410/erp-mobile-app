@@ -156,7 +156,7 @@ const CreateTakeLeave: React.FC<CreateConfirmProps> = () => {
     setDateTime(currentDate);
   };
 
-  console.log(nameSearch,'nameSearch')
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

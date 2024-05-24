@@ -7,17 +7,19 @@ import {APPHEADER} from '../../constants/appHeaderNavigator';
 import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
-import ConfirmScreen from '../work/ConfirmScreen';
 import TakeLeaveScreen from '../work/TakeleaveScreen';
 import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
 import ItemDetailTakeLeave from '../../components/work/leave/ItemDetailTakeLeave';
 import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
 import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
+import CreateConfirm from '../../components/work/confirm/CreateConfirm';
+import ListConfirm from '../../components/work/confirm/ListConfirm';
+import EditConfirm from '../../components/work/confirm/EditConfirm';
 
 const MainStack = () => {
 
   const Stack = createNativeStackNavigator();
-  
+
   return (
     <Stack.Navigator initialRouteName={SCREENS.MAIN.KEY}>
       <Stack.Screen
@@ -76,10 +78,11 @@ const MainStack = () => {
         }}
         component={PayRollScreen}
       />
-      <Stack.Screen
-        name={SCREENS.XIN_XAC_NHAN.KEY}
+ 
+        <Stack.Screen
+        name={SCREENS.TAO_DON_XAC_NHAN.KEY}
         options={{
-          title: SCREENS.XIN_XAC_NHAN.NAME,
+          title: SCREENS.TAO_DON_XAC_NHAN.NAME,
           headerTintColor: 'transparent',
           headerShown: APPHEADER.headerShown,
           headerTitleStyle: {
@@ -87,7 +90,20 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={ConfirmScreen}
+        component={CreateConfirm}
+      />
+        <Stack.Screen
+        name={SCREENS.LIST_DON_XAC_NHAN.KEY}
+        options={{
+          title: SCREENS.LIST_DON_XAC_NHAN.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={ListConfirm}
       />
       <Stack.Screen
         name={SCREENS.DETAIL_XAC_NHAN.KEY}
@@ -101,6 +117,19 @@ const MainStack = () => {
           },
         }}
         component={ItemDetailConfirm}
+      />
+       <Stack.Screen
+        name={SCREENS.EDIT_XAC_NHAN.KEY}
+        options={{
+          title: SCREENS.EDIT_XAC_NHAN.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={EditConfirm}
       />
       <Stack.Screen
         name={SCREENS.XIN_NGHI_PHEP.KEY}

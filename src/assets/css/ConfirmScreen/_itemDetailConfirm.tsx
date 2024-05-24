@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   flex: {
     flexDirection:'row',
     justifyContent:'space-between',
- 
   },
   flexRight: {
     flexDirection:'row',
@@ -18,37 +17,69 @@ export const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
-    borderBottomColor: '#ddd',
-    borderBottomWidth:1,
     paddingVertical:moderateScale(15),
   
   },
-  left: {
-  
+  buttonSave: {
+    borderRadius:moderateScale(5),
+    backgroundColor: '#0066ff',
+    textAlign:'center',
+    padding:moderateScale(10),
+    flexDirection:'row',
+    justifyContent:'center'
   },
-  list: {
-
+  boxRight: {
+    flexDirection:'row',
+    alignContent:'center'
+  },
+  statusWrapper: {
+    borderRadius: moderateScale(4),
+    alignItems:'flex-end',
+    justifyContent:'space-between',
+  },
+  statusText: {
+    padding:moderateScale(5),
+    color: '#fff',
+    textAlign:'center',
+    fontSize: moderateScale(12),
+    fontWeight: 'bold',
+    minWidth:moderateScale(60),
   },
   shadow: {
     shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
     backgroundColor: 'white',
-    borderRadius: moderateScale(8),
-    padding: moderateScale(15),
-    width: '100%',
-    marginVertical: moderateScale(10),
+    margin: moderateScale(10),
+    borderRadius: moderateScale(10),
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    overflow:'hidden',
+    shadowOpacity: 0.75,
+    shadowRadius: 4,
+    elevation: 3,
+     padding: moderateScale(10),
   },
   titleID: {
     fontSize:moderateScale(18),
     color: '#2179A9',
     marginBottom:moderateScale(10)
   },
+  pickerDropdown: {
+    flex:1,
+    maxWidth:moderateScale(180),
+    borderColor: '#ddd',
+    borderRadius: 5,
+    backgroundColor: '#f9f9f9',
+  },
   input: {
-    width: '100%',
     color: '#2179A9',
     fontSize:moderateScale(14)
+  },
+  inputEdit: {
+    fontSize:moderateScale(14),
+    borderBottomColor: '#ccc',
+    borderBottomWidth:1,
   },
   colorGreen: {
     backgroundColor: 'green',
@@ -77,8 +108,7 @@ export const styles = StyleSheet.create({
   },
   textSmall: {
     fontSize: moderateScale(14),
-    color:'#333',
-  
+    
   },
   textDate: {
     fontSize: moderateScale(16),

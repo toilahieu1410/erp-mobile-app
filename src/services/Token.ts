@@ -29,24 +29,22 @@ export class Token {
 
   static async saveToken(token: Token) {
     try {
-      await AsyncStorage.setItem('token', JSON.stringify(token));
-    } catch (error) {}
+      await AsyncStorage.setItem('accessToken', token.accessToken);
+      await AsyncStorage.setItem('refreshToken', token.refreshToken);
+      console.log('Token đã được lưu:', token);
+    } catch (error) {
+      console.error('Không thể lưu token', error);
+    }
   }
 
   // Static method to load tokens from SecureStore
   static async getToken(): Promise<Token | null> {
     try {
-      const storedToken = await AsyncStorage.getItem('token');
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      const refreshToken = await AsyncStorage.getItem('refreshToken');
 
-      if (storedToken) {
-        const parsedToken = JSON.parse(storedToken);
-        return new Token(
-          parsedToken.accessToken,
-          parsedToken.expireAccessToken,
-          parsedToken.refreshToken,
-          parsedToken.expireRefreshToken,
-          parsedToken.value,
-        );
+      if (accessToken && refreshToken) {
+        return new Token(accessToken, '', refreshToken, '', {});
       } else {
         return null; // No token found
       }
@@ -72,7 +70,8 @@ export class Token {
 
   static async removeToken() {
     try {
-      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
     } catch (error) {}
   }
 }

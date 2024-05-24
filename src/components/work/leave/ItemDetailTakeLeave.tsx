@@ -8,32 +8,28 @@ import AppHeader from "../../navigators/AppHeader";
 
 const ItemDetailTakeLeave:React.FC<{route: any}> = ({route}) => {
 
-  const {item} = route.params
-
-  const checkStatus = (
-    TRUONG_PHONG_DA_DUYET: boolean,
-    TRUONG_PHONG_HUY_DUYET: boolean,
-  ) => {
-    if (TRUONG_PHONG_DA_DUYET === true && TRUONG_PHONG_HUY_DUYET === false) {
-      return (
-        <View style={styles.colorGreen}>
-          <Text style={styles.white}>Đã duyệt</Text>
-        </View>
-      );
-    }
-    if (TRUONG_PHONG_DA_DUYET === false && TRUONG_PHONG_HUY_DUYET === false) {
-      return (
-        <View style={styles.colorBlue}>
-          <Text style={styles.white}>Chờ duyệt</Text>
-        </View>
-      );
-    }
-    if (TRUONG_PHONG_HUY_DUYET !== false) {
-      return (
-        <View style={styles.colorRed}>
-          <Text style={styles.white}>Hủy duyệt</Text>
-        </View>
-      );
+  const checkStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Approved':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#27b376'}]}>
+            <Text style={styles.statusText}>Đã duyệt</Text>
+          </View>
+        );
+      case 'Pending':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#3366ff'}]}>
+            <Text style={styles.statusText}>Chưa duyệt</Text>
+          </View>
+        );
+      case 'Reject':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#cc2a36'}]}>
+            <Text style={styles.statusText}>Hủy duyệt</Text>
+          </View>
+        );
+      default:
+        return null;
     }
   };
 
