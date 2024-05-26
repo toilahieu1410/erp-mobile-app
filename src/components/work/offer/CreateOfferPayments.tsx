@@ -217,14 +217,14 @@ const CreateOfferPayments: React.FC<CreateOfferPaymentsProps> = () => {
             </View>
             <View style={[styles.flex, {justifyContent: 'center'}]}>
               <NativeBaseProvider>
-                <ButtonCreate
+                {/* <ButtonCreate
                   disabled={disable}
                   // onPress={(e) => console.log(e)}
                   style={
                     disable ? styles.buttonAddDisable : styles.buttonAddEnable
                   }>
                   <Text style={styles.textColor}>Tạo đề nghị</Text>
-                </ButtonCreate>
+                </ButtonCreate> */}
               </NativeBaseProvider>
             </View>
           </View>

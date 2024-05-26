@@ -8,12 +8,34 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  inputContainer: {
+    marginBottom: moderateScale(20),
+  },
+  dateContainer: {
+    marginBottom: moderateScale(20),
+  },
+  dateTextFromTo: {
+    fontSize: moderateScale(14),
+    color: '#333',
+    alignContent:'center',
+    alignItems:'center'
+  },
+  dateText: {
+    fontSize: moderateScale(14),
+    color: '#333',
+
+  },
+  charCount: {
+    marginTop: moderateScale(5),
+    textAlign:'right',
+    color: '#999'
+  },
   flexTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: moderateScale(10),
-    marginTop: moderateScale(10)
+    alignItems:'center'
   },
+  
   flexContent: {
     flexDirection: 'row',
     margin: moderateScale(10),
@@ -21,17 +43,22 @@ export const styles = StyleSheet.create({
     color: '#2179A9',
     paddingLeft: moderateScale(20)
   },
+  flexFromTo: {
+  
+    justifyContent:'flex-start',
+    flexDirection:'column',
+  },
   textHeader: {
     fontSize: moderateScale(16),
     color: '#444'
   },
   btnDate: {
     backgroundColor: 'transparent',
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
+    marginRight: moderateScale(10)
   },
   scroll: {
-    height:height + moderateScale(70),
+    height:height - moderateScale(70),
+    
   },
   colorText: {
     color: '#03347D',
@@ -51,6 +78,10 @@ export const styles = StyleSheet.create({
   },
   pickerDropdown: {
     flex:1,
+    maxWidth:moderateScale(180),
+    borderColor: '#ddd',
+    borderRadius: 5,
+    backgroundColor: '#f9f9f9',
   },
   flex: {
     flexDirection: 'row',
@@ -60,6 +91,9 @@ export const styles = StyleSheet.create({
   flexTime: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    paddingBottom: moderateScale(10),
   },
   icon: {
     marginRight: moderateScale(10),
@@ -92,6 +126,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 5.25,
     shadowRadius: 3.84,
     elevation: 6,
+    height:'100%',
   },
   colorHeader: {
     shadowColor: '#000',
@@ -100,14 +135,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     elevation: 1,
   },
-  input: {
-    backgroundColor: '#f5f5f5',
-    flexShrink: 1,
-    width: '100%',
-    minHeight:35,
-    maxHeight:300,
-    fontSize: moderateScale(16),
-  },
+
   dropdown: {
     
     width: '100%',
@@ -129,39 +157,22 @@ export const styles = StyleSheet.create({
     color: '#fff',
   },
   buttonAddEnable: {
-    padding: 5,
-    textAlign: 'center',
-    alignSelf: 'center',
-    borderRadius: moderateScale(50),
-    width: widthScale(250),
-    height: heightScale(35),
-    color: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#1166D5',
+    color: '#2179A9',
   },
   buttonAddDisable: {
-    padding: moderateScale(5),
-    textAlign: 'center',
-    alignSelf: 'center',
-    borderRadius: moderateScale(50),
-    width: widthScale(250),
-    height: heightScale(35),
-    backgroundColor: '#ccc',
-    color: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    color: '#ccc',
   },
 
-
   label: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
+    fontSize: moderateScale(14),
+    color: '#555',
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    color: '#333',
   },
   placeholderStyle: {
     fontSize: 16,

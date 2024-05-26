@@ -2,7 +2,8 @@ import React from 'react';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import {Platform} from 'react-native';
+import {Platform, Text} from 'react-native';
+import { moderateScale } from '../../screens/size';
 
 type AppBarProps = {
   showButtonBack?: Boolean | false;
@@ -45,7 +46,13 @@ const AppHeader = ({
         title={`${title}`}
         titleStyle={{fontSize: 16, fontWeight: 'bold'}}
       />
-      {actions && actions}
+
+      {actions && (
+        <Text>
+          {/* Thêm View bao bọc actions với marginRight */}
+          {actions}
+        </Text>
+      )}
     </Appbar.Header>
   );
 };

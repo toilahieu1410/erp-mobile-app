@@ -40,10 +40,12 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
 
   //============================== Các loại đơn, đề nghị =======================================
   //Xac nhan
-  XIN_XAC_NHAN: {KEY: 'ConfirmScreen', NAME: 'Xin Xác nhận'},
 
+  TAO_DON_XAC_NHAN: {KEY: 'CreateConfirm', NAME: 'Tạo đơn xác nhận'},
+  LIST_DON_XAC_NHAN: {KEY: 'ListConfirm', NAME: 'Danh sách đơn xác nhận'},
   DETAIL_XAC_NHAN: {KEY: 'ItemDetailConfirm', NAME: 'Chi tiết đơn Xác nhận'},
-
+  EDIT_XAC_NHAN: {KEY: 'EditConfirm', NAME: 'Sửa đơn xác nhận'},
+  
   //Nghi phep
   XIN_NGHI_PHEP: {KEY: 'TakeLeaveScreen', NAME: 'Xin nghỉ phép'},
 

@@ -115,10 +115,10 @@ const AccountScreen = () => {
     },
     {
       icon: <Icon size={25} color="#027BE3" name="reader-outline" />,
-      title: SCREENS.XIN_XAC_NHAN.NAME,
+      title: SCREENS.LIST_DON_XAC_NHAN.NAME,
       type: 'menu',
       onClick: () => {
-        navigation?.navigate(SCREENS.XIN_XAC_NHAN.KEY);
+        navigation?.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY);
       },
     },
     {

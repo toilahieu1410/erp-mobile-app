@@ -1,68 +1,120 @@
-import React from 'react'
-import { Platform, StyleSheet } from 'react-native'
-import { heightScale, moderateScale, widthScale } from '../../../screens/size';
+import React from 'react';
+import {Platform, StyleSheet} from 'react-native';
+import {heightScale, moderateScale, widthScale} from '../../../screens/size';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
-  scrollView: {
+  boxWrapper: {
+    marginVertical:moderateScale(5),
+    marginHorizontal: moderateScale(10),
+    padding: moderateScale(5),
+    backgroundColor: '#fff',
+    borderRadius: moderateScale(10),
+  },
 
-  },
-  containerLandscape: {
-    height: Platform.OS === 'ios' ? heightScale(180) : heightScale(200),
-  },
-  containerPortal: {
-    height: Platform.OS === 'ios' ? heightScale(500) : heightScale(520),
-  },
-  swipe: {
-    flex: 1,
-    alignItems: 'center',
+  itemWrapper: {
+    backgroundColor: '#fff',
+    borderRadius: moderateScale(10),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    overflow:'hidden',
+    shadowOpacity: 0.75,
+    shadowRadius: 4,
+    elevation: 3,
+    flexDirection: 'row',
     justifyContent: 'center',
-    flexDirection: 'column',
+     padding: moderateScale(10),
+    // alignContent:'center'
   },
-  flexContent: {
+  dateWrapper: {
+    color: '#ccc',
+    marginBottom: moderateScale(10),
+  },
+  dateText: {
+    fontSize: moderateScale(14),
+    fontWeight: 'bold',
+    color: '#999',
+  },
+  datePickerContainer: {
     flexDirection: 'row',
-    margin: moderateScale(10),
-    marginTop: moderateScale(15),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: moderateScale(10),
+  },
+  datePickerText: {
+    fontSize: moderateScale(14),
     color: '#2179A9',
-
-    justifyContent: 'space-between'
   },
-  textHeader: {
-    fontSize: moderateScale(16),
-    color: '#444',
-  },
-  listWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  row: {
-    backgroundColor: '#fff',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    fontSize: moderateScale(16),
-    flexShrink: 1,
-    padding: moderateScale(10),
-    color: '#444',
-  },
-  row1: {
-    backgroundColor: '#fff',
-    width: widthScale(380),
+  contentWrapper: {
     flex: 1,
-    fontSize: moderateScale(16),
-    padding: moderateScale(10),
-    color: '#444',
   },
-  rowHeader: {
-    backgroundColor: '#2179A9',
-    color: '#fff',
+  editButton: {
+    backgroundColor:'#a6a6a6',
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
+    padding:moderateScale(10),
+    marginVertical: moderateScale(10),
+  },
+  deleteButton: {
+    backgroundColor:'#ff0000',
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
+    padding:moderateScale(10),
+    marginVertical: moderateScale(10),
+  },
+  mainText: {
+    fontSize: moderateScale(13),
+    fontWeight: 'bold',
+    color: '#aaa',
+    marginVertical: moderateScale(5),
+  },
+  subText: {
     fontSize: moderateScale(16),
-    padding: moderateScale(10),
-    flexShrink: 1,
+    color: '#333',
+    fontWeight: '700',
+  },
+  statusWrapper: {
+    borderRadius: moderateScale(4),
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+
+    // alignContent:'center',
+  },
+  iconWhite: {
+    color: '#fff',
+  },
+  textWhite: {
+    color: '#fff',
+    fontSize: moderateScale(12)
+  },
+  statusText: {
+    padding: moderateScale(5),
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: moderateScale(12),
+    fontWeight: 'bold',
+    minWidth: moderateScale(60),
+  },
+  icon: {
+    backgroundColor: '#f2f2f2',
+    padding: moderateScale(3),
+    borderRadius: moderateScale(5),
+  },
+  fontSize: {
+    fontWeight: '500',
+    fontSize: moderateScale(13),
+    marginLeft: moderateScale(15),
+  },
+  textDate: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
-

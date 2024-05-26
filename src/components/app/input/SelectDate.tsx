@@ -1,7 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import {Icon} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
+
 import moment from 'moment';
 type SelectDateTimeProps = {
   title?: string | null;

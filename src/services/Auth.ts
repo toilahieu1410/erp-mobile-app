@@ -12,7 +12,7 @@ export const AuthenticateService = {
 
 
   async GetUser(): Promise<BaseResponse<any>> {
-    const response = await http.get('user/GetUser')
+    const response = await http.get('user/get_user')
     return response.data
   },
 
@@ -35,6 +35,7 @@ export const AuthenticateService = {
       throw error;
     }
   },
+
   async CheckToken() {
     const token = await Token.getToken();
     if (token) {
