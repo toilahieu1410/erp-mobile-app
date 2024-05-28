@@ -48,7 +48,7 @@ const AppHeader = ({
       />
 
       {actions && (
-        <Text>
+        <Text style={{marginRight:moderateScale(5)}}>
           {/* Thêm View bao bọc actions với marginRight */}
           {actions}
         </Text>

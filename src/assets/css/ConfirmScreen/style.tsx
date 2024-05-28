@@ -1,8 +1,8 @@
-import React from 'react'
-import { Platform, StyleSheet,Dimensions } from 'react-native'
-import { heightScale, moderateScale, widthScale } from '../../../screens/size';
+import React from 'react';
+import {Platform, StyleSheet, Dimensions} from 'react-native';
+import {heightScale, moderateScale, widthScale} from '../../../screens/size';
 
-const height = Dimensions.get('window').height
+const height = Dimensions.get('window').height;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -17,48 +17,45 @@ export const styles = StyleSheet.create({
   dateTextFromTo: {
     fontSize: moderateScale(14),
     color: '#333',
-    alignContent:'center',
-    alignItems:'center'
+    alignContent: 'center',
+    alignItems: 'center',
   },
   dateText: {
     fontSize: moderateScale(14),
     color: '#333',
-
   },
   charCount: {
     marginTop: moderateScale(5),
-    textAlign:'right',
-    color: '#999'
+    textAlign: 'right',
+    color: '#999',
   },
   flexTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center'
+    alignItems: 'center',
   },
-  
+
   flexContent: {
     flexDirection: 'row',
     margin: moderateScale(10),
     marginTop: moderateScale(15),
     color: '#2179A9',
-    paddingLeft: moderateScale(20)
+    paddingLeft: moderateScale(20),
   },
   flexFromTo: {
-  
-    justifyContent:'flex-start',
-    flexDirection:'column',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
   },
   textHeader: {
     fontSize: moderateScale(16),
-    color: '#444'
+    color: '#444',
   },
   btnDate: {
     backgroundColor: 'transparent',
-    marginRight: moderateScale(10)
+    marginRight: moderateScale(10),
   },
   scroll: {
-    height:height - moderateScale(70),
-    
+    height: height - moderateScale(70),
   },
   colorText: {
     color: '#03347D',
@@ -72,21 +69,38 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   border: {
-    borderColor:'#ccc',
-    borderWidth:1,
-    marginBottom:moderateScale(20)
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: moderateScale(20),
   },
   pickerDropdown: {
-    flex:1,
-    maxWidth:moderateScale(180),
+    flex: 1,
+    maxWidth: moderateScale(180),
     borderColor: '#ddd',
     borderRadius: 5,
     backgroundColor: '#f9f9f9',
   },
+  buttonSaveEnabled: {
+    color: '#fff',
+    backgroundColor: '#2179A9',
+    fontWeight: '500',
+    borderColor: '#2179A9',
+    borderWidth: 1,
+    padding: moderateScale(5),
+    borderRadius: moderateScale(5),
+  },
+  buttonSaveDisabled: {
+    color: '#ccc',
+    fontWeight: '500',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: moderateScale(5),
+    borderRadius: moderateScale(5),
+  },
   flex: {
     flexDirection: 'row',
     marginBottom: moderateScale(20),
-    alignItems:'center'
+    alignItems: 'center',
   },
   flexTime: {
     flexDirection: 'row',
@@ -94,6 +108,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
     paddingBottom: moderateScale(10),
+    marginTop: moderateScale(20),
   },
   icon: {
     marginRight: moderateScale(10),
@@ -126,7 +141,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 5.25,
     shadowRadius: 3.84,
     elevation: 6,
-    height:'100%',
+    height: '100%',
   },
   colorHeader: {
     shadowColor: '#000',
@@ -137,7 +152,6 @@ export const styles = StyleSheet.create({
   },
 
   dropdown: {
-    
     width: '100%',
     height: 45,
     borderBottomColor: '#cccccc59',
@@ -146,7 +160,7 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(20),
   },
   dropdownSearch: {
-    minWidth:moderateScale(170),
+    minWidth: moderateScale(170),
   },
   datepicker: {
     color: '#000',
@@ -189,4 +203,3 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

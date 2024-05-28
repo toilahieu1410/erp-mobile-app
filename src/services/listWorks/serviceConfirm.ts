@@ -28,7 +28,6 @@ interface ListConfirm {
 }
 
 
-
 export const ConfirmService = {
   async createConfirm(data: ConfirmPayload): Promise<BaseResponse<any>> {
     try {

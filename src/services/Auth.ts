@@ -9,7 +9,14 @@ export const AuthenticateService = {
     return response.data
   },
 
-
+  async Logout(accessToken: string): Promise<void> {
+    const url = `/user/logout`
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    };
+    await http.post(url, {}, { headers });
+  },
 
   async GetUser(): Promise<BaseResponse<any>> {
     const response = await http.get('user/get_user')
@@ -26,6 +33,13 @@ export const AuthenticateService = {
   //     throw err.response.data;
   //   }
   // },
+
+  async RevokeToken(accessToken: string, refreshToken: string): Promise<void> {
+    const url = `/token/revoke`
+    const data = {accessToken, refreshToken}
+    const response = await http.post(url, data)
+    return response.data
+  },
 
   async GetToken(): Promise<Token | null> {
     try {

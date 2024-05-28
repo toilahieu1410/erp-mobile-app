@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    
   },
   boxWrapper: {
     marginVertical:moderateScale(5),
@@ -32,42 +33,55 @@ export const styles = StyleSheet.create({
      padding: moderateScale(10),
     // alignContent:'center'
   },
-  dateWrapper: {
-    color: '#ccc',
-    marginBottom: moderateScale(10),
+  btnDate: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth:1,
+    padding: moderateScale(7),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+
   dateText: {
     fontSize: moderateScale(14),
     fontWeight: 'bold',
     color: '#999',
   },
   datePickerContainer: {
+    borderTopColor: '#cecece',
+    borderTopWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: moderateScale(10),
+    paddingVertical:moderateScale(8),
+    paddingHorizontal: moderateScale(10),
+    
+  },
+  flexDatePicker: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   datePickerText: {
     fontSize: moderateScale(14),
     color: '#2179A9',
+    marginLeft:moderateScale(5)
   },
   contentWrapper: {
     flex: 1,
   },
   editButton: {
+    minWidth:moderateScale(50),
     backgroundColor:'#a6a6a6',
     flexDirection:'column',
     alignItems:'center',
     justifyContent:'center',
-    padding:moderateScale(10),
     marginVertical: moderateScale(10),
   },
   deleteButton: {
+    minWidth:moderateScale(50),
     backgroundColor:'#ff0000',
     flexDirection:'column',
     alignItems:'center',
     justifyContent:'center',
-    padding:moderateScale(10),
     marginVertical: moderateScale(10),
   },
   mainText: {
@@ -93,7 +107,7 @@ export const styles = StyleSheet.create({
   },
   textWhite: {
     color: '#fff',
-    fontSize: moderateScale(12)
+   
   },
   statusText: {
     padding: moderateScale(5),

@@ -9,6 +9,19 @@ export interface BaseResponse<T = object> {
   };
 }
 
+export interface BaseResponseConfirm<T = object> {
+  value: {
+    items: T[]
+  };
+  isSuccess: boolean;
+  isFailure: boolean;
+  statusCode: number;
+  error: {
+    code: string;
+    message: string;
+  };
+}
+
 export interface ListData<T = object> {
   value: T[];
   totalPage: number;

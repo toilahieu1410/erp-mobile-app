@@ -24,7 +24,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
   const passwordRef = useRef(null);
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
