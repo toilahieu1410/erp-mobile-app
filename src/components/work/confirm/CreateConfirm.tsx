@@ -39,12 +39,8 @@ const CreateConfirm = () => {
   const [dateTime, setDateTime] = useState(newDate);
   const [showDate, setShowDate] = useState(false);
 
-  const [showStartPicker, setShowStartPicker] = useState<'date' | 'time' | null>(
-    null,
-  );
-  const [showEndPicker, setShowEndPicker] = useState<'date' | 'time' | null>(
-    null,
-  );
+  const [showStartPicker, setShowStartPicker] = useState<'date' | 'time' | null>(null);
+  const [showEndPicker, setShowEndPicker] = useState<'date' | 'time' | null>(null);
 
   useEffect(() => {
     const fetchConfirmTypes = async () => {
@@ -116,17 +112,16 @@ const CreateConfirm = () => {
         endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : "",
         dateNeedConfirm: moment(dateTime).format('DD/MM/YYYY'),
       };
-      console.log(payload, 'ssss');
-      const result = await ConfirmService.createConfirm(payload);
+      await ConfirmService.createConfirm(payload);
       showMessage({
-        message: 'Success',
-        description: 'Tạo đơn thành công',
+        message: 'Tạo đơn thành công',
+        description: 'Đơn xác nhận của bạn đã được tạo trên hệ thống',
         type: 'success'
       })
     } catch (error) {
       showMessage({
-        message: 'Error',
-        description: 'Tạo đơn thất bại',
+        message: 'Tạo đơn thất bại',
+        description: 'Không thể tạo được đơn',
         type: 'danger'
       })
     }
@@ -168,8 +163,7 @@ const CreateConfirm = () => {
       }
     }
   };
-
-
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -185,7 +179,7 @@ const CreateConfirm = () => {
               disabled={disable}
               size={moderateScale(50)}
               onPress={handleSubmit}>
-              <Text style={{color:'#333'}}>Lưu</Text>
+              <Text style={disable === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
             </Button>
           </NativeBaseProvider>
         }
@@ -204,7 +198,7 @@ const CreateConfirm = () => {
                   ]}>
                   {moment(newDate).format('DD/MM/YYYY')}
                 </Text>
-                <Icon name="today-outline" size={20} color={'#2179A9'} />
+                <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
               </View>
             </View>
 
@@ -218,7 +212,7 @@ const CreateConfirm = () => {
                     {moment(dateTime).format('DD/MM/YYYY')}
                   </Text>
                 </TouchableOpacity>
-                <Icon name="today-outline" size={20} color={'#2179A9'} />
+                <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
               </View>
 
               {showDate && (
@@ -252,7 +246,7 @@ const CreateConfirm = () => {
                 <View style={styles.flexFromTo}>
                   <Text style={styles.label}>Từ</Text>
                   <View
-                    style={[styles.flexTime, {marginTop: moderateScale(20)}]}>
+                    style={styles.flexTime}>
                     <TouchableOpacity
                       style={styles.btnDate}
                       onPress={() => showDatePicker('startDate', 'date')}>
@@ -285,7 +279,7 @@ const CreateConfirm = () => {
                 <View style={styles.flexFromTo}>
                   <Text style={styles.label}>Đến</Text>
                   <View
-                    style={[styles.flexTime, {marginTop: moderateScale(20)}]}>
+                    style={styles.flexTime}>
                     <TouchableOpacity
                       style={styles.btnDate}
                       onPress={() => showDatePicker('endDate', 'date')}>

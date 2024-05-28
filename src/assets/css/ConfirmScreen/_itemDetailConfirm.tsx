@@ -20,6 +20,30 @@ export const styles = StyleSheet.create({
     paddingVertical:moderateScale(15),
   
   },
+  flexFromTo: {
+    justifyContent:'flex-start',
+    flexDirection:'column',
+  },
+  flexTime: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    paddingBottom: moderateScale(10),
+    marginTop: moderateScale(20)
+  },
+  flexVerticalIcon: {
+    flexDirection: 'row',
+    alignItems:'center'
+  },
+  borderBottomColor: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    
+  },
+  rightDateTime: {
+    marginRight:moderateScale(10)
+  },
   buttonSave: {
     borderRadius:moderateScale(5),
     backgroundColor: '#0066ff',
@@ -80,6 +104,7 @@ export const styles = StyleSheet.create({
     fontSize:moderateScale(14),
     borderBottomColor: '#ccc',
     borderBottomWidth:1,
+    minWidth: moderateScale(100)
   },
   colorGreen: {
     backgroundColor: 'green',

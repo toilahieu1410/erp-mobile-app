@@ -82,13 +82,21 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
   },
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
+export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
-    await Token.removeToken();
-    await AsyncStorage.removeItem(dateLogoutKey);
+    console.log('Logging out.....')
+    const token = await Token.getToken()
+    if(token) {
+      await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken)
+      console.log('Token revoked');
+    }
+    await Token.removeToken()
+    await AsyncStorage.removeItem(dateLogoutKey)
+    console.log('Token removed and logout key removed');
     return true
-  } catch (err) {
-    throw err
+  } catch (error) {
+    console.error('Logout error:', error);
+    return rejectWithValue(error.message);
   }
 });
 
@@ -105,7 +113,7 @@ export const checkLogin = createAsyncThunk<boolean>(
         await AsyncStorage.removeItem(dateLogoutKey)
         return false
       }
-      console.log(dateLogout ,'333333')
+
       if (token) {
         return true;
       } else {

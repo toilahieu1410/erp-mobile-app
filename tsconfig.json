@@ -1,3 +1,12 @@
+// {
+
+//   // "include": ["src/**/*"],
+//   // "exclude": ["node_modules", "babel.config.js", "metro.config.js", "index.js"]
+// }
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "compilerOptions": {
+    // "extends": "@react-native/typescript-config/tsconfig.json",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
+  }
 }

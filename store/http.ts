@@ -5,6 +5,9 @@ import {API_BASE_URL} from '../src/constants/base';
 
 class Http {
   instance: AxiosInstance;
+  isRefreshing: boolean = false;
+  failedQueue: any[] = [];
+
   constructor() {
     this.instance = axios.create({
       baseURL: API_BASE_URL,
@@ -16,7 +19,9 @@ class Http {
     this.instance.interceptors.request.use(
       async config => {
         const token = await Token.getToken();
-        config.headers.Authorization = `Bearer ${token?.accessToken}`;
+        if (token && config.headers) {
+          config.headers.Authorization = `Bearer ${token.accessToken}`;
+        }
         return config;
       },
       error => {
@@ -24,33 +29,52 @@ class Http {
       },
     );
 
-    this.instance.interceptors.response.use(
-    (response) => response,
+      this.instance.interceptors.response.use(
+      response => response,
       async error => {
-        const refreshToken = await this.GetRefreshToken();
-        if (error.response && error.response.status === 401 && refreshToken) {
-          try {
-            await this.RefreshToken(refreshToken).then(async data => {
-              await Token.saveToken(data.value);
-              const config = error.config;
-              config.headers.Authorization = `Bearer ${data.value.accessToken}`;
-              return axios(config);
+        const originalRequest = error.config;
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+          if (this.isRefreshing) {
+            return new Promise(function (resolve, reject) {
+              this.failedQueue.push({ resolve, reject });
+            }).then(token => {
+              originalRequest.headers['Authorization'] = 'Bearer ' + token;
+              return axios(originalRequest);
+            }).catch(err => {
+              return Promise.reject(err);
             });
-          } catch (error) {
-            return Promise.reject(error);
           }
-        } else {
-          return Promise.reject(error);
+
+          originalRequest._retry = true;
+          this.isRefreshing = true;
+
+          const refreshToken = await this.GetRefreshToken();
+          if (refreshToken) {
+            try {
+              const { value } = await this.RefreshToken(refreshToken);
+              await Token.saveToken(value);
+              originalRequest.headers['Authorization'] = 'Bearer ' + value.accessToken;
+              this.isRefreshing = false;
+              this.onRefreshed(value.accessToken);
+              return axios(originalRequest);
+            } catch (err) {
+              this.isRefreshing = false;
+              this.failedQueue = [];
+              return Promise.reject(err);
+            }
+          }
         }
-      },
+        return Promise.reject(error);
+      }
     );
   }
 
   async RefreshToken(refreshToken: string): Promise<BaseResponse<Token>> {
-  
-    const url = `/api/Authentication/GetAccessToken`;
-    const data = { token: refreshToken };
+    console.log('Refreshing token with refresh token:', refreshToken);
+    const url = `/token/refresh`; // Endpoint API refresh token mới
+    const data = { refreshToken };
     const res = await this.instance.post(url, data);
+    console.log('Token refreshed successfully:', res.data);
     return res.data;
   }
 
@@ -70,6 +94,12 @@ class Http {
     } catch (error) {
       throw error;
     }
+  }
+  onRefreshed(token: string) {
+    this.failedQueue.forEach(prom => {
+      prom.resolve(token);
+    });
+    this.failedQueue = [];
   }
 }
 
