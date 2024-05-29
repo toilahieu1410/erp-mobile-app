@@ -162,7 +162,7 @@ const EditConfirm: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
       <AppHeader
-        title="Sửa đơn xác nhận"
+        title="Chi tiết đơn xác nhận"
         centerTitle={true}
         showButtonBack={true}
       />

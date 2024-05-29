@@ -8,13 +8,14 @@ import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
 import TakeLeaveScreen from '../work/TakeleaveScreen';
-import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
+// import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
 import ItemDetailTakeLeave from '../../components/work/leave/ItemDetailTakeLeave';
 import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
 import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
 import CreateConfirm from '../../components/work/confirm/CreateConfirm';
 import ListConfirm from '../../components/work/confirm/ListConfirm';
 import EditConfirm from '../../components/work/confirm/EditConfirm';
+import SearchConfirm from '../../components/work/confirm/SearchConfirm';
 
 const MainStack = () => {
 
@@ -106,9 +107,9 @@ const MainStack = () => {
         component={ListConfirm}
       />
       <Stack.Screen
-        name={SCREENS.DETAIL_XAC_NHAN.KEY}
+        name={SCREENS.SEARCH_DON_XAC_NHAN.KEY}
         options={{
-          title: SCREENS.DETAIL_XAC_NHAN.NAME,
+          title: SCREENS.SEARCH_DON_XAC_NHAN.NAME,
           headerTintColor: 'transparent',
           headerShown: APPHEADER.headerShown,
           headerTitleStyle: {
@@ -116,7 +117,7 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={ItemDetailConfirm}
+        component={SearchConfirm}
       />
        <Stack.Screen
         name={SCREENS.EDIT_XAC_NHAN.KEY}

@@ -8,6 +8,14 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     
   },
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position:'absolute',
+    top: '50%',
+    left: '50%'
+  },
   boxWrapper: {
     marginVertical:moderateScale(5),
     marginHorizontal: moderateScale(10),
@@ -130,5 +138,15 @@ export const styles = StyleSheet.create({
   textDate: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  footerLoading: {
+    padding: moderateScale(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#2179A9',
+    fontSize: moderateScale(14),
+    fontWeight: 'normal',
   },
 });

@@ -17,8 +17,9 @@ import {BaseResponse} from '../../models/BaseResponse';
 import {showMessage} from 'react-native-flash-message';
 import {SCREENS} from '../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
-import {heightScale} from '../size';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {styles} from '../../assets/css/AccountScreen/style';
+import AuthenticateService from '../../services/Auth';
 
 interface Item {
   icon?: React.ReactElement;
@@ -30,6 +31,10 @@ interface Item {
 const AccountScreen = () => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
+
+  const [userName, setUserName] = useState(null)
+  const [hovaten, setHovaten] = useState(null)
+  const [email, setEmail] = useState(null)
 
   const ListItem: Item[] = [
     {
@@ -90,8 +95,7 @@ const AccountScreen = () => {
       type: 'menu',
       onClick: () => {
         //@ts-ignore
-        dispatch(logout())
-          .unwrap()
+        dispatch(logout()).unwrap()
           .then(() => {
             showMessage({
               message: 'Đăng xuất thành công!',
@@ -149,7 +153,24 @@ const AccountScreen = () => {
     },
   ];
 
-
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token')
+        if(token) {
+          const response = await AuthenticateService.GetUser()
+          const user = response.value
+          console.log(user,'uuuu')
+          setUserName(user.userName)
+          setHovaten(user.hoTen)
+          setEmail(user.email)
+        }
+      } catch (error) {
+        console.error('Error', error)
+      }
+    }
+    fetchUserData()
+  }, [])
   return (
     <>
       <SafeAreaView className="flex-1 w-full ">
@@ -167,10 +188,10 @@ const AccountScreen = () => {
             </View>
             <View>
               <Text className="text-center text-xl font-bold text-black">
-                Lâm Văn Đức
+                {hovaten}
               </Text>
               <Text className="text-center text-base text-black">
-                Ducvl@hoplong.com
+                {email}
               </Text>
             </View>
           </View>
