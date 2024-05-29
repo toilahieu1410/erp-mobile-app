@@ -84,8 +84,8 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
 
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
-    console.log('Logging out.....')
     const token = await Token.getToken()
+
     if(token) {
       await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken)
       console.log('Token revoked');

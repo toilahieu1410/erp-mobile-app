@@ -40,7 +40,7 @@ export const AuthenticateService = {
     const response = await http.post(url, data)
     return response.data
   },
-
+  
   async GetToken(): Promise<Token | null> {
     try {
       const loadedToken = await Token.getToken();
