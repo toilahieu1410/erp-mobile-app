@@ -76,7 +76,8 @@ const SearchConfirm: React.FC = () => {
             </Text>
           </TouchableOpacity>
           <Button onPress={handleSearch}>
-            <Icon name="search-sharp" size={20} color={'#2179A9'} />
+            <Text>SEARCH</Text>
+            {/* <Icon name="search-sharp" size={20} color={'#2179A9'} /> */}
           </Button>
         </View>
     

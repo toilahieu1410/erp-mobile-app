@@ -45,6 +45,7 @@ interface ViewConfirmProps {
   onDelete: (id: string) => void;
   refreshing: boolean;
   onRefresh: () => void;
+  onLoadMore: () => void;
 }
 
 interface RouteParams {
@@ -55,12 +56,13 @@ interface RouteParams {
 const ListConfirm: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { fromDate: initialFromDate, toDate: initialToDate } = (route.params as RouteParams) || {};
+
+  const { fromDate: initialFromDate = '', toDate: initialToDate = '' } = route.params || {};
 
   const [index, setIndex] = useState(0);
   const [listXacNhan, setListXacNhan] = useState<XacNhan[]>([]);
-  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null);
-  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null);
+  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate).format('DD/MM/YYYY') : null);
+  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialFromDate).format('DD/MM/YYYY') : null);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -86,15 +88,21 @@ const ListConfirm: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    fetchConfirmList();
+  
+   useEffect(() => {
+    const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null;
+    const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null;
+    setFromDate(fromDateValue);
+    setToDate(toDateValue);
+    fetchConfirmList(fromDateValue, toDateValue);
   }, [initialFromDate, initialToDate]);
 
-  const fetchConfirmList = async () => {
+  const fetchConfirmList = async (fromDate: Date | null, toDate: Date | null) => {
     try {
       setLoading(true);
       const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : '';
       const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : '';
+   
       const response: any = await ConfirmService.getConfirmList(formattedFromDate, formattedToDate);
       const sortedResponse = response.sort((a: XacNhan, b: XacNhan) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
