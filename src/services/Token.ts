@@ -42,7 +42,6 @@ export class Token {
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const refreshToken = await AsyncStorage.getItem('refreshToken');
-
       if (accessToken && refreshToken) {
         return new Token(accessToken, '', refreshToken, '', {});
       } else {

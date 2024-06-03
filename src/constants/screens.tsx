@@ -31,7 +31,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   ACCOUNTSTACK: {KEY: 'AccountStackScreen', NAME: 'Tài khoản'},
   ACCOUNT: {KEY: 'AccountScreen', NAME: 'Tài khoản'},
 
-  INFORACCOUNT: {KEY: 'InforAccountScreen', NAME: 'Thông tin tài khoản'},
+  INFOACCOUNT: {KEY: 'InfoAccountScreen', NAME: 'Thông tin tài khoản'},
   CHANGEPASSWORD: {KEY: 'ChangePasswordScreen', NAME: 'Đổi mật khẩu'},
 
   CHECKIN_WFH: {KEY: 'CheckInWFHScreen', NAME: 'Chấm công WFH'},
@@ -48,7 +48,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   EDIT_XAC_NHAN: {KEY: 'EditConfirm', NAME: 'Sửa đơn xác nhận'},
   
   //Nghi phep
-  XIN_NGHI_PHEP: {KEY: 'TakeLeaveScreen', NAME: 'Xin nghỉ phép'},
+  LIST_DON_NGHI_PHEP: {KEY: 'ListTakeLeave', NAME: 'Danh sách đơn nghỉ phép'},
 
   DETAIL_NGHI_PHEP: {KEY: 'ItemDetailTakeLeave', NAME: 'Chi tiết đơn nghỉ phép'},
 
@@ -88,3 +88,9 @@ export const IMAGES = {
   WARNING: require('../assets/images/app/warning.png'),
   MENU: require('../assets/images/navigator/menu.png'),
 };
+
+export const ICON_INFO_ACCOUNT = {
+  AVATAR_ICON: require('../assets/images/icon/avatar.png'),
+  CONTACTINFO_ICON: require('../assets/images/icon/contact-info.png'),
+  PORTFOLIO_ICON: require('../assets/images/icon/portfolio.png'),
+}

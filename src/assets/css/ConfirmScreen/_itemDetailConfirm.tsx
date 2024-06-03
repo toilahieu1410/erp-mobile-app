@@ -96,6 +96,11 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#f9f9f9',
   },
+  btnShowDate: {
+    backgroundColor : '#2179A9',
+    padding: moderateScale(3),
+    borderRadius: moderateScale(5)
+  },
   input: {
     color: '#2179A9',
     fontSize:moderateScale(14)

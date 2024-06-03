@@ -169,7 +169,7 @@ const CreateConfirm = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled>
       <AppHeader
-        title="Danh sách đơn xác nhận"
+        title="Tạo đơn xác nhận"
         showButtonBack={true}
         centerTitle={true}
         actions={

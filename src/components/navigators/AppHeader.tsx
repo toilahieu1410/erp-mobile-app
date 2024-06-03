@@ -10,6 +10,8 @@ type AppBarProps = {
   title: String | React.ReactNode;
   centerTitle?: Boolean | false;
   actions?: React.ReactElement;
+  backgroundColor?: string;
+  titleColor: string
 };
 
 const AppHeader = ({
@@ -17,6 +19,8 @@ const AppHeader = ({
   title,
   centerTitle,
   actions,
+  backgroundColor= '#fff',
+  titleColor = '#000'
 }: AppBarProps) => {
   const navigator = useNavigation();
 
@@ -24,7 +28,7 @@ const AppHeader = ({
     <Appbar.Header
       style={{
         elevation: Platform.OS === 'ios' ? 1 : 4,
-        backgroundColor: '#ffffff',
+        backgroundColor: backgroundColor,
         height: 50,
       }}
       statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}
@@ -44,7 +48,7 @@ const AppHeader = ({
       ) : null}
       <Appbar.Content
         title={`${title}`}
-        titleStyle={{fontSize: 16, fontWeight: 'bold'}}
+        titleStyle={{fontSize: 16, fontWeight: 'bold', color: titleColor}}
       />
 
       {actions && (
@@ -62,6 +66,8 @@ AppHeader.propTypes = {
   title: PropTypes.string,
   centerTitle: PropTypes.bool,
   actions: PropTypes.element,
+  backgroundColor: PropTypes.string,
+  titleColor: PropTypes.string,
 };
 
 export default AppHeader;

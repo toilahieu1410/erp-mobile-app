@@ -1,254 +1,281 @@
-import React, {useState} from 'react';
-import {View, Text, ScrollView, FlatList, TouchableOpacity} from 'react-native';
-import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
-import { useNavigation } from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View, 
+  Text,
+  Dimensions, 
+  FlatList, 
+  TouchableOpacity,
+  RefreshControl,  
+  ActivityIndicator} from 'react-native';
+
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { widthScale } from '../../../screens/size';
-import { SCREENS } from '../../../constants/screens';
+import {moderateScale} from '../../../screens/size';
+import {RectButton, Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
+import AppHeader from '../../navigators/AppHeader';
+import moment from 'moment';
+import TakeLeaveService from '../../../services/listWorks/serviceTakeLeave';
+import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
 
 interface NghiPhep {
-  $id: string;
-  MA_SO_XIN_NGHI: string;
-  NGAY_LAM_DON: string;
-  NGUOI_DE_NGHI: string;
-  TEN_PHONG_BAN: string;
-  LY_DO_XIN_NGHI: string;
-  THOI_GIAN_NGHI: string;
-  TONG_SO_NGAY_NGHI: number;
-  GHI_CHU: string | null;
-  TRUONG_PHONG_DUYET: string | null;
-  NGAY_TRUONG_PHONG_DUYET: string | null;
-  TRUONG_PHONG_DA_DUYET: boolean;
-  TRUONG_PHONG_HUY_DUYET: boolean;
-  HO_VA_TEN: string;
-  TRUONG_NHOM: string | null;
-  LOAI_NGHI_PHEP: string;
-  TONG_SO_NGAY_NGHI_TRONG_NAM: number;
-  TONG_SO_NGAY_NGHI_OM: number;
-  TONG_SO_NGAY_NGHI_HIEU_HY: number;
-  TONG_SO_NGAY_NGHI_THUONG: number;
-  NGUOI_BAN_GIAO: string | null;
-  NOI_DUNG_BAN_GIAO: string | null;
-  LEADER: string;
+  id: string;
+  content: string;
+  handOver_Content: string;
+  handOver_ToUserId: string;
+  approvedBy: string | null;
+  approvedAt: string | null;
+  type: string;
+  status: string;
+  createdByUserId: string;
+  createdByUserName: string;
+  createdAt: string;
 }
 
 interface ViewTakeLeaveProps {
-  nghiPhep: {
-    listNghiPhep: NghiPhep[];
-    listDemNghiPhep: number[];
-  };
-
+  nghiPhep: NghiPhep[];
+  refreshing: boolean;
+  onRefresh: () => void;
 }
 
-interface DanhSachNghiPhepProps {
-  navigation: any;
+interface RouteParams {
+  fromDate?: string;
+  toDate?: string;
 }
 
-const ListTakeLeave: React.FC<DanhSachNghiPhepProps> = () => {
-  const listTakeLeave: NghiPhep[] = [
+const ListTakeLeave: React.FC = () => {
+
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<{ params: RouteParams }, 'params'>>();
+
+  const { fromDate: initialFromDate = '', toDate: initialToDate = '' } = route.params || {};
+
+  const [index, setIndex] = useState(0);
+  const [listNghiPhep, setListNghiPhep] = useState<NghiPhep[]>([]);
+  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null);
+  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const routes = [
     {
-      $id: '1',
-      MA_SO_XIN_NGHI: 'NPHL2405070001',
-      NGAY_LAM_DON: '2024-05-07T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      TEN_PHONG_BAN: 'IT phần mềm',
-      LY_DO_XIN_NGHI: 'Đưa vợ đi khám sức khỏe',
-      THOI_GIAN_NGHI: '07/05/2024-Chiều;',
-      TONG_SO_NGAY_NGHI: 0.5,
-      GHI_CHU: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      TRUONG_NHOM: null,
-      LOAI_NGHI_PHEP: 'Nghỉ thường',
-      TONG_SO_NGAY_NGHI_TRONG_NAM: 1,
-      TONG_SO_NGAY_NGHI_OM: 0,
-      TONG_SO_NGAY_NGHI_HIEU_HY: 0,
-      TONG_SO_NGAY_NGHI_THUONG: 1,
-      NGUOI_BAN_GIAO: 'INTE026_HL - Dương Văn Tiến - IT phần mềm',
-      NOI_DUNG_BAN_GIAO: '<p>giga digital</p>',
-      LEADER: 'INTE001_HL',
+      key: 'all',
+      title: 'Tất cả',
+      icon: '',
     },
     {
-      $id: '2',
-      MA_SO_XIN_NGHI: 'NPHL2404200001',
-      NGAY_LAM_DON: '2024-04-20T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      TEN_PHONG_BAN: 'IT phần mềm',
-      LY_DO_XIN_NGHI: 'Xin nghỉ buổi chiều đi khám sức khỏe',
-      THOI_GIAN_NGHI: '22/04/2024-Chiều;',
-      TONG_SO_NGAY_NGHI: 0.5,
-      GHI_CHU: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      TRUONG_NHOM: null,
-      LOAI_NGHI_PHEP: 'Nghỉ thường',
-      TONG_SO_NGAY_NGHI_TRONG_NAM: 1,
-      TONG_SO_NGAY_NGHI_OM: 0,
-      TONG_SO_NGAY_NGHI_HIEU_HY: 0,
-      TONG_SO_NGAY_NGHI_THUONG: 1,
-      NGUOI_BAN_GIAO: 'Không',
-      NOI_DUNG_BAN_GIAO: '<p>gigadigital</p>',
-      LEADER: 'INTE001_HL',
+      key: 'pending',
+      title: 'Chưa duyệt',
+      icon: 'ellipse-sharp',
+      color: '#3366ff',
     },
     {
-      $id: '3',
-      MA_SO_XIN_NGHI: 'NPHL2404080001',
-      NGAY_LAM_DON: '2024-04-08T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      TEN_PHONG_BAN: 'IT phần mềm',
-      LY_DO_XIN_NGHI: 'Xin nghỉ phép vì lí do bà ngoại mất',
-      THOI_GIAN_NGHI: '10/04/2024-Cả ngày;',
-      TONG_SO_NGAY_NGHI: 1,
-      GHI_CHU: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      TRUONG_NHOM: null,
-      LOAI_NGHI_PHEP: 'Nghỉ hiếu/hỷ',
-      TONG_SO_NGAY_NGHI_TRONG_NAM: 1,
-      TONG_SO_NGAY_NGHI_OM: 0,
-      TONG_SO_NGAY_NGHI_HIEU_HY: 0,
-      TONG_SO_NGAY_NGHI_THUONG: 1,
-      NGUOI_BAN_GIAO: 'INTE026_HL - Dương Văn Tiến - IT phần mềm',
-      NOI_DUNG_BAN_GIAO: '<p>web giga, bảo h&agrave;nh ecovacs</p>',
-      LEADER: 'INTE001_HL',
+      key: 'approved',
+      title: 'Đã duyệt',
+      icon: 'ellipse-sharp',
+      color: '#27b376',
     },
     {
-      $id: '4',
-      MA_SO_XIN_NGHI: 'NPHL2102010012',
-      NGAY_LAM_DON: '2021-02-01T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      TEN_PHONG_BAN: 'IT phần mềm',
-      LY_DO_XIN_NGHI: 'Testtttt ',
-      THOI_GIAN_NGHI: '01/02/2021-Cả ngày;',
-      TONG_SO_NGAY_NGHI: 1,
-      GHI_CHU: 'test',
-      TRUONG_PHONG_DUYET: 'ACCT007_HL',
-      NGAY_TRUONG_PHONG_DUYET: '2021-02-01T00:00:00',
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: true,
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      TRUONG_NHOM: null,
-      LOAI_NGHI_PHEP: 'Nghỉ thường',
-      TONG_SO_NGAY_NGHI_TRONG_NAM: 3.5,
-      TONG_SO_NGAY_NGHI_OM: 0,
-      TONG_SO_NGAY_NGHI_HIEU_HY: 0,
-      TONG_SO_NGAY_NGHI_THUONG: 3.5,
-      NGUOI_BAN_GIAO: null,
-      NOI_DUNG_BAN_GIAO: null,
-      LEADER: 'INTE001_HL',
-    },
-    {
-      $id: '5',
-      MA_SO_XIN_NGHI: 'NPHL2401040001',
-      NGAY_LAM_DON: '2024-01-04T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      TEN_PHONG_BAN: 'IT phần mềm',
-      LY_DO_XIN_NGHI: 'Xin nghỉ vì lí do sức khỏe',
-      THOI_GIAN_NGHI: '03/01/2024-Cả ngày;',
-      TONG_SO_NGAY_NGHI: 1,
-      GHI_CHU: null,
-      TRUONG_PHONG_DUYET: 'ACCT007_HL',
-      NGAY_TRUONG_PHONG_DUYET: '2024-01-06T00:00:00',
-      TRUONG_PHONG_DA_DUYET: true,
-      TRUONG_PHONG_HUY_DUYET: false,
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      TRUONG_NHOM: null,
-      LOAI_NGHI_PHEP: 'Nghỉ thường',
-      TONG_SO_NGAY_NGHI_TRONG_NAM: 1,
-      TONG_SO_NGAY_NGHI_OM: 0,
-      TONG_SO_NGAY_NGHI_HIEU_HY: 0,
-      TONG_SO_NGAY_NGHI_THUONG: 1,
-      NGUOI_BAN_GIAO: 'INTE026_HL - Dương Văn Tiến - IT phần mềm',
-      NOI_DUNG_BAN_GIAO: '<p>web giga, giga account</p>',
-      LEADER: 'INTE001_HL',
+      key: 'rejected',
+      title: 'Hủy duyệt',
+      icon: 'ellipse-sharp',
+      color: '#cc2a36',
     },
   ];
 
-  const [showList, setShowList] = useState<boolean>(false)
+  console.log(listNghiPhep,'listNghiPhep')
+  useEffect(() => {
+    const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null
+    const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null
+    setFromDate(fromDateValue)
+    setToDate(toDateValue)
+    fetchListTakeLeave(fromDateValue, toDateValue)
 
+  }, [initialFromDate, initialToDate])
 
+  const fetchListTakeLeave = async (fromDate: Date | null, toDate: Date | null) => {
+    try {
+      setLoading(true)
+      const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : ''
+      const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : ''
 
+      const response: any = await TakeLeaveService.getListTakeLeave(formattedFromDate, formattedToDate)
+      const sortedResponse = response.sort((a: NghiPhep, b: NghiPhep) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      })
+      setListNghiPhep(sortedResponse)
+    } catch (error) {
+      console.error('Error fetching listTakeLeave', error)
+      setListNghiPhep([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchListTakeLeave(fromDate, toDate)
+    setRefreshing(false)
+  }, [initialFromDate, initialToDate])
+
+  const renderScene = SceneMap({
+    all: () => (
+      <ViewTask 
+        nghiPhep={listNghiPhep}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    ),
+    pending: () => (
+      <ViewTask
+        nghiPhep={listNghiPhep.filter((item) => item.status === 'Pending')}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    ),
+    approved: () => (
+      <ViewTask
+        nghiPhep={listNghiPhep.filter((item) => item.status === 'Approved')}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    ),
+    rejected: () => (
+      <ViewTask
+        nghiPhep={listNghiPhep.filter((item) => item.status === 'Reject')}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    ),
+  })
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.flexContent}>
-          <Text style={styles.textHeader}>Tổng số ngày nghỉ phép:</Text>
-          <Text>&nbsp;&nbsp;</Text>
-          <Text
-            style={[styles.textHeader, {color: '#03347D', fontWeight: 'bold'}]}>
-            1
-          </Text>
-        </View>
-        <View>
-          <ViewTask 
-            nghiPhep={{
-              listNghiPhep: listTakeLeave,
-              listDemNghiPhep:[1]
-            }}
+    <GestureHandlerRootView style={styles.container}>
+       <AppHeader title="Danh sách đơn nghỉ phép" showButtonBack={true} />
+      <TabView 
+        navigationState={{index, routes}}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{width: Dimensions.get('window').width}}
+        renderTabBar={props => (
+          <TabBar 
+            {...props}
+            indicatorStyle={{backgroundColor: '#2179A9'}}
+            style={{backgroundColor: '#fff', borderBottomColor: '#cecece', borderBottomWidth: 1}}
+            labelStyle={{color:'black'}}
+             renderLabel={({ route, focused, color }) => (
+              <View style={{flexDirection: 'row', alignItems:'center'}}>
+                <Icon 
+                  name={route.icon}
+                  size={moderateScale(10)}
+                  color={route.color}
+                />
+                <Text style={{color: 'black', marginLeft: moderateScale(5)}}>{route.title}</Text>
+              </View>
+            )}
           />
+        )}
+      />  
+      {loading && !refreshing ? (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator size="large" color="#2179A9" />
         </View>
-      </ScrollView>
-    </View>
+      ) : null}
+    </GestureHandlerRootView>
   );
 };
 
 export default ListTakeLeave;
 
-const ViewTask: React.FC<ViewTakeLeaveProps> = ({nghiPhep}) => {
+const ViewTask: React.FC<ViewTakeLeaveProps> = ({nghiPhep, refreshing, onRefresh}) => {
+  const navigation: any = useNavigation();
 
-  const navigation: any = useNavigation()
-
-  const checkStatusIcon = (
-    TRUONG_PHONG_DA_DUYET: boolean,
-    TRUONG_PHONG_HUY_DUYET: boolean
-  ) => {
-    if (TRUONG_PHONG_DA_DUYET === true && TRUONG_PHONG_HUY_DUYET === false) {
-      return <Icon name='checkmark-sharp' size={35} color={'#40A578'} />
+  const checkStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Pending':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#3366ff'}]}>
+            <Text style={styles.statusText}>Chưa duyệt</Text>
+          </View>
+        );
+      case 'Approved':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#27b376'}]}>
+            <Text style={styles.statusText}>Đã duyệt</Text>
+          </View>
+        );
+      case 'Rejected':
+        return (
+          <View style={[styles.statusWrapper, {backgroundColor: '#cc2a36'}]}>
+            <Text style={styles.statusText}>Hủy duyệt</Text>
+          </View>
+        );
+      default:
+        return null;
     }
-    if (TRUONG_PHONG_DA_DUYET === false && TRUONG_PHONG_HUY_DUYET === false) {
-      return <Icon name='refresh-sharp' size={35} color={'#1679AB'} />
-    }
-    if (TRUONG_PHONG_HUY_DUYET !== false) {
-      return <Icon name='close-sharp' size={35} color={'#FA7070'} />
-    }
-  }
+  };
 
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
     const day = ('0' + date.getDate()).slice(-2); // Thêm số 0 phía trước nếu cần và lấy hai ký tự cuối
-    const month = ('0' + (date.getMonth() + 1)).slice(-2)
-    const year = date.getFullYear()
-    return `${day}/${month}/${year}`
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const renderRightActions = (id: string) => {
+    return (
+      <RectButton style={styles.deleteButton} onPress={(e) => console.log(e)}>
+        <Icon name='trash-outline' size={moderateScale(20)} color={'#fff'} />
+        <Text style={styles.textWhite}>Delete</Text>
+      </RectButton>
+    )
   }
 
   return (
-    <View style={[styles.container]}>
-    <View style={styles.listWrapper}>
-      <Text style={[styles.rowHeader, { width: widthScale(100) }]}>Ngày làm đơn</Text>
-      <Text style={[styles.rowHeader, { width: widthScale(180) }]}>Loại nghỉ phép</Text>
-      <Text style={[styles.rowHeader, { width: widthScale(80) }]}>Trạng thái</Text>
-    </View>
-    <FlatList
-      data={nghiPhep.listNghiPhep}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate(SCREENS.DETAIL_NGHI_PHEP.KEY, {item: item })} style={styles.listWrapper}>
-          {/* <Text style={[styles.row, { width: widthScale(150) }]}>{moment(item.NGAY_LAM_DON).format('DD/MM/YYYY')}</Text> */}
-          <Text style={[styles.row, { width: widthScale(100) }]}>{formatDate(item.NGAY_LAM_DON)}</Text>
-          <Text style={[styles.row, { width: widthScale(180) }]}>{item.LOAI_NGHI_PHEP}</Text>
-          <Text style={[styles.row, { width: widthScale(80) }]}>{checkStatusIcon(item.TRUONG_PHONG_DA_DUYET, item.TRUONG_PHONG_HUY_DUYET)}</Text>
-        </TouchableOpacity>
-      )}
-    />
-  </View> 
-  )
-}
+      <FlatList
+        data={nghiPhep}
+        renderItem={({item}) => (
+          <Swipeable
+            renderRightActions={() => item.status === 'Pending' ? renderRightActions(item.id) : null}
+          >
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.boxWrapper}
+              onPress={() => navigation.navigate('')}
+            >
+              <View style={styles.itemWrapper}>
+                <View style={styles.contentWrapper}>
+                  <Text style={styles.subText}>{item.content}</Text>
+                  <Text style={styles.mainText}>
+                    Ngày tạo: {moment(item.createdAt).format('DD/MM/YYYY')}
+                  </Text>
+                  <View style={styles.textDate}>
+                    {/* <Text style={styles.mainText}>
+                      Ngày nghỉ phép: {moment(item.)}
+                    </Text> */}
+                  </View>
+                </View>
+                <View style={styles.statusWrapper}>
+                <Text>{checkStatusIcon(item.status)}</Text>
+                <View style={styles.icon}>
+                  <Icon
+                    name="chevron-forward-sharp"
+                    size={moderateScale(20)}
+                    color={'#aaa'}
+                  />
+                </View>
+              </View>
+              </View>
+            </TouchableOpacity>
+          </Swipeable>
+        )}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      />
+  );
+};

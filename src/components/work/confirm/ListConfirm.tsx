@@ -11,7 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import {TouchableRipple, Button} from 'react-native-paper';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import {
   RectButton,
@@ -45,7 +45,6 @@ interface ViewConfirmProps {
   onDelete: (id: string) => void;
   refreshing: boolean;
   onRefresh: () => void;
-  onLoadMore: () => void;
 }
 
 interface RouteParams {
@@ -55,14 +54,14 @@ interface RouteParams {
 
 const ListConfirm: React.FC = () => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<RouteProp<{ params: RouteParams }, 'params'>>();
 
   const { fromDate: initialFromDate = '', toDate: initialToDate = '' } = route.params || {};
 
   const [index, setIndex] = useState(0);
   const [listXacNhan, setListXacNhan] = useState<XacNhan[]>([]);
-  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate).format('DD/MM/YYYY') : null);
-  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialFromDate).format('DD/MM/YYYY') : null);
+  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null);
+  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +74,7 @@ const ListConfirm: React.FC = () => {
       color: '#3366ff',
     },
     {
-      key: 'appvored',
+      key: 'approved',
       title: 'Đã duyệt',
       icon: 'ellipse-sharp',
       color: '#27b376',
@@ -153,15 +152,16 @@ const ListConfirm: React.FC = () => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchConfirmList();
+    await fetchConfirmList(fromDate, toDate);
     setRefreshing(false);
   }, [initialFromDate, initialToDate]);
 
   const handleReloadData = async () => {
+    // @ts-ignore
     navigation.setParams({ fromDate: '', toDate: '' });
     setFromDate(null);
     setToDate(null);
-    await fetchConfirmList();
+    await fetchConfirmList(fromDate, toDate);
   };
 
   const renderScene = SceneMap({
@@ -181,7 +181,7 @@ const ListConfirm: React.FC = () => {
         onRefresh={onRefresh}
       />
     ),
-    appvored: () => (
+    approved: () => (
       <ViewTask
         xacNhan={listXacNhan.filter((item) => item.status === 'Approved')}
         onDelete={handleDelete}
@@ -211,13 +211,15 @@ const ListConfirm: React.FC = () => {
               onPress={
                  //@ts-ignore
                 () => navigation.navigate(SCREENS.SEARCH_DON_XAC_NHAN.KEY)}>
-              <Icon name="search-outline" size={25} color={'#2179A9'} />
+              <Icon name="search-outline" size={moderateScale(24)} color={'#2179A9'} />
             </TouchableRipple>
+            <Text>&nbsp;&nbsp;&nbsp;</Text>
             <TouchableRipple
               rippleColor={'transparent'}
               onPress={handleReloadData}>
-              <Icon name="reload-outline" size={25} color={'#2179A9'} />
+              <Icon name="reload-outline" size={moderateScale(24)} color={'#2179A9'} />
             </TouchableRipple>
+            <Text>&nbsp;&nbsp;&nbsp;</Text>
             <TouchableRipple
               rippleColor={'transparent'}
               onPress={() =>
@@ -226,7 +228,7 @@ const ListConfirm: React.FC = () => {
               }>
               <Icon
                 name="add-circle-outline"
-                size={25}
+                size={moderateScale(24)}
                 color={'#2179A9'}
               />
             </TouchableRipple>
@@ -242,7 +244,7 @@ const ListConfirm: React.FC = () => {
           <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: '#2179A9' }}
-            style={{ backgroundColor: '#ffffff', elevation: 0 }}
+            style={{ backgroundColor: '#ffffff', elevation: 0, borderBottomColor: '#cecece', borderBottomWidth: 1 }}
             labelStyle={{ color: 'black' }}
             renderLabel={({ route, focused, color }) => (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -317,6 +319,7 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
             item.status === 'Pending' ? renderRightActions(item.id) : null
           }>
           <TouchableOpacity
+          activeOpacity={0.8}
             style={styles.boxWrapper}
             onPress={() =>
               navigation.navigate(SCREENS.EDIT_XAC_NHAN.KEY, { item: item })
@@ -329,8 +332,7 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
                 </Text>
                 <View style={styles.textDate}>
                   <Text style={styles.mainText}>
-                    Ngày xác nhận:
-                    {moment(item.dateNeedConfirm).format('DD/MM/YYYY')}
+                    Ngày xác nhận: {moment(item.dateNeedConfirm).format('DD/MM/YYYY')}
                   </Text>
                   <Text
                     style={[
