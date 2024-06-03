@@ -19,11 +19,22 @@ export const AuthenticateService = {
   },
 
   async GetUser(): Promise<BaseResponse<any>> {
-    const response = await http.get('user/get_user')
-    return response.data
+    const token = await Token.getToken();
+    if (token) {
+      const response = await http.get('/user/get_user', {
+        headers: { Authorization: `Bearer ${token.accessToken}` },
+      });
+      return response.data;
+    }
+    throw new Error('Token không tồn tại');
   },
 
-
+  // async UpdateAvatar(avatarUrl: string): Promise<BaseResponse<any>> {
+  //   const token = await Token.getToken()
+  //   if(token) {
+  //     const response = await http.post()
+  //   }
+  // }
   // async GetUser() {
   //   const url = `/api/Authentication/GetUser`;
   //   try {

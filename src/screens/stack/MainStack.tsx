@@ -7,7 +7,6 @@ import {APPHEADER} from '../../constants/appHeaderNavigator';
 import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
-import TakeLeaveScreen from '../work/TakeleaveScreen';
 // import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
 import ItemDetailTakeLeave from '../../components/work/leave/ItemDetailTakeLeave';
 import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
@@ -16,6 +15,7 @@ import CreateConfirm from '../../components/work/confirm/CreateConfirm';
 import ListConfirm from '../../components/work/confirm/ListConfirm';
 import EditConfirm from '../../components/work/confirm/EditConfirm';
 import SearchConfirm from '../../components/work/confirm/SearchConfirm';
+import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
 
 const MainStack = () => {
 
@@ -133,9 +133,9 @@ const MainStack = () => {
         component={EditConfirm}
       />
       <Stack.Screen
-        name={SCREENS.XIN_NGHI_PHEP.KEY}
+        name={SCREENS.LIST_DON_NGHI_PHEP.KEY}
         options={{
-          title: SCREENS.XIN_NGHI_PHEP.NAME,
+          title: SCREENS.LIST_DON_NGHI_PHEP.NAME,
           headerTintColor: 'transparent',
           headerShown: APPHEADER.headerShown,
           headerTitleStyle: {
@@ -143,7 +143,7 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={TakeLeaveScreen}
+        component={ListTakeLeave}
       />
       <Stack.Screen
         name={SCREENS.DETAIL_NGHI_PHEP.KEY}

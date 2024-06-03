@@ -89,7 +89,7 @@ const RootNavigator = () => {
     <>
       <NavigationContainer linking={linking} independent={true}>
         <StatusBar
-          backgroundColor="#027BE3"
+          backgroundColor="#2179A9"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
         />
         {isLoggedIn ? (
@@ -118,7 +118,6 @@ const App = () => {
         <PersistGate loading={null} persistor={persistor}>
           <RootNavigator />
         </PersistGate>
-
         <FlashMessage position="top" />
       </Provider>
     </PaperProvider>

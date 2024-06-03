@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SCREENS} from '../../constants/screens';
 import AccountScreen from '../navigators/AccountScreen';
-import InforAccountScreen from '../account/InforAccountScreen';
+import InfoAccountScreen from '../account/InfoAccountScreen';
 import {APPHEADER} from '../../constants/appHeaderNavigator';
 import CheckInWFHScreen from '../account/attendance/CheckInWFHScreen';
 const Stack = createStackNavigator();
@@ -24,9 +24,9 @@ const AccountStack = () => {
         component={AccountScreen}
       />
       <Stack.Screen
-        name={SCREENS.INFORACCOUNT.KEY}
+        name={SCREENS.INFOACCOUNT.KEY}
         options={{
-          title: SCREENS.INFORACCOUNT.NAME,
+          title: SCREENS.INFOACCOUNT.NAME,
           headerShown: APPHEADER.headerShown,
           headerPressColor: 'transparent',
           headerTitleStyle: {
@@ -34,7 +34,7 @@ const AccountStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={InforAccountScreen}
+        component={InfoAccountScreen}
       />
 
       <Stack.Screen

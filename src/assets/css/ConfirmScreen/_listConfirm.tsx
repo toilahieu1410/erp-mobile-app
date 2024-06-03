@@ -21,25 +21,27 @@ export const styles = StyleSheet.create({
     marginHorizontal: moderateScale(10),
     padding: moderateScale(5),
     backgroundColor: '#fff',
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(5),
   },
 
   itemWrapper: {
     backgroundColor: '#fff',
-    borderRadius: moderateScale(10),
-    shadowColor: '#000',
+    borderRadius: moderateScale(5),
+    shadowColor: '#333',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 1,
     },
-    overflow:'hidden',
-    shadowOpacity: 0.75,
-    shadowRadius: 4,
-    elevation: 3,
+    overflow: 'hidden',
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 2,
     flexDirection: 'row',
     justifyContent: 'center',
-     padding: moderateScale(10),
-    // alignContent:'center'
+    padding: moderateScale(10),
+  },
+  contentWrapper: {
+    flex: 1,
   },
   btnDate: {
     borderBottomColor: '#ccc',
@@ -55,27 +57,36 @@ export const styles = StyleSheet.create({
     color: '#999',
   },
   datePickerContainer: {
-    borderTopColor: '#cecece',
-    borderTopWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical:moderateScale(8),
-    paddingHorizontal: moderateScale(10),
+    margin: moderateScale(15),
+    backgroundColor: '#fff',
+    borderRadius: moderateScale(5),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
     
+    shadowOpacity: 0.75,
+    shadowRadius: 4,
+    elevation: 3,
+    padding: moderateScale(10),
   },
+
   flexDatePicker: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  flexDateBetween: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'space-between',
+    marginBottom: moderateScale(15)
+  },
   datePickerText: {
     fontSize: moderateScale(14),
-    color: '#2179A9',
     marginLeft:moderateScale(5)
   },
-  contentWrapper: {
-    flex: 1,
-  },
+
   editButton: {
     minWidth:moderateScale(50),
     backgroundColor:'#a6a6a6',
@@ -135,9 +146,40 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(13),
     marginLeft: moderateScale(15),
   },
+
+  buttonSearchEnabled: {
+    flexDirection:'row',
+    alignItems:'center',
+    borderColor: '#2179A9',
+    backgroundColor: '#2179A9',
+    borderWidth: 1,
+    borderRadius: moderateScale(20),
+    paddingVertical: moderateScale(5),
+    paddingHorizontal: moderateScale(10),
+    justifyContent:'center',
+    alignSelf:'center'
+  },
+  buttonSearchDisabled: {
+    flexDirection:'row',
+    alignItems:'center',
+    borderColor: '#ccc',
+    backgroundColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: moderateScale(20),
+    paddingVertical: moderateScale(5),
+    paddingHorizontal: moderateScale(10),
+    justifyContent:'center',
+    alignSelf:'center'
+  },
   textDate: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection:'row',
+    alignItems:'center',
+    color: '#2179A9',
+    fontSize: moderateScale(14)
+  },
+  textSearch: {
+    color: '#fff',
+    fontSize: moderateScale(14)
   },
   footerLoading: {
     padding: moderateScale(10),

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import {View, TouchableOpacity, Text, SafeAreaView} from 'react-native'
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "react-native-date-picker";
-import { Button } from "react-native-paper";
+import { Button, NativeBaseProvider } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
 import AppHeader from "../../navigators/AppHeader";
 import { SCREENS } from "../../../constants/screens";
+import { moderateScale } from "../../../screens/size";
 
 const SearchConfirm: React.FC = () => {
   
@@ -61,25 +62,39 @@ const SearchConfirm: React.FC = () => {
       />
 
       <View style={styles.datePickerContainer}>
-        <View style={styles.flexDatePicker}>
+        <View style={styles.flexDateBetween}>
+          <Text style={styles.textDate}>Từ ngày</Text>
+          <View style={styles.flexDatePicker}>
           <TouchableOpacity onPress={() => setShowFromDatePicker(true)} style={styles.btnDate}>
-            <Icon name="today-outline" size={20} color={'#2179A9'} />
+            <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
             <Text style={styles.datePickerText}>
               {fromDate ? moment(fromDate).format('DD/MM/YYYY') : 'Ngày bắt đầu'}
             </Text>
           </TouchableOpacity>
-          <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+          </View>
+        </View>
+
+
+        <View style={styles.flexDateBetween}>
+          <Text style={styles.textDate}>Đến ngày</Text>
+          <View style={styles.flexDatePicker}>
           <TouchableOpacity onPress={() => setShowToDatePicker(true)} style={styles.btnDate}>
-            <Icon name="today-outline" size={20} color={'#2179A9'} />
+            <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
             <Text style={styles.datePickerText}>
               {toDate ? moment(toDate).format('DD/MM/YYYY') : 'Ngày kết thúc'}
             </Text>
           </TouchableOpacity>
-          <Button onPress={handleSearch}>
-            <Text>SEARCH</Text>
-            {/* <Icon name="search-sharp" size={20} color={'#2179A9'} /> */}
-          </Button>
+          </View>
         </View>
+
+          <TouchableOpacity disabled={(fromDate === null || toDate === null) ? true : false} onPress={handleSearch} style={(fromDate === null || toDate === null) ? styles.buttonSearchDisabled: styles.buttonSearchEnabled}>
+            <Icon name="search-outline" size={moderateScale(20)} color={'#fff'} />
+            <Text style={styles.textSearch}>Tìm kiếm</Text>
+          </TouchableOpacity>
+  
+    
+          
+       
     
       </View>
     </SafeAreaView>

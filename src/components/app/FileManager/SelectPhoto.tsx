@@ -8,7 +8,8 @@ type SelectPhotoProps = {
   onSelect?: (value: ImagePikerModal) => void;
   mediaType: 'photo' | 'video' | 'mixed';
 };
-const SelectPhoto = ({children, onSelect, mediaType}: SelectPhotoProps) => {
+const SelectPhoto = ({children, onSelect, mediaType = 'photo'}: SelectPhotoProps) => {
+  
   const pickPhoToAsync = async () => {
     const options = {
       mediaType: mediaType,
@@ -21,9 +22,9 @@ const SelectPhoto = ({children, onSelect, mediaType}: SelectPhotoProps) => {
         //@ts-ignore
       } else if (response.error) {
       } else {
-        if (onSelect) {
+        if (onSelect && response.assets && response.assets.length > 0) {
           //@ts-ignore
-          onSelect(response.assets?.[0]);
+          onSelect(response.assets[0]);
         }
       }
     });

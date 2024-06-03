@@ -20,20 +20,13 @@ const initialState: AuthState = {
 };
 
 const tokenKey = 'token'
-const dateLogoutKey = 'dateLogout'
 
 export const checkToken = createAsyncThunk<boolean>(
   'auth/checkToken',
   async (_, {rejectWithValue}) => {
     try {
       const token = await Token.getToken();
-      const dateLogout = await AsyncStorage.getItem(dateLogoutKey)
-      const now = Date.now()
-      if(dateLogout && parseInt(dateLogout) < now) {
-        await Token.removeToken()
-        await AsyncStorage.removeItem(dateLogoutKey)
-        return false
-      }
+
       if(token) {
         return true
       } else {
@@ -63,8 +56,6 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
   async (data, {rejectWithValue}) => {
     try {
       const response = await AuthenticateService.Login(data)
-      const dateLogout = Date.now() + 86400000 //24hours
-      await AsyncStorage.setItem(dateLogoutKey, dateLogout.toString())
       const tokenData = new Token(
         response.value.accessToken,
         '',
@@ -87,15 +78,19 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
     const token = await Token.getToken()
 
     if(token) {
-      await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken)
+      const response:any = await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken)
+      if(response?.data?.status === 500) {
+        throw new Error('SERVER_ERROR')
+      }
       console.log('Token revoked');
     }
     await Token.removeToken()
-    await AsyncStorage.removeItem(dateLogoutKey)
+    await AsyncStorage.removeItem('accessToken')
     console.log('Token removed and logout key removed');
     return true
   } catch (error) {
     console.error('Logout error:', error);
+    console.log(error,'ádasd')
     return rejectWithValue(error.message);
   }
 });
@@ -106,13 +101,7 @@ export const checkLogin = createAsyncThunk<boolean>(
   async (_, { rejectWithValue }) => {
     try {
       const token = await AsyncStorage.getItem(tokenKey);
-      const dateLogout = await AsyncStorage.getItem(dateLogoutKey)
-      const now = Date.now()
-      if(dateLogout && parseInt(dateLogout) < now) {
-        await Token.removeToken()
-        await AsyncStorage.removeItem(dateLogoutKey)
-        return false
-      }
+ 
 
       if (token) {
         return true;
@@ -148,6 +137,7 @@ const authSlice = createSlice({
     })
     .addCase(logout.rejected, (state, action) => {
       state.error = action.error.message || null;
+      state.user = null;
     })
     .addCase(checkToken.pending, (state) => {
       state.loading = true;
