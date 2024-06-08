@@ -1,31 +1,30 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
-  Dimensions,
   FlatList,
   TouchableOpacity,
-  ScrollView,
   Alert,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
-import {TouchableRipple, Button} from 'react-native-paper';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import { TouchableRipple } from 'react-native-paper';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import {
   RectButton,
   Swipeable,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {moderateScale} from '../../../screens/size';
-import {showMessage} from 'react-native-flash-message';
-import {SCREENS} from '../../../constants/screens';
+import { moderateScale } from '../../../screens/size';
+import { showMessage } from 'react-native-flash-message';
+import { SCREENS } from '../../../constants/screens';
 import AppHeader from '../../navigators/AppHeader';
 import moment from 'moment';
-import ConfirmService from '../../../services/listWorks/serviceConfirm';
-import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
+import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
+import { styles } from '../../../assets/css/ConfirmScreen/_listConfirm';
 
 interface XacNhan {
   id: string;
@@ -45,6 +44,9 @@ interface ViewConfirmProps {
   onDelete: (id: string) => void;
   refreshing: boolean;
   onRefresh: () => void;
+  onLoadMore: () => void;
+  loadingMore: boolean;
+  flatListRef: React.MutableRefObject<FlatList<any> | null>;
 }
 
 interface RouteParams {
@@ -58,64 +60,85 @@ const ListConfirm: React.FC = () => {
 
   const { fromDate: initialFromDate = '', toDate: initialToDate = '' } = route.params || {};
 
+  const flatListRef = useRef<FlatList>(null);
+
   const [index, setIndex] = useState(0);
   const [listXacNhan, setListXacNhan] = useState<XacNhan[]>([]);
   const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null);
   const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0)
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  const routes = [
-    { key: 'all', title: 'Tất cả', icon: '' },
-    {
-      key: 'pending',
-      title: 'Chưa duyệt',
-      icon: 'ellipse-sharp',
-      color: '#3366ff',
-    },
-    {
-      key: 'approved',
-      title: 'Đã duyệt',
-      icon: 'ellipse-sharp',
-      color: '#27b376',
-    },
-    {
-      key: 'reject',
-      title: 'Hủy duyệt',
-      icon: 'ellipse-sharp',
-      color: '#cc2a36',
-    },
-  ];
+  const routes = useMemo(
+    () => [
+      {key: 'all', title: 'Tất cả', icon: ''},
+      {
+        key: 'pending',
+        title: 'Chưa duyệt',
+        icon: 'ellipse-sharp',
+        color: '#3366ff',
+      },
+      {
+        key: 'approved',
+        title: 'Đã duyệt',
+        icon: 'ellipse-sharp',
+        color: '#27b376',
+      },
+      {
+        key: 'rejected',
+        title: 'Hủy duyệt',
+        icon: 'ellipse-sharp',
+        color: '#cc2a36',
+      },
+    ],
+    [],
+  );
 
-  
-   useEffect(() => {
+  useEffect(() => {
     const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null;
     const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null;
     setFromDate(fromDateValue);
     setToDate(toDateValue);
-    fetchConfirmList(fromDateValue, toDateValue);
+    fetchConfirmList(fromDateValue, toDateValue, 1);
   }, [initialFromDate, initialToDate]);
 
-  const fetchConfirmList = async (fromDate: Date | null, toDate: Date | null) => {
+  const fetchConfirmList = useCallback(async (fromDate: Date | null, toDate: Date | null, page: number) => {
     try {
-      setLoading(true);
+      if (page === 1) setLoading(true);
+      setLoadingMore(page > 1);
+
       const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : '';
       const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : '';
-   
-      const response: any = await ConfirmService.getConfirmList(formattedFromDate, formattedToDate);
+
+      const response: any = await ServiceConfirm.getConfirmList(formattedFromDate, formattedToDate, page, pageSize);
       const sortedResponse = response.sort((a: XacNhan, b: XacNhan) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
-      setListXacNhan(sortedResponse);
+
+      if (page === 1) {
+        setListXacNhan(sortedResponse);
+      } else {
+        setListXacNhan(prevState => [...prevState, ...sortedResponse]);
+      }
+
+      setPageNumber(page);
+      setTotalItems(response.total)
+      setHasMore(response.length === pageSize);
     } catch (error) {
       console.error('Error fetching list confirm', error);
-      setListXacNhan([]);
+      if (page === 1) setListXacNhan([]);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
-  };
+  }, [pageSize]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     Alert.alert(
       'Xác nhận xóa',
       'Bạn chắc chắn muốn xóa mục này',
@@ -129,7 +152,7 @@ const ListConfirm: React.FC = () => {
           text: 'Đồng ý',
           onPress: async () => {
             try {
-              await ConfirmService.deleteConfirm(id);
+              await ServiceConfirm.deleteConfirm(id);
               setListXacNhan(prevState => prevState.filter(item => item.id !== id));
               showMessage({
                 message: 'Success',
@@ -148,21 +171,30 @@ const ListConfirm: React.FC = () => {
       ],
       { cancelable: false },
     );
-  };
+  }, []);
 
+  console.log(listXacNhan,'ssss')
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchConfirmList(fromDate, toDate);
+    await fetchConfirmList(fromDate, toDate, 1);
     setRefreshing(false);
-  }, [initialFromDate, initialToDate]);
+  }, [fromDate, toDate, fetchConfirmList]);
 
-  const handleReloadData = async () => {
+  const handleReloadData = useCallback(async () => {
     // @ts-ignore
     navigation.setParams({ fromDate: '', toDate: '' });
     setFromDate(null);
     setToDate(null);
-    await fetchConfirmList(fromDate, toDate);
-  };
+    await fetchConfirmList(null, null, 1);
+  }, [navigation, fetchConfirmList]);
+
+  const loadMoreData = useCallback(async () => {
+    if (!loadingMore && hasMore) {
+      setLoadingMore(true);
+      await fetchConfirmList(fromDate, toDate, pageNumber + 1);
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, fromDate, toDate, pageNumber]);
 
   const renderScene = SceneMap({
     all: () => (
@@ -171,6 +203,9 @@ const ListConfirm: React.FC = () => {
         onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
     pending: () => (
@@ -179,6 +214,9 @@ const ListConfirm: React.FC = () => {
         onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
     approved: () => (
@@ -187,23 +225,32 @@ const ListConfirm: React.FC = () => {
         onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
-    reject: () => (
+    rejected: () => (
       <ViewTask
         xacNhan={listXacNhan.filter((item) => item.status === 'Reject')}
         onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
   });
 
+  console.log(listXacNhan,'list', hasMore)
   return (
     <GestureHandlerRootView style={styles.container}>
       <AppHeader
         title="Xin xác nhận"
         showButtonBack={true}
+        backgroundColor='#fff'
+        titleColor='#000'
         actions={
           <View style={{ flexDirection: 'row' }}>
             <TouchableRipple
@@ -246,7 +293,7 @@ const ListConfirm: React.FC = () => {
             indicatorStyle={{ backgroundColor: '#2179A9' }}
             style={{ backgroundColor: '#ffffff', elevation: 0, borderBottomColor: '#cecece', borderBottomWidth: 1 }}
             labelStyle={{ color: 'black' }}
-            renderLabel={({ route, focused, color }) => (
+            renderLabel={({ route }) => (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Icon
                   name={route.icon}
@@ -270,9 +317,7 @@ const ListConfirm: React.FC = () => {
   );
 };
 
-export default ListConfirm;
-
-const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, onRefresh }) => {
+const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, onRefresh, onLoadMore, loadingMore, flatListRef }) => {
   const navigation: any = useNavigation();
 
   const checkStatusIcon = (status: string) => {
@@ -311,6 +356,7 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
 
   return (
     <FlatList
+      ref={flatListRef}
       data={xacNhan}
       keyExtractor={item => item.id}
       renderItem={({ item }) => (
@@ -319,7 +365,7 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
             item.status === 'Pending' ? renderRightActions(item.id) : null
           }>
           <TouchableOpacity
-          activeOpacity={0.8}
+            activeOpacity={0.8}
             style={styles.boxWrapper}
             onPress={() =>
               navigation.navigate(SCREENS.EDIT_XAC_NHAN.KEY, { item: item })
@@ -370,6 +416,19 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
           onRefresh={onRefresh}
         />
       }
+      onEndReached={onLoadMore}
+      onEndReachedThreshold={0.5}
+      maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+      ListFooterComponent={
+        loadingMore ? 
+        <View style={styles.flexDateBetween}>
+        <Text style={styles.textDate}>Đang tải dữ liệu</Text>
+        <ActivityIndicator size="small" color="#2179A9" />
+      </View>
+        : null
+      }
     />
   );
 };
+
+export default ListConfirm;

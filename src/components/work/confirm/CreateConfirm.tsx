@@ -20,7 +20,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppHeader from '../../navigators/AppHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {moderateScale} from '../../../screens/size';
-import ConfirmService from '../../../services/listWorks/serviceConfirm';
+import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
+import { useNavigation } from '@react-navigation/native';
+import { SCREENS } from '../../../constants/screens';
 
 const newDate = new Date();
 
@@ -30,6 +32,9 @@ interface XacNhanType {
 }
 
 const CreateConfirm = () => {
+
+  const navigation = useNavigation();
+
   const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
   const [confirmType, setConfirmType] = useState<XacNhanType[]>([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -45,7 +50,7 @@ const CreateConfirm = () => {
   useEffect(() => {
     const fetchConfirmTypes = async () => {
       try {
-        const types = await ConfirmService.getConfirmTypes();
+        const types = await ServiceConfirm.getConfirmTypes();
         setConfirmType(types);
       } catch (error) {
         console.error('Error' + error);
@@ -112,12 +117,15 @@ const CreateConfirm = () => {
         endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : "",
         dateNeedConfirm: moment(dateTime).format('DD/MM/YYYY'),
       };
-      await ConfirmService.createConfirm(payload);
+      await ServiceConfirm.createConfirm(payload);
+   
       showMessage({
         message: 'Tạo đơn thành công',
         description: 'Đơn xác nhận của bạn đã được tạo trên hệ thống',
         type: 'success'
       })
+         //@ts-ignore
+         navigation.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY)
     } catch (error) {
       showMessage({
         message: 'Tạo đơn thất bại',
@@ -172,6 +180,8 @@ const CreateConfirm = () => {
         title="Tạo đơn xác nhận"
         showButtonBack={true}
         centerTitle={true}
+        backgroundColor='#fff'
+        titleColor='#000'
         actions={
           <NativeBaseProvider>
             <Button

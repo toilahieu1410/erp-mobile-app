@@ -48,9 +48,11 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   EDIT_XAC_NHAN: {KEY: 'EditConfirm', NAME: 'Sửa đơn xác nhận'},
   
   //Nghi phep
+  TAO_DON_NGHI_PHEP: {KEY: 'CreateTakeLeave', NAME: 'Tạo đơn nghỉ phép'},
   LIST_DON_NGHI_PHEP: {KEY: 'ListTakeLeave', NAME: 'Danh sách đơn nghỉ phép'},
-
-  DETAIL_NGHI_PHEP: {KEY: 'ItemDetailTakeLeave', NAME: 'Chi tiết đơn nghỉ phép'},
+  SEARCH_DON_NGHI_PHEP: {KEY: 'SearchTakeLeave', NAME: 'Tìm kiếm đơn nghỉ phép'},
+  EDIT_NGHI_PHEP: {KEY: 'EditTakeLeave', NAME: 'Sửa đơn nghỉ phép'},
+  // DETAIL_NGHI_PHEP: {KEY: 'ItemDetailTakeLeave', NAME: 'Chi tiết đơn nghỉ phép'},
 
   //work from home
   WORK_FROM_HOME: {KEY: 'WorkFromHomeScreen', NAME: 'Xin làm việc tại nhà'},

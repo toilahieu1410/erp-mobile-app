@@ -28,7 +28,7 @@ interface ListConfirm {
 }
 
 
-export const ConfirmService = {
+export const ServiceConfirm = {
   async createConfirm(data: ConfirmPayload): Promise<BaseResponse<any>> {
     try {
       const response = await http.post('/approval_application', data)
@@ -47,12 +47,22 @@ export const ConfirmService = {
     }
   },
 
-  async getConfirmList(fromDate: string, toDate: string): Promise<BaseResponse<ListConfirm[]>> {
+  async getConfirmList(fromDate: string, toDate: string, pageNumber: number, pageSize: number): Promise<BaseResponse<ListConfirm[]>> {
     try {
-      const response = await http.get(`/approval_application?FromDate=${fromDate}&ToDate=${toDate}`)
+      const response = await http.get(`/approval_application?FromDate=${fromDate}&ToDate=${toDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`)
       return response.data.value.items
     } catch (error) {
       throw error 
+    }
+  },
+
+  async updateConfirm(id: string, data: ConfirmPayload): Promise<BaseResponse<any>> {
+    try {
+      const response = await http.put(`/approval_application/${id}`, data)
+      return response.data
+    }
+    catch (error) {
+      throw error
     }
   },
 
@@ -64,17 +74,9 @@ export const ConfirmService = {
      catch (error) {
       throw error
      }
-  },
-
-  async updateConfirm(id: string, data: ConfirmPayload): Promise<BaseResponse<any>> {
-    try {
-      const response = await http.put(`/approval_application/${id}`, data)
-      return response.data
-    }
-    catch (error) {
-      throw error
-    }
   }
+
+
 }
 
-export default ConfirmService
+export default ServiceConfirm

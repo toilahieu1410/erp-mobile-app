@@ -2,6 +2,10 @@ import axios, {AxiosInstance} from 'axios';
 import {Token} from '../src/services/Token';
 import {BaseResponse} from '../src/models/BaseResponse';
 import {API_BASE_URL} from '../src/constants/base';
+import { SCREENS } from '../src/constants/screens';
+import { navigate } from './navigationRef';
+import { store } from './store';
+import { logout } from '../src/slice/Auth';
 
 class Http {
   instance: AxiosInstance;
@@ -60,8 +64,13 @@ class Http {
             } catch (err) {
               this.isRefreshing = false;
               this.failedQueue = [];
+              navigate(SCREENS.LOGIN.KEY)
+              store.dispatch(logout())
               return Promise.reject(err);
             }
+          } else {
+            navigate(SCREENS.LOGIN.KEY)
+            store.dispatch(logout())
           }
         }
         return Promise.reject(error);

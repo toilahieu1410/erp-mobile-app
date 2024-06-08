@@ -91,6 +91,7 @@ const AccountScreen = () => {
       onClick: () => {
         //@ts-ignore
         dispatch(logout())
+         //@ts-ignore
           .unwrap()
           .then(() => {
             showMessage({
@@ -100,7 +101,8 @@ const AccountScreen = () => {
             navigation.replace(SCREENS.LOGIN.KEY);
           })
           .catch((err: BaseResponse) => {
-            if (err.error.message === 'SERVER_ERROR') {
+            console.log(err.error.code,'ádsadas')
+            if (err.error && err.error.code === 'LOGOUT_ERROR') {
               navigation.replace(SCREENS.LOGIN.KEY);
             } else {
               showMessage({
@@ -135,7 +137,7 @@ const AccountScreen = () => {
     },
 
     {
-      icon: <Icon size={moderateScale(20)} color="#fff" name="reader-outline" style={{backgroundColor:'#FD7272', padding: moderateScale(5), borderRadius: moderateScale(5)}}/> ,
+      icon: <Icon size={moderateScale(20)} color="#fff" name="reader-outline" style={{backgroundColor:'#F97F51', padding: moderateScale(5), borderRadius: moderateScale(5)}}/> ,
       title: SCREENS.WORK_FROM_HOME.NAME,
       type: 'menu',
       onClick: () => {
@@ -160,8 +162,8 @@ const AccountScreen = () => {
         console.log(token, 'token đc lưu trữ');
         if (token) {
           const response = await AuthenticateService.GetUser();
-
           const user = response.value;
+         
           setUserName(user.userName);
           setHovaten(user.hoTen);
           setEmail(user.email);

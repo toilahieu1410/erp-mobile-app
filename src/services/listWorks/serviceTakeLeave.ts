@@ -1,29 +1,89 @@
 import { BaseResponse } from "../../models/BaseResponse"
 import http from "../../../store/http"
 
+interface TakeLeavePayLoad {
+  content: string,
+  typeApplication: string,
+  handOverContent: string,
+  handOverToUserId: string,
+  leaveApplicationDetails: {
+    leaveAt: string,
+    timeType: number
+  }[]
+}
+
+interface TakeLeaveType {
+  value: number,
+  display: string
+}
+
 interface ListTakeLeave {
   id: string,
   content: string,
   handOver_Content: string,
   handOver_ToUserId: string,
   approvedBy: string | null,
+  approvedByName: string | null,
   approvedAt: string | null,
   type: string,
   status: string,
   createdByUserId: string,
   createdByUserName: string,
-  createdAt: string
+  createdAt: string,
+  detail: {
+    id: string,
+    leaveAt: string
+    type: number
+  }[]
 }
 
-export const TakeLeaveService = {
-  async getListTakeLeave(fromDate: string, toDate: string): Promise<BaseResponse<ListTakeLeave[]>> {
+export const ServiceTakeLeave = {
+  async createTakeLeave(data: TakeLeavePayLoad): Promise<BaseResponse<any>> {
     try {
-      const response = await http.get(`/leave_application?FromDate=${fromDate}&ToDate=${toDate}`)
+      const response = await http.post('/leave_application', data) 
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async getTypesTakeLeave(): Promise<TakeLeaveType[]> {
+    try {
+      const response = await http.get('/leave_application/get_type_application' )
+        return response.data.value
+    } catch (error) {
+      throw new Error(' Không thể lấy loại xác nhận')
+    }
+  },
+
+  async getListTakeLeave(fromDate: string, toDate: string, pageNumber: number, pageSize: number): Promise<BaseResponse<ListTakeLeave[]>> {
+    try {
+      const response = await http.get(`/leave_application?FromDate=${fromDate}&ToDate=${toDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`)
       return response.data.value.items
     } catch (error) {
       throw error
     }
+  },
+
+  async updateTakeLeave(id: string, data: TakeLeavePayLoad): Promise<BaseResponse<any>> {
+    try {
+      const response = await http.put(`/leave_application/${id}`, data)
+      return response.data
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async deleteTakeLeave(id: string): Promise<BaseResponse<any>> {
+    try {
+      const response = await http.delete(`/leave_application/${id}`)
+      return response.data
+    } catch (error) {
+      throw error
+    }
   }
+
+  
 }
 
-export default TakeLeaveService
+export default ServiceTakeLeave

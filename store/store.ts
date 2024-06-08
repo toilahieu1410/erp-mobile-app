@@ -1,4 +1,4 @@
-import {combineReducers, Reducer} from 'redux'
+import {combineReducers} from 'redux'
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -6,6 +6,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import authReducer from '../src/slice/Auth'
+import authMiddleware from './authMiddleware';
 
 
 const persistConfig = {
@@ -13,20 +14,18 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-const rootReducer:Reducer = combineReducers({
-  authReducer, 
-})
+const rootReducer = combineReducers({
+  auth: authReducer, 
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: persistedReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Tắt kiểm tra serializable nếu gặp lỗi liên quan đến serializable
-    }).concat(),
+    }).concat(authMiddleware),
 });
 
 export const persistor = persistStore(store);
