@@ -6,268 +6,242 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
-import {NativeBaseProvider} from 'native-base';
+import {Button, NativeBaseProvider} from 'native-base';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from '../../../assets/css/ConfirmScreen/style';
 import moment from 'moment';
 
 import PickThoiGianXinNghi from '../../picker/pickThoiGianXinNghi';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { moderateScale } from '../../../screens/size';
+import DatePickerDay from '../../picker/datePicker';
+import ServiceTakeLeave from '../../../services/listWorks/serviceTakeLeave';
+import { showMessage } from 'react-native-flash-message';
+import AppHeader from '../../navigators/AppHeader';
+import { TouchableOpacity } from 'react-native';
+import { SCREENS } from '../../../constants/screens';
+import { useNavigation } from '@react-navigation/native';
+
 
 const newDate = new Date();
 
-interface CreateConfirmProps {
-  onPress: () => void;
+interface NghiPhepType {
+  value: number,
+  display: string
 }
 
-interface ListItems {
-  id: number;
-  name: string;
-}
+const timeTypes = [
+  {value: 0, display: 'Sáng'},
+  {value: 1, display: 'Chiều'},
+  {value: 2, display: 'Cả ngày'},
+]
 
-interface DataNameDropdown {
-  $id: string;
-  AVATAR: string | null;
-  HO_VA_TEN: string;
-  MA_CONG_TY: string;
-  MA_PHONG_BAN: string;
-  SDT: string | null;
-  TEN_PHONG_BAN: string;
-  USERNAME: string;
-}
+const CreateTakeLeave = () => {
 
-const dataName: DataNameDropdown[] = [
-  {
-    $id: '1',
-    AVATAR: 'DatNT1/DatNT1_02_00_30_18_03_2024.png',
-    USERNAME: 'DatNT1',
-    HO_VA_TEN: 'Nguyễn Tiến Đạt',
-    SDT: '0983877462',
-    TEN_PHONG_BAN: 'IT phần mềm',
-    MA_PHONG_BAN: 'IT_SOFT',
-    MA_CONG_TY: 'HOPLONG',
-  },
-  {
-    $id: '2',
-    AVATAR: 'Avatar-Facebook-tr?ng.jpg',
-    USERNAME: 'INTE026_HL',
-    HO_VA_TEN: 'Dương Văn Tiến',
-    SDT: '0867198572',
-    TEN_PHONG_BAN: 'IT phần mềm',
-    MA_PHONG_BAN: 'IT_SOFT',
-    MA_CONG_TY: 'HOPLONG',
-  },
-  {
-    $id: '3',
-    AVATAR: 'TRAN_TIEN_BO.jpg',
-    USERNAME: 'TECH028_HL',
-    HO_VA_TEN: 'Trần Tiến Bộ',
-    SDT: '0966930768',
-    TEN_PHONG_BAN: 'Kỹ Thuật Bảo Hành',
-    MA_PHONG_BAN: 'BAO_HANH',
-    MA_CONG_TY: 'HOPLONG',
-  },
-  {
-    $id: '4',
-    AVATAR: 'TienDM/TienDM_05_02_47_27_02_2024.jpg',
-    USERNAME: 'TienDM',
-    HO_VA_TEN: 'Đào Mạnh Tiến',
-    SDT: '0963 929 865',
-    TEN_PHONG_BAN: 'Marketing',
-    MA_PHONG_BAN: 'MARK_HL',
-    MA_CONG_TY: 'HOPLONG',
-  },
-  {
-    $id: '5',
-    AVATAR: null,
-    USERNAME: 'TungDT',
-    HO_VA_TEN: 'Dương Tiếng Tùng',
-    SDT: '0374799781',
-    TEN_PHONG_BAN: 'Kinh doanh GiGa',
-    MA_PHONG_BAN: 'SALE_GIGA',
-    MA_CONG_TY: 'GIGA',
-  },
-  {
-    $id: '6',
-    AVATAR: 'PHAM_NGOC_TIEN.jpg',
-    USERNAME: 'WALO006_HL',
-    HO_VA_TEN: 'Phạm Ngọc Tiến',
-    SDT: '0916 150 752',
-    TEN_PHONG_BAN: 'Nhặt hàng HN',
-    MA_PHONG_BAN: 'WALO_NHATHANG_HL',
-    MA_CONG_TY: 'HOPLONG',
-  },
-];
+  const navigation = useNavigation();
 
-const loaiXinNghi: ListItems[] = [
-  {
-    id: 1,
-    name: 'Nghỉ thường',
-  },
-  {
-    id: 1,
-    name: 'Nghỉ ốm nằm viện/sinh con',
-  },
-  {
-    id: 1,
-    name: 'Nghỉ hiếu/hỷ',
-  },
-];
-const CreateTakeLeave: React.FC<CreateConfirmProps> = () => {
-  const [username, setUsername] = useState('hieunm');
-  const [email, setEmail] = useState('test@gmail.com');
-  const [phone, setPhone] = useState('0987654321');
-  const [selectConfirm, setSelectConfirm] = useState<ListItems | null>(null);
-  const [lyDoNghi, setLyDoNghi] = useState('');
-  const [soNgayNghi, setSoNgayNghi] = useState('');
-  const [banGiao, setBanGiao] = useState('')
-  const [disable, setDisable] = useState(true);
-  const [dateTime, setDateTime] = useState(newDate);
-  const [day, setDay] = useState('Cả ngày');
-  const [show, setShow] = useState(false);
-  const [nameSearch, setNameSearch] = useState<string>();
-  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [selectTakeLeave, setSelectTakeLeave] = useState<NghiPhepType | null>(null)
+  const [takeleaveType, setTakeleaveType] = useState<NghiPhepType[]>([])
+  const [leaveAtDate, setLeaveAtDate] = useState(newDate)
 
-  const renderLabel = () => {
-    if (nameSearch || isFocus) {
-      return <Text>Dropdown label</Text>;
-    }
-    return null;
-  };
-
-  const handleConfirm = (itemValue: ListItems) => {
-    setSelectConfirm(itemValue);
-  };
+  const [handOverToUserId, setHandOverToUserId] = useState('3fa85f64-5717-4562-b3fc-2c963f66afa6')
+  const [handOverContent, setHandOverContent] = useState('')
+  const [leaveTimeType, setLeaveTimeType] = useState<number | null>(null)
+  const [lyDoXinNghi, setLyDoXinNghi] = useState('')
+  const [disabled, setDisabled] = useState(true)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   useEffect(() => {
-    if (lyDoNghi !== '' && soNgayNghi !== '') {
-      setDisable(false);
+    const fetchTakeLeaveTypes = async () => {
+      try {
+        const types = await ServiceTakeLeave.getTypesTakeLeave()
+        setTakeleaveType(types)
+      } catch (error) {
+        console.error('Error' + error)
+      }
     }
-    if (lyDoNghi === '' || soNgayNghi === '') {
-      setDisable(true);
-    }
-  }, [lyDoNghi, soNgayNghi]);
+    fetchTakeLeaveTypes()
+  },[])
 
-  const onChange = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || dateTime;
-    setShow(Platform.OS === 'ios');
-    setDateTime(currentDate);
+  useEffect(() => {
+    if (lyDoXinNghi !== ''  && handOverContent !== '') {
+      setDisabled(false);
+    }
+    if (lyDoXinNghi === ''  || handOverContent === '') {
+      setDisabled(true);
+    }
+  }, [lyDoXinNghi, handOverContent]);
+
+  const handleSubmit = async () => {
+    if (!selectTakeLeave) {
+      Alert.alert('Error', 'Loại nghỉ phép là bắt buộc')
+      return
+    }
+    try {
+      const payload = {
+        content: lyDoXinNghi,
+        typeApplication: selectTakeLeave.value.toString(),
+        handOverContent: handOverContent,
+        handOverToUserId: handOverToUserId,
+        leaveApplicationDetails: [
+          {
+            leaveAt: moment(leaveAtDate).format('DD/MM/YYYY'),
+            timeType: leaveTimeType
+          }
+        ]
+      }
+      console.log(payload,'pâyyyyyy')
+      await ServiceTakeLeave.createTakeLeave(payload)
+   
+      showMessage({
+        message: 'Tạo đơn thành công',
+        description: 'Đơn nghỉ phép của bạn đã được tạo trên hệ thống',
+        type:'success'
+      })
+        //@ts-ignore
+       navigation.navigate(SCREENS.LIST_DON_NGHI_PHEP.KEY)
+    } catch (error) {
+      showMessage({
+        message: 'Tạo đơn thất bại',
+        description: 'Không tạo được đơn nghỉ phép',
+        type:'danger'
+      })
+    }
+  }
+
+  const handleDateChange = (event: any, selectedDate: Date) => {
+    const currentDate = selectedDate || leaveAtDate;
+    setShowDatePicker(Platform.OS === 'ios');
+    setLeaveAtDate(currentDate)
   };
-
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled>
-      <ScrollView > 
+      <AppHeader 
+        title='Tạo đơn nghỉ phép'
+        showButtonBack={true}
+        centerTitle={true}
+        backgroundColor='#fff'
+        titleColor='#000'
+        actions={
+          <NativeBaseProvider>
+          <Button
+            backgroundColor={'transparent'}
+            disabled={disabled}
+            size={moderateScale(50)}
+            onPress={handleSubmit}>
+            <Text style={disabled === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
+          </Button>
+        </NativeBaseProvider>
+        }
+      />
+      <ScrollView>
         <View style={styles.scroll}>
           <View style={styles.card}>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Người đề nghị:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{username}</Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Email:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{email}</Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Phone:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>{phone}</Text>
-            </View>
-            <View style={styles.border}></View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Ngày tạo đơn:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Text style={styles.colorText}>
-                {moment(newDate).format('DD/MM/YYYY')}
-              </Text>
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Số ngày nghỉ:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <TextInput
-                style={[styles.input]}
-                multiline={true}
-                onChangeText={setSoNgayNghi}
-                placeholder="Số ngày"
-              />
-            </View>
-            <View style={styles.flex}>
-              <TextInput
-                style={styles.input}
-                multiline={true}
-                onChangeText={setLyDoNghi}
-                placeholder="Nhập lý do nghỉ"
-              />
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Loại xin nghỉ:</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <Picker
-                mode="dropdown"
-                style={styles.pickerDropdown}
-                selectedValue={selectConfirm}
-                onValueChange={(itemValue, itemIndex) =>
-                  handleConfirm(loaiXinNghi[itemIndex])
-                }>
-                {loaiXinNghi &&
-                  loaiXinNghi.map(item => (
-                    <Picker.Item label={item.name} value={item} />
-                  ))}
-              </Picker>
-            </View>
-           
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Thời gian xin nghỉ</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <View style={styles.dropdown}>
-                <NativeBaseProvider>
-                  <PickThoiGianXinNghi day={day} setDay={setDay} />
-                </NativeBaseProvider>
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Ngày tạo đơn:</Text>
+              <View style={styles.flexTime}>
+              <Text
+                  style={[
+                    styles.dateText,
+                    styles.btnDate,
+                    {color: '#2179A9', fontWeight: '500'},
+                  ]}>{moment(newDate).format('DD/MM/YYYY')}</Text>
+                  <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
               </View>
             </View>
-            <View style={styles.flex}>
-              <Text style={styles.textHeader}>Người nhận bàn giao</Text>
-              <Text>&nbsp;&nbsp;</Text>
-              <View>
-              <Dropdown
-                  style={styles.dropdownSearch}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={dataName}
-                  search
-                  maxHeight={200}
-                  valueField="$id"
-                  labelField="HO_VA_TEN"
-                  placeholder={!isFocus ? 'Select item' : '...'}
-                  searchPlaceholder='search...'
-                  value={nameSearch}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={item => {setNameSearch(item.HO_VA_TEN);setIsFocus(false)}}
-                  // renderLeftIcon={() => (
-                  //   <Icon name='home' size={20} />
-                  // )}
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Ngày xin nghỉ phép:</Text>
+              <View style={styles.flexTime}>
+                <TouchableOpacity
+                  style={styles.btnDate}
+                  onPress={() => setShowDatePicker(!showDatePicker)}>
+                  <Text style={styles.dateText}>
+                  { moment(leaveAtDate).format('DD/MM/YYYY') }
+                  </Text>
+                </TouchableOpacity>
+                <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
+              </View>
+
+              {showDatePicker && (
+                <DatePickerDay
+                  onChange={handleDateChange}
+                  date={leaveAtDate}
+                  mode={'date'}
                 />
-              </View>
+              )}
             </View>
-            <View >
-              <Text style={[styles.textHeader, {marginBottom:moderateScale(10)}]}>Nội dung bàn giao:</Text>
-              <TextInput
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+            <Text style={styles.label}>Bàn giao cho</Text>
+              <TextInput 
                 style={styles.input}
-                multiline={true}
-                onChangeText={setBanGiao}
-                placeholder="Nhập nội dung bàn giao"
+                value={handOverToUserId}
+                onChangeText={setHandOverToUserId}
+                placeholder='Bàn giao'
               />
             </View>
-  
+            <View style={styles.inputContainer}>
+              <View style={styles.flexTitle}>
+                <Text style={styles.label}>Lý do xin nghỉ</Text>
+                <Text style={styles.charCount}>{lyDoXinNghi.length}/200</Text>
+              </View>
+              <TextInput 
+                style={styles.input}
+                multiline={true}
+                value={lyDoXinNghi}
+                onChangeText={setLyDoXinNghi}
+                placeholder='Nhập lý do nghỉ'
+                maxLength={200}
+              />
+            </View>
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+              <Text style={styles.label}>Loại nghỉ phép</Text>
+                <Picker
+                  mode='dropdown'
+                  style={styles.pickerDropdown}
+                  selectedValue={selectTakeLeave}
+                  onValueChange={itemValue => setSelectTakeLeave(itemValue)}
+                >
+                  <Picker.Item label='Chọn loại nghỉ phép' value={''} />
+                  {takeleaveType && 
+                    takeleaveType.map(item => (
+                      <Picker.Item key={item.value} label={item.display} value={item}/>
+                    ))
+                  }
+                </Picker>
+            </View>
+            <View style={[styles.flexTitle, styles.inputContainer]}>
+                <Text style={styles.label}>Thời gian xin nghỉ:</Text>
+                <Picker
+                  mode="dropdown"
+                  style={styles.pickerDropdown}
+                  selectedValue={leaveTimeType}
+                  onValueChange={itemValue => setLeaveTimeType(itemValue)}>
+                  <Picker.Item label={'Chọn thời gian nghỉ'} value="" />
+                  {timeTypes.map(item => (
+                    <Picker.Item key={item.value} label={item.display} value={item.value} />
+                  ))}
+                </Picker>
+              </View>
+              <View style={styles.inputContainer}>
+              <View style={styles.flexTitle}>
+                <Text style={styles.label}>Nội dung bàn giao</Text>
+                <Text style={styles.charCount}>{handOverContent.length}/200</Text>
+              </View>
+              <TextInput 
+                style={styles.input}
+                multiline={true}
+                value={handOverContent}
+                onChangeText={setHandOverContent}
+                placeholder='Nhập nội dung bàn giao'
+                maxLength={200}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>

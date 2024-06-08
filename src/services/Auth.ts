@@ -22,7 +22,9 @@ export const AuthenticateService = {
     const token = await Token.getToken();
     if (token) {
       const response = await http.get('/user/get_user', {
-        headers: { Authorization: `Bearer ${token.accessToken}` },
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+        }
       });
       return response.data;
     }

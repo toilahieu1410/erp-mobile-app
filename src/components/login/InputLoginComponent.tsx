@@ -58,11 +58,7 @@ const InputLoginComponent: React.FC<{navigation: any}> = ({navigation}) => {
   };
 
 
-  React.useEffect(() => {
-    if (authState.error) {
-      Alert.alert('Login Failed', authState.error);
-    }
-  }, [authState.error]);
+
   // const onLogin = () => {
   //   if (username == undefined || username == null || username.length == 0) {
   //     showMessage({

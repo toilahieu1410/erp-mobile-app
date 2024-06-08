@@ -10,7 +10,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {styles} from '../../../assets/css/ConfirmScreen/_itemDetailConfirm';
 import DatePicker from 'react-native-date-picker';
-import ConfirmService from '../../../services/listWorks/serviceConfirm';
+import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
 import moment from 'moment';
 import {showMessage} from 'react-native-flash-message';
 import {Picker} from '@react-native-picker/picker';
@@ -24,6 +24,7 @@ interface XacNhanType {
   display: string;
 }
 
+
 const newDate = new Date();
 
 const EditConfirm: React.FC = () => {
@@ -33,29 +34,29 @@ const EditConfirm: React.FC = () => {
   
   const {item}: any = route.params;
 
-  const [content, setContent] = useState(item.content);
-  const [dateNeedConfirm, setDateNeedConfirm] = useState(
-    new Date(item.dateNeedConfirm),
-  );
+  const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
+  const [confirmTypes, setConfirmTypes] = useState<XacNhanType[]>([]);
   const [startDate, setStartDate] = useState<Date | null>(
     item.startDate ? new Date(item.startDate) : null,
   );
   const [endDate, setEndDate] = useState<Date | null>(
     item.endDate ? new Date(item.endDate) : null,
   );
+  const [content, setContent] = useState(item.content);
+  const [dateNeedConfirm, setDateNeedConfirm] = useState(
+    new Date(item.dateNeedConfirm),
+  );
+
   const [showStartDateNeedConfirm, setShowStartDateNeedConfirm] = useState(false);
 
   const [showStartDatePicker, setShowStartDatePicker] = useState<'date' | 'time' | null>(null);
   const [showEndDatePicker, setShowEndDatePicker] = useState< 'date' | 'time' | null>(null);
 
-  const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
-  const [confirmTypes, setConfirmTypes] = useState<XacNhanType[]>([]);
-
   const [btnShowDate, setBtnShowDate] = useState(false)
   useEffect(() => {
     const fetchConfirmTypes = async () => {
       try {
-        const types = await ConfirmService.getConfirmTypes();
+        const types = await ServiceConfirm.getConfirmTypes();
         setConfirmTypes(types);
         const selectedType = types.find(type => type.display === item.type);
         setSelectConfirm(selectedType || null);
@@ -85,7 +86,7 @@ const EditConfirm: React.FC = () => {
     };
 
     try {
-      await ConfirmService.updateConfirm(item.id, payload);
+      await ServiceConfirm.updateConfirm(item.id, payload);
       showMessage({
         message: 'Success',
         description: 'Sửa đơn xác nhận thành công',
@@ -165,6 +166,8 @@ const EditConfirm: React.FC = () => {
         title="Chi tiết đơn xác nhận"
         centerTitle={true}
         showButtonBack={true}
+        backgroundColor='#fff'
+        titleColor='#000'
       />
       <View style={styles.shadow}>
         <View style={styles.flexVertical}>

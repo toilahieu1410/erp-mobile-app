@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
     marginRight: moderateScale(10),
   },
   scroll: {
-    height: height - moderateScale(70),
+    height: height - moderateScale(100),
   },
   colorText: {
     color: '#03347D',

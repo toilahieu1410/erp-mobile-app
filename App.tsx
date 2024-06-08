@@ -6,7 +6,7 @@ import {Alert, LogBox, SafeAreaView, StatusBar} from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store, persistor} from './store/store';
 import FlashMessage from 'react-native-flash-message';
-import {checkLogin, checkToken} from './src/slice/Auth';
+import { checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
 import {SCREENS} from './src/constants/screens';
 import MainStack from './src/screens/stack/MainStack';
@@ -16,6 +16,7 @@ import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
 import {PersistGate} from 'redux-persist/integration/react';
+import { navigationRef } from './store/navigationRef';
 
 const config = {
   screens: {
@@ -51,16 +52,17 @@ const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(
-    (state: RootState) => state.auth.authReducer.isAuthenticated,
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
   );
   const loading = useSelector(
-    (state: RootState) => state.auth.authReducer.loading,
+    (state: RootState) => state.auth.loading,
   );
 
   useEffect(() => {
     //@ts-ignore
     dispatch(checkToken())
+    //@ts-ignore
       .unwrap()
       //@ts-ignore
       .then(res => {
@@ -84,15 +86,15 @@ const RootNavigator = () => {
   if (loading) {
     return null; 
   }
-
+  console.log(isAuthenticated,'isLoggedIn')
   return (
     <>
-      <NavigationContainer linking={linking} independent={true}>
+      <NavigationContainer linking={linking} independent={true} ref={navigationRef}>
         <StatusBar
           backgroundColor="#2179A9"
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
         />
-        {isLoggedIn ? (
+        {isAuthenticated ? (
             <MainStack />
         ) : (
           /* nếu loginState.isAuthenticated == chưa authen => sẽ vào màn hình login , ngược lại vào main để sử dụng */

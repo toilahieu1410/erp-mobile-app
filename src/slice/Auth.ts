@@ -75,23 +75,31 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
 
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
-    const token = await Token.getToken()
+    const token = await Token.getToken();
 
-    if(token) {
-      const response:any = await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken)
-      if(response?.data?.status === 500) {
-        throw new Error('SERVER_ERROR')
+    if (token) {
+      try {
+        await AuthenticateService.RevokeToken(token.accessToken, token.refreshToken);
+        console.log('Token revoked');
+      } catch (revokeError) {
+        console.error('Error revoking token:', revokeError);
+        // Không làm gì thêm ở đây, vì vẫn cần xóa token và điều hướng về màn hình đăng nhập
       }
-      console.log('Token revoked');
     }
-    await Token.removeToken()
-    await AsyncStorage.removeItem('accessToken')
+
+    await Token.removeToken();
+    await AsyncStorage.removeItem('accessToken');
     console.log('Token removed and logout key removed');
-    return true
+    return true;
+
   } catch (error) {
     console.error('Logout error:', error);
-    console.log(error,'ádasd')
-    return rejectWithValue(error.message);
+    return rejectWithValue({
+      error: {
+        code: 'LOGOUT_ERROR',
+        message: error.message || 'Unknown error occurred',
+      },
+    });
   }
 });
 
@@ -117,7 +125,16 @@ export const checkLogin = createAsyncThunk<boolean>(
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = {};
+      state.error = null;
+    }
+  },
   extraReducers: builder => {
     builder
     .addCase(login.pending, (state) => {
@@ -137,7 +154,7 @@ const authSlice = createSlice({
     })
     .addCase(logout.rejected, (state, action) => {
       state.error = action.error.message || null;
-      state.user = null;
+      
     })
     .addCase(checkToken.pending, (state) => {
       state.loading = true;

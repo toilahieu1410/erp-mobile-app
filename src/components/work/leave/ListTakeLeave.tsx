@@ -1,22 +1,31 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  View, 
+  View,
   Text,
-  Dimensions, 
-  FlatList, 
+  Dimensions,
+  FlatList,
   TouchableOpacity,
-  RefreshControl,  
-  ActivityIndicator} from 'react-native';
+  RefreshControl,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {moderateScale} from '../../../screens/size';
-import {RectButton, Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler';
+import {
+  RectButton,
+  Swipeable,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import AppHeader from '../../navigators/AppHeader';
 import moment from 'moment';
-import TakeLeaveService from '../../../services/listWorks/serviceTakeLeave';
+import ServiceTakeLeave from '../../../services/listWorks/serviceTakeLeave';
 import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
+import {debounce} from '../../../../utils/debounce';
+import {showMessage} from 'react-native-flash-message';
+import { SCREENS } from '../../../constants/screens';
 
 interface NghiPhep {
   id: string;
@@ -30,12 +39,20 @@ interface NghiPhep {
   createdByUserId: string;
   createdByUserName: string;
   createdAt: string;
+  leaveApplicationDetails: {
+    leaveAt: string;
+    type: number;
+  }[]; 
 }
 
 interface ViewTakeLeaveProps {
   nghiPhep: NghiPhep[];
+  onDelete: (id: string) => void;
   refreshing: boolean;
   onRefresh: () => void;
+  onLoadMore: () => void;
+  loadingMore: boolean;
+  flatListRef: React.MutableRefObject<FlatList<any> | null>;
 }
 
 interface RouteParams {
@@ -44,138 +61,286 @@ interface RouteParams {
 }
 
 const ListTakeLeave: React.FC = () => {
-
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<{ params: RouteParams }, 'params'>>();
+  const route = useRoute<RouteProp<{params: RouteParams}, 'params'>>();
 
-  const { fromDate: initialFromDate = '', toDate: initialToDate = '' } = route.params || {};
+  const {fromDate: initialFromDate = '', toDate: initialToDate = ''} =
+    route.params || {};
+
+  const flatListRef = useRef<FlatList>(null);
 
   const [index, setIndex] = useState(0);
   const [listNghiPhep, setListNghiPhep] = useState<NghiPhep[]>([]);
-  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null);
-  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null);
+  const [fromDate, setFromDate] = useState<Date | null>(
+    initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null,
+  );
+  const [toDate, setToDate] = useState<Date | null>(
+    initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null,
+  );
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0)
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  const routes = [
-    {
-      key: 'all',
-      title: 'Tất cả',
-      icon: '',
-    },
-    {
-      key: 'pending',
-      title: 'Chưa duyệt',
-      icon: 'ellipse-sharp',
-      color: '#3366ff',
-    },
-    {
-      key: 'approved',
-      title: 'Đã duyệt',
-      icon: 'ellipse-sharp',
-      color: '#27b376',
-    },
-    {
-      key: 'rejected',
-      title: 'Hủy duyệt',
-      icon: 'ellipse-sharp',
-      color: '#cc2a36',
-    },
-  ];
+  const routes = useMemo(
+    () => [
+      {key: 'all', title: 'Tất cả', icon: ''},
+      {
+        key: 'pending',
+        title: 'Chưa duyệt',
+        icon: 'ellipse-sharp',
+        color: '#3366ff',
+      },
+      {
+        key: 'approved',
+        title: 'Đã duyệt',
+        icon: 'ellipse-sharp',
+        color: '#27b376',
+      },
+      {
+        key: 'rejected',
+        title: 'Hủy duyệt',
+        icon: 'ellipse-sharp',
+        color: '#cc2a36',
+      },
+    ],
+    [],
+  );
 
-  console.log(listNghiPhep,'listNghiPhep')
   useEffect(() => {
-    const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null
-    const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null
-    setFromDate(fromDateValue)
-    setToDate(toDateValue)
-    fetchListTakeLeave(fromDateValue, toDateValue)
+    const fromDateValue = initialFromDate
+      ? moment(initialFromDate, 'DD/MM/YYYY').toDate()
+      : null;
+    const toDateValue = initialToDate
+      ? moment(initialToDate, 'DD/MM/YYYY').toDate()
+      : null;
+    setFromDate(fromDateValue);
+    setToDate(toDateValue);
+    fetchListTakeLeave(fromDateValue, toDateValue, 1);
+  }, [initialFromDate, initialToDate]);
 
-  }, [initialFromDate, initialToDate])
-
-  const fetchListTakeLeave = async (fromDate: Date | null, toDate: Date | null) => {
+  const fetchListTakeLeave = async (
+    fromDate: Date | null,
+    toDate: Date | null,
+    page: number,
+  ) => {
     try {
-      setLoading(true)
-      const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : ''
-      const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : ''
+      setLoading(page === 1);
+      setLoadingMore(page > 1);
+      const formattedFromDate = fromDate  ? moment(fromDate).format('DD/MM/YYYY') : '';
+      const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : '';
 
-      const response: any = await TakeLeaveService.getListTakeLeave(formattedFromDate, formattedToDate)
+      const response: any = await ServiceTakeLeave.getListTakeLeave(
+        formattedFromDate,
+        formattedToDate,
+        page,
+        pageSize,
+      );
       const sortedResponse = response.sort((a: NghiPhep, b: NghiPhep) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      })
-      setListNghiPhep(sortedResponse)
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
+      if (page === 1) {
+        setListNghiPhep(sortedResponse);
+      } else {
+        setListNghiPhep(prevState => [...prevState, ...sortedResponse]);
+      }
+      setPageNumber(page);
+      setTotalItems(response.length === 0 ? 0 : response.length)
+      setHasMore(response.length === pageSize); // Cập nhật cờ hasMore
     } catch (error) {
-      console.error('Error fetching listTakeLeave', error)
-      setListNghiPhep([])
+      console.error('Error fetching listTakeLeave', error);
+      if (page === 1) setListNghiPhep([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
+      setLoadingMore(false);
     }
-  }
+  };
+
+  // Ham xoa item Nghi Phep
+
+  const handleDelete = async (id: string) => {
+    Alert.alert(
+      'Xác nhận xóa',
+      'Bạn có chắc chắn muốn xóa mục này',
+      [
+        {
+          text: 'Hủy',
+          onPress: () => console.log('Cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'Đồng ý',
+          onPress: async () => {
+            try {
+              await ServiceTakeLeave.deleteTakeLeave(id);
+              setListNghiPhep(prevState =>
+                prevState.filter(item => item.id !== id),
+              );
+              showMessage({
+                message: 'Success',
+                description: 'Xóa đơn nghỉ phép thành công',
+                type: 'success',
+              });
+            } catch (error) {
+              showMessage({
+                message: 'Error',
+                description: 'Xóa đơn thất bại',
+                type: 'danger',
+              });
+            }
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
 
   const onRefresh = useCallback(async () => {
-    setRefreshing(true)
-    await fetchListTakeLeave(fromDate, toDate)
-    setRefreshing(false)
-  }, [initialFromDate, initialToDate])
+    setRefreshing(true);
+    await fetchListTakeLeave(fromDate, toDate, 1);
+    setRefreshing(false);
+  }, [initialFromDate, initialToDate]);
+
+  const handleReloadData = useCallback(async () => {
+    // @ts-ignore
+    navigation.setParams({ fromDate: '', toDate: '' });
+    setFromDate(null);
+    setToDate(null);
+    await fetchListTakeLeave(null, null, 1);
+  }, [navigation, fetchListTakeLeave]);
+
+
+  const loadMoreData = useCallback(async () => {
+    if (!loadingMore && hasMore) {
+      setLoadingMore(true);
+      await fetchListTakeLeave(fromDate, toDate, pageNumber + 1);
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, fromDate, toDate, pageNumber]);
 
   const renderScene = SceneMap({
     all: () => (
-      <ViewTask 
+      <ViewTask
         nghiPhep={listNghiPhep}
+        onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
     pending: () => (
       <ViewTask
-        nghiPhep={listNghiPhep.filter((item) => item.status === 'Pending')}
+        nghiPhep={listNghiPhep.filter(item => item.status === 'Pending')}
+        onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
     approved: () => (
       <ViewTask
-        nghiPhep={listNghiPhep.filter((item) => item.status === 'Approved')}
+        nghiPhep={listNghiPhep.filter(item => item.status === 'Approved')}
+        onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
     rejected: () => (
       <ViewTask
-        nghiPhep={listNghiPhep.filter((item) => item.status === 'Reject')}
+        nghiPhep={listNghiPhep.filter(item => item.status === 'Reject')}
+        onDelete={handleDelete}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onLoadMore={loadMoreData}
+        loadingMore={loadingMore}
+        flatListRef={flatListRef}
       />
     ),
-  })
+  });
 
   return (
     <GestureHandlerRootView style={styles.container}>
-       <AppHeader title="Danh sách đơn nghỉ phép" showButtonBack={true} />
-      <TabView 
+      <AppHeader
+        title="Danh sách đơn nghỉ phép"
+        showButtonBack={true}
+        backgroundColor="#fff"
+        titleColor="#000"
+        actions={
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={
+                //@ts-ignore
+                () => navigation.navigate(SCREENS.SEARCH_DON_NGHI_PHEP.KEY)
+              }>
+              <Icon
+                name="search-outline"
+                size={moderateScale(24)}
+                color={'#2179A9'}
+              />
+            </TouchableOpacity>
+            <Text>&nbsp;&nbsp;&nbsp;</Text>
+            <TouchableOpacity onPress={handleReloadData}>
+              <Icon
+                name="reload-outline"
+                size={moderateScale(24)}
+                color={'#2179A9'}
+              />
+            </TouchableOpacity>
+            <Text>&nbsp;&nbsp;&nbsp;</Text>
+            <TouchableOpacity 
+              //@ts-ignore
+              onPress={() => navigation.navigate(SCREENS.TAO_DON_NGHI_PHEP.KEY)}>
+              <Icon
+                name="add-circle-outline"
+                size={moderateScale(24)}
+                color={'#2179A9'}
+              />
+            </TouchableOpacity>
+          </View>
+        }
+      />
+      <TabView
         navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{width: Dimensions.get('window').width}}
         renderTabBar={props => (
-          <TabBar 
+          <TabBar
             {...props}
             indicatorStyle={{backgroundColor: '#2179A9'}}
-            style={{backgroundColor: '#fff', borderBottomColor: '#cecece', borderBottomWidth: 1}}
-            labelStyle={{color:'black'}}
-             renderLabel={({ route, focused, color }) => (
-              <View style={{flexDirection: 'row', alignItems:'center'}}>
-                <Icon 
+            style={{
+              backgroundColor: '#fff',
+              borderBottomColor: '#cecece',
+              borderBottomWidth: 1,
+            }}
+            labelStyle={{color: 'black'}}
+            renderLabel={({route, focused, color}) => (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon
                   name={route.icon}
                   size={moderateScale(10)}
                   color={route.color}
                 />
-                <Text style={{color: 'black', marginLeft: moderateScale(5)}}>{route.title}</Text>
+                <Text style={{color: 'black', marginLeft: moderateScale(5)}}>
+                  {route.title}
+                </Text>
               </View>
             )}
           />
         )}
-      />  
+      />
       {loading && !refreshing ? (
         <View style={styles.spinnerContainer}>
           <ActivityIndicator size="large" color="#2179A9" />
@@ -185,9 +350,17 @@ const ListTakeLeave: React.FC = () => {
   );
 };
 
-export default ListTakeLeave;
 
-const ViewTask: React.FC<ViewTakeLeaveProps> = ({nghiPhep, refreshing, onRefresh}) => {
+
+const ViewTask: React.FC<ViewTakeLeaveProps> = ({
+  nghiPhep,
+  onDelete,
+  refreshing,
+  onRefresh,
+  onLoadMore,
+  loadingMore,
+  flatListRef
+}) => {
   const navigation: any = useNavigation();
 
   const checkStatusIcon = (status: string) => {
@@ -225,38 +398,54 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({nghiPhep, refreshing, onRefresh
 
   const renderRightActions = (id: string) => {
     return (
-      <RectButton style={styles.deleteButton} onPress={(e) => console.log(e)}>
-        <Icon name='trash-outline' size={moderateScale(20)} color={'#fff'} />
+      <RectButton style={styles.deleteButton} onPress={() => onDelete(id)}>
+        <Icon name="trash-outline" size={moderateScale(20)} color={'#fff'} />
         <Text style={styles.textWhite}>Delete</Text>
       </RectButton>
-    )
-  }
+    );
+  };
 
   return (
-      <FlatList
-        data={nghiPhep}
-        renderItem={({item}) => (
-          <Swipeable
-            renderRightActions={() => item.status === 'Pending' ? renderRightActions(item.id) : null}
-          >
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.boxWrapper}
-              onPress={() => navigation.navigate('')}
-            >
-              <View style={styles.itemWrapper}>
-                <View style={styles.contentWrapper}>
-                  <Text style={styles.subText}>{item.content}</Text>
+    <FlatList
+      ref={flatListRef}
+      data={nghiPhep}
+      renderItem={({item}) => (
+        <Swipeable
+          renderRightActions={() =>
+            item.status === 'Pending' ? renderRightActions(item.id) : null
+          }>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.boxWrapper}
+            onPress={() => navigation.navigate(SCREENS.EDIT_NGHI_PHEP.KEY, { item: item })}>
+            <View style={styles.itemWrapper}>
+              <View style={styles.contentWrapper}>
+                <Text style={styles.subText}>{item.content}</Text>
+                <Text style={styles.mainText}>
+                  Ngày tạo: {moment(item.createdAt).format('DD/MM/YYYY')}
+                </Text>
+                <View style={styles.textDate}>
                   <Text style={styles.mainText}>
-                    Ngày tạo: {moment(item.createdAt).format('DD/MM/YYYY')}
+                    Ngày nghỉ phép:{' '}
+                    {moment(item.leaveApplicationDetails && item.leaveApplicationDetails[0].leaveAt).format('DD/MM/YYYY')}
                   </Text>
-                  <View style={styles.textDate}>
-                    {/* <Text style={styles.mainText}>
-                      Ngày nghỉ phép: {moment(item.)}
-                    </Text> */}
-                  </View>
+                  <Text
+                    style={[
+                      styles.fontSize,
+                      {
+                        color:
+                          item.status === 'Pending'
+                            ? '#3366ff'
+                            : item.status === 'Approved'
+                            ? '#27b376'
+                            : '#cc2a36',
+                      },
+                    ]}>
+                    {item.type}
+                  </Text>
                 </View>
-                <View style={styles.statusWrapper}>
+              </View>
+              <View style={styles.statusWrapper}>
                 <Text>{checkStatusIcon(item.status)}</Text>
                 <View style={styles.icon}>
                   <Icon
@@ -266,16 +455,26 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({nghiPhep, refreshing, onRefresh
                   />
                 </View>
               </View>
-              </View>
-            </TouchableOpacity>
-          </Swipeable>
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      />
+            </View>
+          </TouchableOpacity>
+        </Swipeable>
+      )}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+      onEndReached={onLoadMore}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        loadingMore ? 
+        <View style={styles.flexDateBetween}>
+        <Text style={styles.textDate}>Đang tải dữ liệu</Text>
+        <ActivityIndicator size="small" color="#2179A9" />
+      </View>
+        : null
+      }
+    />
   );
 };
+
+export default ListTakeLeave;

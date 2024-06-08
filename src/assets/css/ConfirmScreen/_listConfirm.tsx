@@ -46,8 +46,9 @@ export const styles = StyleSheet.create({
   btnDate: {
     borderBottomColor: '#ccc',
     borderBottomWidth:1,
-    padding: moderateScale(7),
+    padding: moderateScale(10),
     flexDirection: 'row',
+    justifyContent:'space-between',
     alignItems: 'center',
   },
 
@@ -79,8 +80,12 @@ export const styles = StyleSheet.create({
   flexDateBetween: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between',
+    justifyContent:'center',
     marginBottom: moderateScale(15)
+  },
+  flexLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   datePickerText: {
     fontSize: moderateScale(14),
@@ -173,9 +178,11 @@ export const styles = StyleSheet.create({
   },
   textDate: {
     flexDirection:'row',
+    
     alignItems:'center',
     color: '#2179A9',
-    fontSize: moderateScale(14)
+    fontSize: moderateScale(14),
+    marginRight: moderateScale(10)
   },
   textSearch: {
     color: '#fff',

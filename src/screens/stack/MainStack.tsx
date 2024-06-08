@@ -11,11 +11,18 @@ import PayRollScreen from '../account/PayRollScreen';
 import ItemDetailTakeLeave from '../../components/work/leave/ItemDetailTakeLeave';
 import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
 import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
+// Don xac nhan
 import CreateConfirm from '../../components/work/confirm/CreateConfirm';
 import ListConfirm from '../../components/work/confirm/ListConfirm';
 import EditConfirm from '../../components/work/confirm/EditConfirm';
 import SearchConfirm from '../../components/work/confirm/SearchConfirm';
+
+// Don nghi phep
 import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
+import CreateTakeLeave from '../../components/work/leave/CreateTakeLeave';
+import SearchTakeLeave from '../../components/work/leave/SearchTakeLeave';
+import EditTakeLeave from '../../components/work/leave/EditTakeLeave';
+
 
 const MainStack = () => {
 
@@ -28,6 +35,7 @@ const MainStack = () => {
         component={Main}
         options={{headerShown: false}}
       />
+      
       <Stack.Screen
         name={SCREENS.HOMEDETAIL.KEY}
         component={HomeDetailScreen}
@@ -106,20 +114,7 @@ const MainStack = () => {
         }}
         component={ListConfirm}
       />
-      <Stack.Screen
-        name={SCREENS.SEARCH_DON_XAC_NHAN.KEY}
-        options={{
-          title: SCREENS.SEARCH_DON_XAC_NHAN.NAME,
-          headerTintColor: 'transparent',
-          headerShown: APPHEADER.headerShown,
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={SearchConfirm}
-      />
-       <Stack.Screen
+        <Stack.Screen
         name={SCREENS.EDIT_XAC_NHAN.KEY}
         options={{
           title: SCREENS.EDIT_XAC_NHAN.NAME,
@@ -133,6 +128,20 @@ const MainStack = () => {
         component={EditConfirm}
       />
       <Stack.Screen
+        name={SCREENS.SEARCH_DON_XAC_NHAN.KEY}
+        options={{
+          title: SCREENS.SEARCH_DON_XAC_NHAN.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={SearchConfirm}
+      />
+     
+      <Stack.Screen
         name={SCREENS.LIST_DON_NGHI_PHEP.KEY}
         options={{
           title: SCREENS.LIST_DON_NGHI_PHEP.NAME,
@@ -145,7 +154,49 @@ const MainStack = () => {
         }}
         component={ListTakeLeave}
       />
+        <Stack.Screen
+        name={SCREENS.TAO_DON_NGHI_PHEP.KEY}
+        options={{
+          title: SCREENS.TAO_DON_NGHI_PHEP.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={CreateTakeLeave}
+      />
+
       <Stack.Screen
+        name={SCREENS.EDIT_NGHI_PHEP.KEY}
+        options={{
+          title: SCREENS.EDIT_NGHI_PHEP.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={EditTakeLeave}
+      />
+
+      <Stack.Screen
+        name={SCREENS.SEARCH_DON_NGHI_PHEP.KEY}
+        options={{
+          title: SCREENS.SEARCH_DON_NGHI_PHEP.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={SearchTakeLeave}
+      />
+
+      {/* <Stack.Screen
         name={SCREENS.DETAIL_NGHI_PHEP.KEY}
         options={{
           title: SCREENS.DETAIL_NGHI_PHEP.NAME,
@@ -157,7 +208,7 @@ const MainStack = () => {
           },
         }}
         component={ItemDetailTakeLeave}
-      />
+      /> */}
       <Stack.Screen
         name={SCREENS.WORK_FROM_HOME.KEY}
         options={{
