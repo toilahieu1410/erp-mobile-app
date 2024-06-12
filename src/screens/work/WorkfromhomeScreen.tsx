@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Text, View, SafeAreaView, ScrollView} from 'react-native'
 import AppHeader from '../../components/navigators/AppHeader'
-import {styles} from '../../assets/css/ConfirmScreen/style'
+import {styles} from '../../assets/css/ListWorksScreen/style'
 import ButtonChange from '../../components/navigators/buttonChange'
 import CreateConfirm from '../../components/work/confirm/CreateConfirm'
 import ListConfirm from '../../components/work/confirm/ListConfirm'

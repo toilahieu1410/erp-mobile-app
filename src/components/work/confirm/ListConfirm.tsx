@@ -24,7 +24,7 @@ import { SCREENS } from '../../../constants/screens';
 import AppHeader from '../../navigators/AppHeader';
 import moment from 'moment';
 import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
-import { styles } from '../../../assets/css/ConfirmScreen/_listConfirm';
+import { styles } from '../../../assets/css/ListWorksScreen/_listWork';
 
 interface XacNhan {
   id: string;
@@ -70,7 +70,6 @@ const ListConfirm: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -125,9 +124,7 @@ const ListConfirm: React.FC = () => {
       } else {
         setListXacNhan(prevState => [...prevState, ...sortedResponse]);
       }
-
       setPageNumber(page);
-      setTotalItems(response.total)
       setHasMore(response.length === pageSize);
     } catch (error) {
       console.error('Error fetching list confirm', error);
@@ -173,7 +170,7 @@ const ListConfirm: React.FC = () => {
     );
   }, []);
 
-  console.log(listXacNhan,'ssss')
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchConfirmList(fromDate, toDate, 1);
@@ -243,7 +240,7 @@ const ListConfirm: React.FC = () => {
     ),
   });
 
-  console.log(listXacNhan,'list', hasMore)
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <AppHeader
@@ -418,6 +415,9 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
       }
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={15}
       maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
       ListFooterComponent={
         loadingMore ? 

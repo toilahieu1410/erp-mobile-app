@@ -19,22 +19,30 @@ interface TakeLeaveType {
 
 interface ListTakeLeave {
   id: string,
+  code: string,
   content: string,
-  handOver_Content: string,
-  handOver_ToUserId: string,
+  handOverContent: string,
+  handOverToUserId: string,
   approvedBy: string | null,
   approvedByName: string | null,
   approvedAt: string | null,
-  type: string,
+  typeApplication: string,
   status: string,
   createdByUserId: string,
   createdByUserName: string,
+  createdByName: string,
   createdAt: string,
   detail: {
     id: string,
     leaveAt: string
-    type: number
+    timeType: number
   }[]
+}
+
+interface ListUsers {
+  id: string, 
+  hoTen: string,
+  userName: string
 }
 
 export const ServiceTakeLeave = {
@@ -81,8 +89,16 @@ export const ServiceTakeLeave = {
     } catch (error) {
       throw error
     }
-  }
+  },
 
+  async getUserHandOver(name: string): Promise<ListUsers[]> {
+    try {
+      const response = await http.get(`/leave_application/get_user_handover?Name=${name}`)
+      return response.data.value
+    } catch {
+      throw new Error ('Không thể lấy danh sách người bàn giao')
+    }
+  }
   
 }
 

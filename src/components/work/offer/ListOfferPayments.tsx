@@ -1,6 +1,6 @@
 import React from "react"
 import {View, Text, ScrollView} from 'react-native'
-import { styles } from "../../../assets/css/ConfirmScreen/style"
+import { styles } from "../../../assets/css/ListWorksScreen/style"
 
 const ListOfferPayments = () => {
   return (

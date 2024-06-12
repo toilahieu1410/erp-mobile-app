@@ -1,240 +1,393 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
-import moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {widthScale} from '../../../screens/size';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-import {SCREENS} from '../../../constants/screens'
+import { View, Text, FlatList, Alert, Dimensions, TouchableOpacity } from "react-native"
+import { ActivityIndicator, TouchableRipple } from 'react-native-paper';
+import moment from "moment"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { ServiceWorkFromHome } from "../../../services/listWorks/serviceWorkFromHome"
+import { showMessage } from "react-native-flash-message"
+import Icon from 'react-native-vector-icons/Ionicons';
+import { TabView, SceneMap, TabBar } from "react-native-tab-view"
+import { RectButton, Swipeable, GestureHandlerRootView, RefreshControl } from "react-native-gesture-handler"
+import { styles } from '../../../assets/css/ListWorksScreen/_listWork';
+import AppHeader from "../../navigators/AppHeader"
+import { moderateScale } from "../../../screens/size";
 
 interface WorkFromHome {
-  $id: string;
-  MA_SO_XAC_NHAN: string;
-  NGUOI_DE_NGHI: string;
-  HO_VA_TEN: string;
-  NOI_DUNG_CAN_XAC_NHAN: string;
-  NGAY_CAN_XAC_NHAN: string;
-  TEN_PHONG_BAN: string;
-  NGAY_LAM_DON: string;
-  LY_DO_HUY: null | string;
-  TRUONG_PHONG_DUYET: string | null;
-  NGAY_TRUONG_PHONG_DUYET: string | null;
-  TRUONG_PHONG_DA_DUYET: boolean;
-  TRUONG_PHONG_HUY_DUYET: boolean;
-  TRUC_THUOC: string;
-  LOAI_XAC_NHAN: null | string;
-  THOI_GIAN_TU: null | string;
-  THOI_GIAN_DEN: null | string;
-  LEADER: string;
+  id: string,
+  code: string,
+  content: string,
+  equipmentBorrow: string,
+  startDate: string,
+  endDate: string,
+  createdByUserId: string,
+  createdByUsername: string,
+  createdByName: string,
+  status: string,
+  approvedBy: string | null,
+  approvedAt: string | null,
+  createdAt: string
 }
 
-interface ViewConfirmProps {
-  xacNhan: {
-    listXacNhan: WorkFromHome[];
-    listDemXacNhan: number[];
-  };
+interface ViewWorkFromHomeProps {
+  workFromHome: WorkFromHome[]
+  onDelete: (id: string) => void
+  refreshing: boolean
+  onRefresh: () => void
+  onLoadMore: () => void
+  loadingMore: boolean
+  flatListRef: React.MutableRefObject<FlatList<any> | null>
 }
 
-interface DanhSachWorkFromHomeProps {
-  navigation: any;
+interface RouteDateParams {
+  fromDate: string,
+  toDate: string
 }
 
-const ListWorkFromHome: React.FC<DanhSachWorkFromHomeProps> = ({navigation}) => {
-  const fakeListItem: WorkFromHome[] = [
-    {
-      $id: '1',
-      MA_SO_XAC_NHAN: 'XNHL2403270001',
-      NGAY_LAM_DON: '2024-03-27T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      NOI_DUNG_CAN_XAC_NHAN:
-        'Xác nhận ngày 27/03/2024 máy chấm công bị sai thời gian và chục chặc thông tin',
-      NGAY_CAN_XAC_NHAN: '27/03/2024',
-      LY_DO_HUY: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      TRUC_THUOC: 'HOPLONG',
-      LOAI_XAC_NHAN: 'Quên chấm công / Không thể chấm công',
-      THOI_GIAN_TU: null,
-      THOI_GIAN_DEN: null,
-      LEADER: 'INTE001_HL',
-      TEN_PHONG_BAN: 'IT phần mềm',
-    },
-    {
-      $id: '2',
-      MA_SO_XAC_NHAN: 'XNHL2403190009',
-      NGAY_LAM_DON: '2024-03-19T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      NOI_DUNG_CAN_XAC_NHAN: 'xin phép về sớm từ 15h00 để đi khám sức khỏe',
-      NGAY_CAN_XAC_NHAN: '19/03/2024',
-      LY_DO_HUY: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      TRUC_THUOC: 'HOPLONG',
-      LOAI_XAC_NHAN: 'Đi muộn, về sớm',
-      THOI_GIAN_TU: null,
-      THOI_GIAN_DEN: null,
-      LEADER: 'INTE001_HL',
-      TEN_PHONG_BAN: 'IT phần mềm',
-    },
-    {
-      $id: '3',
-      MA_SO_XAC_NHAN: 'XNHL2403070002',
-      NGAY_LAM_DON: '2024-03-07T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      NOI_DUNG_CAN_XAC_NHAN:
-        'Xác nhận sáng ngày 07/03 máy chấm công bị reset sai lệch thời gian, nên ko chấm công được buổi sáng',
-      NGAY_CAN_XAC_NHAN: '07/03/2024',
-      LY_DO_HUY: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      TRUC_THUOC: 'HOPLONG',
-      LOAI_XAC_NHAN: 'Quên chấm công / Không thể chấm công',
-      THOI_GIAN_TU: null,
-      THOI_GIAN_DEN: null,
-      LEADER: 'INTE001_HL',
-      TEN_PHONG_BAN: 'IT phần mềm',
-    },
-    {
-      $id: '4',
-      MA_SO_XAC_NHAN: 'XNHL2310220001',
-      NGAY_LAM_DON: '2023-10-22T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      NOI_DUNG_CAN_XAC_NHAN: 'Xác nhận tăng ca chủ Nhật code web x21 KingSmith',
-      NGAY_CAN_XAC_NHAN: '22/10/2023',
-      LY_DO_HUY: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      TRUC_THUOC: 'HOPLONG',
-      LOAI_XAC_NHAN: 'Tăng ca/ OT',
-      THOI_GIAN_TU: '2023-10-22T08:00:00',
-      THOI_GIAN_DEN: '2023-10-22T18:00:00',
-      LEADER: 'INTE001_HL',
-      TEN_PHONG_BAN: 'IT phần mềm',
-    },
-    {
-      $id: '5',
-      MA_SO_XAC_NHAN: 'XNHL2403010001',
-      NGAY_LAM_DON: '2024-03-01T00:00:00',
-      NGUOI_DE_NGHI: 'HieuNM',
-      HO_VA_TEN: 'Nguyễn Minh Hiếu',
-      NOI_DUNG_CAN_XAC_NHAN:
-        'Xác nhận không chấm công được ngày 01/03/2024 do máy chấm công hỏng',
-      NGAY_CAN_XAC_NHAN: '01/03/2024',
-      LY_DO_HUY: null,
-      TRUONG_PHONG_DUYET: null,
-      NGAY_TRUONG_PHONG_DUYET: null,
-      TRUONG_PHONG_DA_DUYET: false,
-      TRUONG_PHONG_HUY_DUYET: false,
-      TRUC_THUOC: 'HOPLONG',
-      LOAI_XAC_NHAN: 'Quên chấm công / Không thể chấm công',
-      THOI_GIAN_TU: null,
-      THOI_GIAN_DEN: null,
-      LEADER: 'INTE001_HL',
-      TEN_PHONG_BAN: 'IT phần mềm',
-    },
-  ];
 
-  const [showList, setShowList] = useState<boolean>(false);
+const ListWorkFromHome: React.FC = () => {
+  const navigation = useNavigation()
+  const route = useRoute<RouteProp<{params: RouteDateParams}, 'params'>>()
+
+  const {fromDate: initialFromDate = '', toDate: initialToDate = ''} = route.params || {}
+
+  const flatListRef = useRef<FlatList>(null)
+
+  const [index, setIndex] = useState(0)
+  const [listWorkFromHome, setListWorkFromHome] = useState<WorkFromHome[]>([])
+  const [fromDate, setFromDate] = useState<Date | null>(initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null)
+  const [toDate, setToDate] = useState<Date | null>(initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null)
+  const [refreshing, setRefreshing] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize] = useState(10)
+  const [totalItems, setTotalItems] = useState(0)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const routes = useMemo(
+    () => [
+      {key: 'all', title: 'Tất cả', icon: ''},
+      {key: 'pending', title: 'Chưa duyệt', icon: 'ellipse-sharp', color: '#3366ff'},
+      {key: 'approved', title: 'Đã duyệt', icon: 'ellipse-sharp', color: '#27b376'},
+      {key: 'rejected', title: 'Hủy duyệt', icon: 'ellipse-sharp', color: '#cc2a36'},
+    ],
+    []
+  )
+
+  useEffect(() => {
+    const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null
+    const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null
+    setFromDate(fromDateValue)
+    setToDate(toDateValue)
+    fetchListWorkFromHome(fromDateValue, toDateValue, 1);
+  },[initialFromDate, initialToDate])
+
+  const fetchListWorkFromHome = useCallback(async (fromDate: Date | null, toDate: Date | null, page: number) => {
+    try {
+      if (page === 1) setLoading(true)
+      setLoadingMore(page > 1)
+
+      const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : ''
+      const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : ''
+
+      const response: any = await ServiceWorkFromHome.getListWorkFromHome(formattedFromDate, formattedToDate, page, pageSize)
+      const sortedResponse = response.sort((a: WorkFromHome, b: WorkFromHome) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      })
+
+      if(page === 1) {
+        setListWorkFromHome(sortedResponse)
+      } else {
+        setListWorkFromHome(prevState => [...prevState, ...sortedResponse])
+      }
+
+      setPageNumber(page)
+      setHasMore(response.length === pageSize);
+    } catch (error) {
+      console.error('Error fetching list confirm', error);
+      if (page === 1) setListWorkFromHome([])
+    } finally {
+      setLoading(false)
+      setLoadingMore(false)
+    }
+  }, [pageSize])
+
+  const handleDelete = useCallback(async (id: string) => {
+    Alert.alert(
+      'Xác nhận xóa',
+      'Bạn chắc chắn muốn xóa mục này',
+      [
+        {
+          text: 'Hủy',
+          onPress: () => console.log('Cancel'),
+          style: 'cancel'
+        }, 
+        {
+          text: 'Đồng ý',
+          onPress: async () => {
+            try {
+              await ServiceWorkFromHome.deleteWorkFromHome(id)
+              setListWorkFromHome(prevState => prevState.filter(item => item.id !== id))
+              showMessage({
+                message: 'Success',
+                description: 'Xóa đơn xin làm việc tại nhà thành công',
+                type: 'success',
+              });
+            } catch (error) {
+              showMessage({
+                message: 'Error',
+                description: 'Xóa đơn thất bại',
+                type: 'danger',
+              });
+            }
+          }
+        }
+      ],
+      { cancelable: false },
+    )
+  }, [])
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchListWorkFromHome(fromDate, toDate, 1)
+    setRefreshing(false)
+  }, [fromDate, toDate, fetchListWorkFromHome])
+
+  const loadMoreData = useCallback(async () => {
+    if (!loadingMore && hasMore) {
+      setLoadingMore(true)
+      await fetchListWorkFromHome(fromDate, toDate, pageNumber + 1)
+      setLoadingMore(false)
+    }
+  }, [loadingMore, hasMore, fromDate, toDate, pageNumber])
+
+  const renderScene = SceneMap({
+    all: () => (
+      <ViewTask
+      workFromHome={listWorkFromHome}
+      onDelete={handleDelete}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onLoadMore={loadMoreData}
+      loadingMore={loadingMore}
+      flatListRef={flatListRef}
+    />
+    ), 
+    pending: () => (
+      <ViewTask
+      workFromHome={listWorkFromHome.filter((item) => item.status === 'Pending')}
+      onDelete={handleDelete}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onLoadMore={loadMoreData}
+      loadingMore={loadingMore}
+      flatListRef={flatListRef}
+    />
+    ),
+    approved: () => (
+      <ViewTask
+      workFromHome={listWorkFromHome.filter((item) => item.status === 'Approved')}
+      onDelete={handleDelete}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onLoadMore={loadMoreData}
+      loadingMore={loadingMore}
+      flatListRef={flatListRef}
+    />
+    ),
+    rejected: () => (
+      <ViewTask
+      workFromHome={listWorkFromHome.filter((item) => item.status === 'Reject')}
+      onDelete={handleDelete}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      onLoadMore={loadMoreData}
+      loadingMore={loadingMore}
+      flatListRef={flatListRef}
+    />
+    ),
+  })
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.flexContent}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.textHeader}>Tổng số đơn xác nhận:</Text>
-            <Text>&nbsp;&nbsp;</Text>
-            <Text
-              style={[
-                styles.textHeader,
-                {color: '#03347D', fontWeight: 'bold'},
-              ]}>
-              {fakeListItem.length}
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity onPress={() => setShowList(!showList)}>
-              {showList ? (
-                <Icon name="list-outline" size={20} color={'#2179A9'} />
-              ) : (
-                <Icon name="grid-outline" size={20} color={'#2179A9'} />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
-
-          <ScrollView horizontal={true}>
-            <ViewTask
-              xacNhan={{
-                listXacNhan: fakeListItem,
-                listDemXacNhan: [fakeListItem.length],
-              }}
+    <GestureHandlerRootView style={styles.container}>
+      <AppHeader 
+        title="Xin làm việc tại nhà"
+        showButtonBack={true}
+        backgroundColor="#fff"
+        titleColor="#000"
+        actions={
+          <View style={{ flexDirection: 'row' }}>
+          {/* <TouchableRipple
+            rippleColor={'transparent'}
+            onPress={
+               //@ts-ignore
+              () => navigation.navigate(SCREENS.SEARCH_DON_XAC_NHAN.KEY)}>
+            <Icon name="search-outline" size={moderateScale(24)} color={'#2179A9'} />
+          </TouchableRipple> */}
+          <Text>&nbsp;&nbsp;&nbsp;</Text>
+          {/* <TouchableRipple
+            rippleColor={'transparent'}
+            onPress={handleReloadData}>
+            <Icon name="reload-outline" size={moderateScale(24)} color={'#2179A9'} />
+          </TouchableRipple> */}
+          {/* <Text>&nbsp;&nbsp;&nbsp;</Text> */}
+          <TouchableRipple
+            rippleColor={'transparent'}
+            onPress={() =>
+              //@ts-ignore
+              navigation.navigate('')
+            }>
+            <Icon
+              name="add-circle-outline"
+              size={moderateScale(24)}
+              color={'#2179A9'}
             />
-          </ScrollView>
-
-      </ScrollView>
-    </View>
-  );
-};
-export default ListWorkFromHome;
-
-const ViewTask: React.FC<ViewConfirmProps> = ({xacNhan}) => {
-
-  const navigation: any = useNavigation()
-
-    const checkStatusIcon = (
-    TRUONG_PHONG_DA_DUYET: boolean,
-    TRUONG_PHONG_HUY_DUYET: boolean,
-  ) => {
-    if (TRUONG_PHONG_DA_DUYET === true && TRUONG_PHONG_HUY_DUYET === false) {
-      return <Icon name="checkmark-sharp" size={35} color={'#40A578'} />;
-    }
-    if (TRUONG_PHONG_DA_DUYET === false && TRUONG_PHONG_HUY_DUYET === false) {
-      return <Icon name="refresh-sharp" size={35} color={'#1679AB'} />;
-    }
-    if (TRUONG_PHONG_HUY_DUYET !== false) {
-      return <Icon name="close-sharp" size={35} color={'#FA7070'} />;
-    }
-  }
-  
-  return (
-    <View style={[styles.container]}>
-      <View style={styles.listWrapper}>
-        <Text style={[styles.rowHeader, { width: widthScale(100) }]}>Ngày xác nhận</Text>
-        <Text style={[styles.rowHeader, { width: widthScale(180) }]}>Loại xác nhận</Text>
-        <Text style={[styles.rowHeader, { width: widthScale(80) }]}>Trạng thái</Text>
-      </View>
-      <FlatList
-
-        data={xacNhan.listXacNhan}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate(SCREENS.DETAIL_XAC_NHAN.KEY, {item: item })} style={styles.listWrapper}>
-            {/* <Text style={[styles.row, { width: widthScale(150) }]}>{moment(item.NGAY_LAM_DON).format('DD/MM/YYYY')}</Text> */}
-            <Text style={[styles.row, { width: widthScale(100) }]}>{(item.NGAY_CAN_XAC_NHAN) }</Text>
-            <Text style={[styles.row, { width: widthScale(180) }]}>{item.LOAI_XAC_NHAN}</Text>
-            <Text style={[styles.row, { width: widthScale(80) }]}>{checkStatusIcon(item.TRUONG_PHONG_DA_DUYET, item.TRUONG_PHONG_HUY_DUYET)}</Text>
-          </TouchableOpacity>
+          </TouchableRipple>
+        </View>
+        }
+      />
+       <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: Dimensions.get('window').width }}
+        renderTabBar={props => (
+          <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: '#2179A9' }}
+            style={{ backgroundColor: '#ffffff', elevation: 0, borderBottomColor: '#cecece', borderBottomWidth: 1 }}
+            labelStyle={{ color: 'black' }}
+            renderLabel={({ route }) => (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon
+                  name={route.icon}
+                  size={moderateScale(10)}
+                  color={route.color}
+                />
+                <Text style={{ color: 'black', marginLeft: moderateScale(5) }}>
+                  {route.title}
+                </Text>
+              </View>
+            )}
+          />
         )}
       />
-    </View>
-  );
-};
+      {loading && !refreshing ? (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator size="small" color="#2179A9" />
+        </View>
+      ) : null}
+    </GestureHandlerRootView>
+  )
+}
+
+const ViewTask: React.FC<ViewWorkFromHomeProps> = ({
+  workFromHome,
+  onDelete,
+  refreshing,
+  onRefresh,
+  onLoadMore,
+  loadingMore,
+  flatListRef,
+}) => {
+  const navigation: any = useNavigation();
+
+  const checkStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Approved':
+        return (
+          <View style={[styles.statusWrapper, { backgroundColor: '#27b376' }]}>
+            <Text style={styles.statusText}>Đã duyệt</Text>
+          </View>
+        );
+      case 'Pending':
+        return (
+          <View style={[styles.statusWrapper, { backgroundColor: '#3366ff' }]}>
+            <Text style={styles.statusText}>Chưa duyệt</Text>
+          </View>
+        );
+      case 'Reject':
+        return (
+          <View style={[styles.statusWrapper, { backgroundColor: '#cc2a36' }]}>
+            <Text style={styles.statusText}>Hủy duyệt</Text>
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const renderRightActions = (id: string) => {
+    return (
+      <RectButton style={styles.deleteButton} onPress={() => onDelete(id)}>
+        <Icon name="trash-outline" size={moderateScale(20)} color={'#fff'} />
+        <Text style={styles.textWhite}>Delete</Text>
+      </RectButton>
+    );
+  };
+  return (
+    <FlatList 
+      ref={flatListRef}
+      data={workFromHome}
+      keyExtractor={item => item.id}
+      renderItem={({item}) => (
+        <Swipeable
+          renderRightActions={() => 
+            item.status === 'Pending' ? renderRightActions(item.id) : null
+          }
+        >
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.boxWrapper}
+            
+          >
+            <View style={styles.itemWrapper}>
+              <View style={styles.contentWrapper}>
+                <Text style={styles.subText}>{item.content}</Text>
+                <Text style={styles.mainText}>
+                  Từ ngày: {moment(item.startDate).format('DD/MM/YYYY')}
+                </Text>
+                <Text style={styles.mainText}>
+                  Đến ngày: {moment(item.endDate).format('DD/MM/YYYY')}
+                </Text>
+               
+              </View>
+              <View style={styles.statusWrapper}>
+                <Text>{checkStatusIcon(item.status)}</Text>
+                <View style={styles.icon}>
+                  <Icon
+                    name="chevron-forward-sharp"
+                    size={moderateScale(20)}
+                    color={'#aaa'}
+                  />
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </Swipeable>
+      )}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+      onEndReached={onLoadMore}
+      onEndReachedThreshold={0.5}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={15}
+      maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+      ListFooterComponent={
+        loadingMore ? 
+        <View style={styles.flexDateBetween}>
+        <Text style={styles.textDate}>Đang tải dữ liệu</Text>
+        <ActivityIndicator size="small" color="#2179A9" />
+      </View>
+        : null
+      }
+    />
+  )
+}
+
+export default ListWorkFromHome

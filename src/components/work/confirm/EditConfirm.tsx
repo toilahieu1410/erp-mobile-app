@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {styles} from '../../../assets/css/ConfirmScreen/_itemDetailConfirm';
+import {styles} from '../../../assets/css/ListWorksScreen/_detailWork';
 import DatePicker from 'react-native-date-picker';
 import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
 import moment from 'moment';
@@ -53,6 +53,8 @@ const EditConfirm: React.FC = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState< 'date' | 'time' | null>(null);
 
   const [btnShowDate, setBtnShowDate] = useState(false)
+  
+
   useEffect(() => {
     const fetchConfirmTypes = async () => {
       try {
@@ -74,6 +76,7 @@ const EditConfirm: React.FC = () => {
       setEndDate(date);
     }
   }, [dateNeedConfirm]);
+
 
   const handleUpdate = async () => {
     const payload: any = {
@@ -170,10 +173,11 @@ const EditConfirm: React.FC = () => {
         titleColor='#000'
       />
       <View style={styles.shadow}>
+        
         <View style={styles.flexVertical}>
           <Text style={styles.textLeft}>Ngày làm đơn</Text>
           <View style={styles.flexVerticalIcon}>
-            <Text style={[styles.textDate,styles.rightDateTime, {color: '#2179A9'}]}>
+            <Text style={[styles.textRight,styles.rightDateTime, {color: '#2179A9'}]}>
               {moment(item.createdAt).format('DD/MM/YYYY')}
             </Text>
             <Icon
@@ -198,7 +202,7 @@ const EditConfirm: React.FC = () => {
             <TouchableOpacity
               style={[ styles.rightDateTime]}
               onPress={() => setShowStartDateNeedConfirm(true)}>
-              <Text style={styles.textDate}>
+              <Text style={styles.textRight}>
                 {moment(dateNeedConfirm).format('DD/MM/YYYY')}
               </Text>
             </TouchableOpacity>
@@ -247,13 +251,13 @@ const EditConfirm: React.FC = () => {
               <View style={styles.flexVertical}>
                 <Text style={styles.textLeft}>Thời gian từ</Text>
                 
-                <Text style={styles.textDate}>
+                <Text style={styles.textRight}>
                   {moment(item.startDate).format('DD/MM/YYYY HH:mm')}
                 </Text>
               </View>
               <View style={styles.flexVertical}>
                 <Text style={styles.textLeft}>Thời gian đến</Text>
-                <Text style={styles.textDate}>
+                <Text style={styles.textRight}>
                   {moment(item.endDate).format('DD/MM/YYYY HH:mm')}
                 </Text>
               </View>
@@ -276,7 +280,7 @@ const EditConfirm: React.FC = () => {
                   <TouchableOpacity
                     onPress={() => showDatePicker('startDate', 'date')}
                     style={styles.rightDateTime}>
-                    <Text style={styles.textDate}>
+                    <Text style={styles.textRight}>
                       {startDate
                         ? moment(startDate).format('DD/MM/YYYY HH:mm')
                         : 'Chọn ngày'}
@@ -319,7 +323,7 @@ const EditConfirm: React.FC = () => {
          <TouchableOpacity
            onPress={() => showDatePicker('endDate', 'date')}
            style={styles.rightDateTime}>
-           <Text style={styles.textDate}>
+           <Text style={styles.textRight}>
              {endDate
                ? moment(endDate).format('DD/MM/YYYY HH:mm')
                : 'Chọn ngày'}
@@ -365,7 +369,7 @@ const EditConfirm: React.FC = () => {
         ) : null}
         <View>
           <TouchableOpacity onPress={handleUpdate} style={styles.buttonSave}>
-            <Text style={styles.white}>Sửa</Text>
+            <Text style={styles.textWhite}>Sửa</Text>
           </TouchableOpacity>
         </View>
       </View>

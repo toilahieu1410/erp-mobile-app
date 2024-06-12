@@ -86,7 +86,7 @@ const RootNavigator = () => {
   if (loading) {
     return null; 
   }
-  console.log(isAuthenticated,'isLoggedIn')
+
   return (
     <>
       <NavigationContainer linking={linking} independent={true} ref={navigationRef}>

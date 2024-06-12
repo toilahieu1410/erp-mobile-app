@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import AppHeader from '../../components/navigators/AppHeader';
-import {styles} from '../../assets/css/ConfirmScreen/style';
+import {styles} from '../../assets/css/ListWorksScreen/style';
 import ButtonChange from '../../components/navigators/buttonChange';
 import CreateTakeLeave from '../../components/work/leave/CreateTakeLeave';
 import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
