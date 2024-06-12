@@ -8,7 +8,6 @@ import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
 // import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
-import ItemDetailTakeLeave from '../../components/work/leave/ItemDetailTakeLeave';
 import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
 import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
 // Don xac nhan
@@ -22,6 +21,7 @@ import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
 import CreateTakeLeave from '../../components/work/leave/CreateTakeLeave';
 import SearchTakeLeave from '../../components/work/leave/SearchTakeLeave';
 import EditTakeLeave from '../../components/work/leave/EditTakeLeave';
+import ListWorkFromHome from '../../components/work/workhome/ListWorkFromHome';
 
 
 const MainStack = () => {
@@ -196,23 +196,11 @@ const MainStack = () => {
         component={SearchTakeLeave}
       />
 
-      {/* <Stack.Screen
-        name={SCREENS.DETAIL_NGHI_PHEP.KEY}
-        options={{
-          title: SCREENS.DETAIL_NGHI_PHEP.NAME,
-          headerTintColor: 'transparent',
-          headerShown: APPHEADER.headerShown,
-          headerTitleStyle: {
-            fontWeight: APPHEADER.headerStyle.fontWeight,
-            fontSize: APPHEADER.headerStyle.fontSize,
-          },
-        }}
-        component={ItemDetailTakeLeave}
-      /> */}
+
       <Stack.Screen
-        name={SCREENS.WORK_FROM_HOME.KEY}
+        name={SCREENS.LIST_WORK_FROM_HOME.KEY}
         options={{
-          title: SCREENS.WORK_FROM_HOME.NAME,
+          title: SCREENS.LIST_WORK_FROM_HOME.NAME,
           headerTintColor: 'transparent',
           headerShown: APPHEADER.headerShown,
           headerTitleStyle: {
@@ -220,7 +208,7 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={WorkFromHomeScreen}
+        component={ListWorkFromHome}
       />
       <Stack.Screen
         name={SCREENS.OFFERPAYMENTS.KEY}

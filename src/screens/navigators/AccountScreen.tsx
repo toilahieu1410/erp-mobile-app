@@ -101,7 +101,6 @@ const AccountScreen = () => {
             navigation.replace(SCREENS.LOGIN.KEY);
           })
           .catch((err: BaseResponse) => {
-            console.log(err.error.code,'ádsadas')
             if (err.error && err.error.code === 'LOGOUT_ERROR') {
               navigation.replace(SCREENS.LOGIN.KEY);
             } else {
@@ -138,10 +137,10 @@ const AccountScreen = () => {
 
     {
       icon: <Icon size={moderateScale(20)} color="#fff" name="reader-outline" style={{backgroundColor:'#F97F51', padding: moderateScale(5), borderRadius: moderateScale(5)}}/> ,
-      title: SCREENS.WORK_FROM_HOME.NAME,
+      title: SCREENS.LIST_WORK_FROM_HOME.NAME,
       type: 'menu',
       onClick: () => {
-        navigation?.navigate(SCREENS.WORK_FROM_HOME.KEY);
+        navigation?.navigate(SCREENS.LIST_WORK_FROM_HOME.KEY);
       },
     },
 

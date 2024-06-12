@@ -52,10 +52,10 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   LIST_DON_NGHI_PHEP: {KEY: 'ListTakeLeave', NAME: 'Danh sách đơn nghỉ phép'},
   SEARCH_DON_NGHI_PHEP: {KEY: 'SearchTakeLeave', NAME: 'Tìm kiếm đơn nghỉ phép'},
   EDIT_NGHI_PHEP: {KEY: 'EditTakeLeave', NAME: 'Sửa đơn nghỉ phép'},
-  // DETAIL_NGHI_PHEP: {KEY: 'ItemDetailTakeLeave', NAME: 'Chi tiết đơn nghỉ phép'},
 
   //work from home
   WORK_FROM_HOME: {KEY: 'WorkFromHomeScreen', NAME: 'Xin làm việc tại nhà'},
+  LIST_WORK_FROM_HOME: {KEY: 'ListWorkFromHome', NAME: 'Danh sách đơn làm tại nhà'},
 
     //đề nghị thanh toán thường
   OFFERPAYMENTS: {KEY: 'OfferPaymentsScreen', NAME: 'Đề nghị thanh toán thường'},

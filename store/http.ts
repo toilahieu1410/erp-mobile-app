@@ -79,7 +79,6 @@ class Http {
   }
 
   async RefreshToken(refreshToken: string): Promise<BaseResponse<Token>> {
-    console.log('Refreshing token with refresh token:', refreshToken);
     const url = `/token/refresh`; // Endpoint API refresh token mới
     const data = { refreshToken };
     const res = await this.instance.post(url, data);

@@ -10,7 +10,7 @@ import {
 import AppHeader from '../../navigators/AppHeader';
 import {TouchableRipple} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {styles} from '../../../assets/css/ConfirmScreen/_itemDetailConfirm';
+import {styles} from '../../../assets/css/ListWorksScreen/_detailWork';
 import moment from 'moment';
 import {moderateScale} from '../../../screens/size';
 

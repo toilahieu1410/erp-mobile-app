@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import AppHeader from "../../navigators/AppHeader";
 import DatePicker from "react-native-date-picker";
-import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
+import {styles} from '../../../assets/css/ListWorksScreen/_listWork';
 import { moderateScale } from "../../../screens/size";
 
 const SearchTakeLeave: React.FC = () => {

@@ -12,7 +12,7 @@ import {
 import {Picker} from '@react-native-picker/picker';
 import {Button, NativeBaseProvider} from 'native-base';
 import {showMessage} from 'react-native-flash-message';
-import {styles} from '../../../assets/css/ConfirmScreen/style';
+import {styles} from '../../../assets/css/ListWorksScreen/style';
 import moment from 'moment';
 import DatePickerDay from '../../picker/datePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';

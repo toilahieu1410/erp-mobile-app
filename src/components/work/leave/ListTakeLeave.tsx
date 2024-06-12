@@ -22,7 +22,7 @@ import {
 import AppHeader from '../../navigators/AppHeader';
 import moment from 'moment';
 import ServiceTakeLeave from '../../../services/listWorks/serviceTakeLeave';
-import {styles} from '../../../assets/css/ConfirmScreen/_listConfirm';
+import {styles} from '../../../assets/css/ListWorksScreen/_listWork';
 import {debounce} from '../../../../utils/debounce';
 import {showMessage} from 'react-native-flash-message';
 import { SCREENS } from '../../../constants/screens';
@@ -30,18 +30,19 @@ import { SCREENS } from '../../../constants/screens';
 interface NghiPhep {
   id: string;
   content: string;
-  handOver_Content: string;
-  handOver_ToUserId: string;
+  handOverContent: string;
+  handOverToUserId: string;
   approvedBy: string | null;
   approvedAt: string | null;
-  type: string;
+  typeApplication: string;
   status: string;
   createdByUserId: string;
   createdByUserName: string;
+  createdByName: string;
   createdAt: string;
   leaveApplicationDetails: {
     leaveAt: string;
-    type: number;
+    timeType: number;
   }[]; 
 }
 
@@ -55,14 +56,14 @@ interface ViewTakeLeaveProps {
   flatListRef: React.MutableRefObject<FlatList<any> | null>;
 }
 
-interface RouteParams {
+interface RouteDateParams {
   fromDate?: string;
   toDate?: string;
 }
 
 const ListTakeLeave: React.FC = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<{params: RouteParams}, 'params'>>();
+  const route = useRoute<RouteProp<{params: RouteDateParams}, 'params'>>();
 
   const {fromDate: initialFromDate = '', toDate: initialToDate = ''} =
     route.params || {};
@@ -111,12 +112,9 @@ const ListTakeLeave: React.FC = () => {
   );
 
   useEffect(() => {
-    const fromDateValue = initialFromDate
-      ? moment(initialFromDate, 'DD/MM/YYYY').toDate()
-      : null;
-    const toDateValue = initialToDate
-      ? moment(initialToDate, 'DD/MM/YYYY').toDate()
-      : null;
+    const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null;
+    const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null;
+
     setFromDate(fromDateValue);
     setToDate(toDateValue);
     fetchListTakeLeave(fromDateValue, toDateValue, 1);
@@ -151,7 +149,7 @@ const ListTakeLeave: React.FC = () => {
       }
       setPageNumber(page);
       setTotalItems(response.length === 0 ? 0 : response.length)
-      setHasMore(response.length === pageSize); // Cập nhật cờ hasMore
+      setHasMore(response.length === pageSize); // Cập nhật hasMore
     } catch (error) {
       console.error('Error fetching listTakeLeave', error);
       if (page === 1) setListNghiPhep([]);
@@ -350,8 +348,6 @@ const ListTakeLeave: React.FC = () => {
   );
 };
 
-
-
 const ViewTask: React.FC<ViewTakeLeaveProps> = ({
   nghiPhep,
   onDelete,
@@ -405,6 +401,7 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
     );
   };
 
+
   return (
     <FlatList
       ref={flatListRef}
@@ -424,10 +421,17 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
                 <Text style={styles.mainText}>
                   Ngày tạo: {moment(item.createdAt).format('DD/MM/YYYY')}
                 </Text>
+                
                 <View style={styles.textDate}>
                   <Text style={styles.mainText}>
-                    Ngày nghỉ phép:{' '}
-                    {moment(item.leaveApplicationDetails && item.leaveApplicationDetails[0].leaveAt).format('DD/MM/YYYY')}
+                    Tổng số ngày nghỉ: <Text style={styles.textSum}>{item.tongSoNgayNghi}</Text>
+                  </Text>
+                
+                </View>
+                <View style={styles.textDate}>
+                  <Text style={styles.mainText}>
+                    Ngày nghỉ phép:
+                    {moment(item?.detail && item?.detail[0]?.leaveAt).format('DD/MM/YYYY')}
                   </Text>
                   <Text
                     style={[
@@ -444,6 +448,7 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
                     {item.type}
                   </Text>
                 </View>
+              
               </View>
               <View style={styles.statusWrapper}>
                 <Text>{checkStatusIcon(item.status)}</Text>
@@ -465,6 +470,9 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
       maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={15}
       ListFooterComponent={
         loadingMore ? 
         <View style={styles.flexDateBetween}>

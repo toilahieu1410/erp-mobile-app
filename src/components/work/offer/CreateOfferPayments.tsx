@@ -13,7 +13,7 @@ import {
 import {Picker} from '@react-native-picker/picker';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {Button as ButtonCreate, NativeBaseProvider} from 'native-base';
-import {styles} from '../../../assets/css/ConfirmScreen/style';
+import {styles} from '../../../assets/css/ListWorksScreen/style';
 
 interface CreateOfferPaymentsProps {
   onPress: () => void;
