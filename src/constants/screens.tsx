@@ -30,7 +30,7 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   //============================== Tài khoản =======================================
   ACCOUNTSTACK: {KEY: 'AccountStackScreen', NAME: 'Tài khoản'},
   ACCOUNT: {KEY: 'AccountScreen', NAME: 'Tài khoản'},
-
+  EDIT_ACCOUNT: {KEY: 'EditAccountScreen', NAME: 'Cập nhật tài khoản'},
   INFOACCOUNT: {KEY: 'InfoAccountScreen', NAME: 'Thông tin tài khoản'},
   CHANGEPASSWORD: {KEY: 'ChangePasswordScreen', NAME: 'Đổi mật khẩu'},
 
@@ -54,8 +54,11 @@ export const SCREENS: {[key: string]: BaseScreenObject} = {
   EDIT_NGHI_PHEP: {KEY: 'EditTakeLeave', NAME: 'Sửa đơn nghỉ phép'},
 
   //work from home
-  WORK_FROM_HOME: {KEY: 'WorkFromHomeScreen', NAME: 'Xin làm việc tại nhà'},
+  CREATE_WORK_FROM_HOME: {KEY: 'CreateWorkFromHome', NAME: 'Tạo đơn làm việc tại nhà'},
+  // WORK_FROM_HOME: {KEY: 'WorkFromHomeScreen', NAME: 'Xin làm việc tại nhà'},
   LIST_WORK_FROM_HOME: {KEY: 'ListWorkFromHome', NAME: 'Danh sách đơn làm tại nhà'},
+  SEARCH_WORK_FROM_HOME: {KEY: 'SearchWorkFromHome', NAME: 'Tìm kiếm đơn làm tại nhà'},
+  EDIT_WORK_FROM_HOME: {KEY: 'EditWorkFromHome', NAME: 'Sửa đơn làm tại nhà'},
 
     //đề nghị thanh toán thường
   OFFERPAYMENTS: {KEY: 'OfferPaymentsScreen', NAME: 'Đề nghị thanh toán thường'},

@@ -8,30 +8,29 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {styles} from '../../../assets/css/ListWorksScreen/_detailWork';
+
 import DatePicker from 'react-native-date-picker';
 import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
 import moment from 'moment';
 import {showMessage} from 'react-native-flash-message';
 import {Picker} from '@react-native-picker/picker';
-import AppHeader from '../../navigators/AppHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AppHeader from '../../navigators/AppHeader';
 import {SCREENS} from '../../../constants/screens';
 import {moderateScale} from '../../../screens/size';
+import {styles} from '../../../assets/css/ListWorksScreen/_detailWork';
 
 interface XacNhanType {
   value: number;
   display: string;
 }
 
-
 const newDate = new Date();
 
 const EditConfirm: React.FC = () => {
-
   const navigation: any = useNavigation();
   const route = useRoute();
-  
+
   const {item}: any = route.params;
 
   const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
@@ -47,13 +46,17 @@ const EditConfirm: React.FC = () => {
     new Date(item.dateNeedConfirm),
   );
 
-  const [showStartDateNeedConfirm, setShowStartDateNeedConfirm] = useState(false);
+  const [showStartDateNeedConfirm, setShowStartDateNeedConfirm] =
+    useState(false);
 
-  const [showStartDatePicker, setShowStartDatePicker] = useState<'date' | 'time' | null>(null);
-  const [showEndDatePicker, setShowEndDatePicker] = useState< 'date' | 'time' | null>(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState<
+    'date' | 'time' | null
+  >(null);
+  const [showEndDatePicker, setShowEndDatePicker] = useState<
+    'date' | 'time' | null
+  >(null);
 
-  const [btnShowDate, setBtnShowDate] = useState(false)
-  
+  const [btnShowDate, setBtnShowDate] = useState(false);
 
   useEffect(() => {
     const fetchConfirmTypes = async () => {
@@ -77,14 +80,15 @@ const EditConfirm: React.FC = () => {
     }
   }, [dateNeedConfirm]);
 
-
   const handleUpdate = async () => {
     const payload: any = {
       id: item.id,
       content,
       dateNeedConfirm: moment(dateNeedConfirm).format('DD/MM/YYYY'),
       type: selectConfirm?.value,
-      startDate: startDate ? moment(startDate).format('DD/MM/YYYY HH:mm') : null,
+      startDate: startDate
+        ? moment(startDate).format('DD/MM/YYYY HH:mm')
+        : null,
       endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : null,
     };
 
@@ -95,8 +99,8 @@ const EditConfirm: React.FC = () => {
         description: 'Sửa đơn xác nhận thành công',
         type: 'success',
       });
-      setStartDate(item.startDate)
-      setEndDate(item.endDate)
+      setStartDate(item.startDate);
+      setEndDate(item.endDate);
       navigation.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY);
     } catch (error) {
       showMessage({
@@ -162,22 +166,26 @@ const EditConfirm: React.FC = () => {
       }
     }
   };
- 
+
   return (
     <ScrollView style={styles.container}>
       <AppHeader
         title="Chi tiết đơn xác nhận"
         centerTitle={true}
         showButtonBack={true}
-        backgroundColor='#fff'
-        titleColor='#000'
+        backgroundColor="#fff"
+        titleColor="#000"
       />
       <View style={styles.shadow}>
-        
         <View style={styles.flexVertical}>
           <Text style={styles.textLeft}>Ngày làm đơn</Text>
           <View style={styles.flexVerticalIcon}>
-            <Text style={[styles.textRight,styles.rightDateTime, {color: '#2179A9'}]}>
+            <Text
+              style={[
+                styles.textRight,
+                styles.rightDateTime,
+                {color: '#2179A9'},
+              ]}>
               {moment(item.createdAt).format('DD/MM/YYYY')}
             </Text>
             <Icon
@@ -198,9 +206,14 @@ const EditConfirm: React.FC = () => {
         </View>
         <View style={styles.flexVertical}>
           <Text style={styles.textLeft}>Ngày cần xác nhận</Text>
-          <View style={[styles.borderBottomColor,styles.flexVerticalIcon, {paddingBottom: moderateScale(10)}]}>
+          <View
+            style={[
+              styles.borderBottomColor,
+              styles.flexVerticalIcon,
+              {paddingBottom: moderateScale(10)},
+            ]}>
             <TouchableOpacity
-              style={[ styles.rightDateTime]}
+              style={[styles.rightDateTime]}
               onPress={() => setShowStartDateNeedConfirm(true)}>
               <Text style={styles.textRight}>
                 {moment(dateNeedConfirm).format('DD/MM/YYYY')}
@@ -247,131 +260,139 @@ const EditConfirm: React.FC = () => {
         selectConfirm?.value === 5 ? (
           <>
             {item.startDate !== null || item.endDate !== null ? (
-            <View>
-              <View style={styles.flexVertical}>
-                <Text style={styles.textLeft}>Thời gian từ</Text>
-                
-                <Text style={styles.textRight}>
-                  {moment(item.startDate).format('DD/MM/YYYY HH:mm')}
-                </Text>
+              <View>
+                <View style={styles.flexVertical}>
+                  <Text style={styles.textLeft}>Thời gian từ</Text>
+
+                  <Text style={styles.textRight}>
+                    {moment(item.startDate).format('DD/MM/YYYY HH:mm')}
+                  </Text>
+                </View>
+                <View style={styles.flexVertical}>
+                  <Text style={styles.textLeft}>Thời gian đến</Text>
+                  <Text style={styles.textRight}>
+                    {moment(item.endDate).format('DD/MM/YYYY HH:mm')}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.flexVertical}>
-                <Text style={styles.textLeft}>Thời gian đến</Text>
-                <Text style={styles.textRight}>
-                  {moment(item.endDate).format('DD/MM/YYYY HH:mm')}
-                </Text>
-              </View>
+            ) : null}
+            <View
+              style={[
+                styles.flexVertical,
+                {paddingVertical: 0, paddingBottom: moderateScale(15)},
+              ]}>
+              <Text style={styles.textLeft}></Text>
+
+              <TouchableOpacity
+                style={styles.btnShowDate}
+                onPress={() => setBtnShowDate(!btnShowDate)}>
+                <Icon
+                  name="today-outline"
+                  size={moderateScale(20)}
+                  color={'#fff'}
+                />
+              </TouchableOpacity>
             </View>
-          ) : null}
-                 <View style={[styles.flexVertical, {paddingVertical: 0, paddingBottom: moderateScale(15)}]}>
-                <Text style={styles.textLeft}></Text>
-                
-                <TouchableOpacity
-                  style={styles.btnShowDate}
-                  onPress={() => setBtnShowDate(!btnShowDate)}>
-                  <Icon name="today-outline" size={moderateScale(20)} color={'#fff'} />
-                </TouchableOpacity>
-              </View>
-              {btnShowDate && (
+            {btnShowDate && (
               <View style={styles.flexVertical}>
                 <View style={styles.flexFromTo}>
                   <Text style={styles.textLeft}>Từ</Text>
-                <View style={styles.flexTime}>
-                  <TouchableOpacity
-                    onPress={() => showDatePicker('startDate', 'date')}
-                    style={styles.rightDateTime}>
-                    <Text style={styles.textRight}>
-                      {startDate
-                        ? moment(startDate).format('DD/MM/YYYY HH:mm')
-                        : 'Chọn ngày'}
-                    </Text>
-                  </TouchableOpacity>
+                  <View style={styles.flexTime}>
+                    <TouchableOpacity
+                      onPress={() => showDatePicker('startDate', 'date')}
+                      style={styles.rightDateTime}>
+                      <Text style={styles.textRight}>
+                        {startDate
+                          ? moment(startDate).format('DD/MM/YYYY HH:mm')
+                          : 'Chọn ngày'}
+                      </Text>
+                    </TouchableOpacity>
                     <Icon
-                    name="today-outline"
-                    size={moderateScale(20)}
-                    color={'#2179A9'}
+                      name="today-outline"
+                      size={moderateScale(20)}
+                      color={'#2179A9'}
                     />
+                  </View>
+                  {showStartDatePicker === 'date' && (
+                    <DatePicker
+                      modal
+                      open={showStartDatePicker === 'date'}
+                      date={startDate || newDate}
+                      mode="date"
+                      onConfirm={date =>
+                        handleDateChange(date, 'startDate', 'date')
+                      }
+                      onCancel={() => setShowStartDatePicker(null)}
+                    />
+                  )}
+                  {showStartDatePicker === 'time' && (
+                    <DatePicker
+                      modal
+                      open={showStartDatePicker === 'time'}
+                      date={startDate || newDate}
+                      mode="time"
+                      onConfirm={date =>
+                        handleDateChange(date, 'startDate', 'time')
+                      }
+                      onCancel={() => setShowStartDatePicker(null)}
+                    />
+                  )}
                 </View>
-       {showStartDatePicker === 'date' && (
-         <DatePicker
-           modal
-           open={showStartDatePicker === 'date'}
-           date={startDate || newDate}
-           mode="date"
-           onConfirm={date =>
-             handleDateChange(date, 'startDate', 'date')
-           }
-           onCancel={() => setShowStartDatePicker(null)}
-         />
-       )}
-       {showStartDatePicker === 'time' && (
-         <DatePicker
-           modal
-           open={showStartDatePicker === 'time'}
-           date={startDate || newDate}
-           mode="time"
-           onConfirm={date =>
-             handleDateChange(date, 'startDate', 'time')
-           }
-           onCancel={() => setShowStartDatePicker(null)}
-         />
-       )}
-     </View>
-     <View style={styles.flexFromTo}>
-       <Text style={styles.textLeft}>Đến</Text>
-       <View style={styles.flexTime}>
-         <TouchableOpacity
-           onPress={() => showDatePicker('endDate', 'date')}
-           style={styles.rightDateTime}>
-           <Text style={styles.textRight}>
-             {endDate
-               ? moment(endDate).format('DD/MM/YYYY HH:mm')
-               : 'Chọn ngày'}
-           </Text>
-         </TouchableOpacity>
-         <Icon
-           name="today-outline"
-           size={moderateScale(20)}
-           color={'#2179A9'}
-         />
-       </View>
-       {showEndDatePicker === 'date' && (
-         <DatePicker
-           modal
-           open={showEndDatePicker === 'date'}
-           date={endDate || newDate}
-           mode="date"
-           onConfirm={date =>
-             handleDateChange(date, 'endDate', 'date')
-           }
-           onCancel={() => setShowEndDatePicker(null)}
-         />
-       )}
-       {showEndDatePicker === 'time' && (
-         <DatePicker
-           modal
-           open={showEndDatePicker === 'time'}
-           date={endDate || newDate}
-           mode="time"
-           onConfirm={date =>
-             handleDateChange(date, 'endDate', 'time')
-           }
-           onCancel={() => setShowEndDatePicker(null)}
-         />
-       )}
-     </View>
-   </View>
-              )}
-       
+                <View style={styles.flexFromTo}>
+                  <Text style={styles.textLeft}>Đến</Text>
+                  <View style={styles.flexTime}>
+                    <TouchableOpacity
+                      onPress={() => showDatePicker('endDate', 'date')}
+                      style={styles.rightDateTime}>
+                      <Text style={styles.textRight}>
+                        {endDate
+                          ? moment(endDate).format('DD/MM/YYYY HH:mm')
+                          : 'Chọn ngày'}
+                      </Text>
+                    </TouchableOpacity>
+                    <Icon
+                      name="today-outline"
+                      size={moderateScale(20)}
+                      color={'#2179A9'}
+                    />
+                  </View>
+                  {showEndDatePicker === 'date' && (
+                    <DatePicker
+                      modal
+                      open={showEndDatePicker === 'date'}
+                      date={endDate || newDate}
+                      mode="date"
+                      onConfirm={date =>
+                        handleDateChange(date, 'endDate', 'date')
+                      }
+                      onCancel={() => setShowEndDatePicker(null)}
+                    />
+                  )}
+                  {showEndDatePicker === 'time' && (
+                    <DatePicker
+                      modal
+                      open={showEndDatePicker === 'time'}
+                      date={endDate || newDate}
+                      mode="time"
+                      onConfirm={date =>
+                        handleDateChange(date, 'endDate', 'time')
+                      }
+                      onCancel={() => setShowEndDatePicker(null)}
+                    />
+                  )}
+                </View>
+              </View>
+            )}
           </>
-    
-          
         ) : null}
-        <View>
+        {item.status === 'Pending' && (
+          <View style={styles.buttonTop}>
           <TouchableOpacity onPress={handleUpdate} style={styles.buttonSave}>
             <Text style={styles.textWhite}>Sửa</Text>
           </TouchableOpacity>
         </View>
+        )}
+      
       </View>
     </ScrollView>
   );

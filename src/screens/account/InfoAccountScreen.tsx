@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native-gesture-handler';
 import AppHeader from '../../components/navigators/AppHeader';
-import {COLORS} from '../../constants/screens';
+import {COLORS, SCREENS} from '../../constants/screens';
 import InfoAccountComponent from '../../components/account/InfoAccountComponent';
 import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -171,7 +171,11 @@ const InfoAccountScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 w-full bg-white">
-        <AppHeader title="Thông tin cá nhân" showButtonBack={true} />
+        <AppHeader title="Thông tin cá nhân"
+         showButtonBack={true} 
+        backgroundColor='#fff'
+        titleColor='#000'
+         />
         <LinearGradient
           colors={['#eaf5fb', '#fff', '#fff', '#eaf5fb']}
           start={{x: 0.0, y: 0.25}}
@@ -276,6 +280,12 @@ const InfoAccountScreen = () => {
               <View className="m-2 overflow-hidden">{renderTabContent()}</View>
             </View>
           </ScrollView>
+          <TouchableOpacity onPress={() => 
+          //@ts-ignore
+            navigator.navigate(SCREENS.EDIT_ACCOUNT.KEY, {userInfo})}
+             style={styles.buttonEdit}>
+            <Text style={styles.textWhite}>Sửa</Text>
+          </TouchableOpacity>
         </LinearGradient>
       </SafeAreaView>
     </>

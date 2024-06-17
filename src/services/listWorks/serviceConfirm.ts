@@ -76,7 +76,6 @@ export const ServiceConfirm = {
      }
   }
 
-
 }
 
 export default ServiceConfirm

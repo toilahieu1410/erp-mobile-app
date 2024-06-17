@@ -51,12 +51,33 @@ export const styles = StyleSheet.create({
     alignItems:'center',
 
   },
+  formGroup: {
+    marginBottom: moderateScale(15),
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: moderateScale(10),
+    borderRadius: moderateScale(5),
+  },
+  radioGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textRight: {
     marginLeft: moderateScale(15)
   },
   textWhite: {
     color:'#fff',
     textAlign:'center'
+  },
+  buttonEdit: {
+    borderRadius:moderateScale(5),
+    backgroundColor: '#0066ff',
+    textAlign:'center',
+    padding:moderateScale(10),
+    flexDirection:'row',
+    justifyContent:'center'
   },
   borderAvatar: {
     borderWidth: 2,

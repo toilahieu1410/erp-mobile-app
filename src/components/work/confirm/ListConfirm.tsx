@@ -367,7 +367,8 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
             onPress={() =>
               navigation.navigate(SCREENS.EDIT_XAC_NHAN.KEY, { item: item })
             }>
-            <View style={styles.itemWrapper}>
+              <View style={styles.boxContent}>
+              <View style={styles.itemWrapper}>
               <View style={styles.contentWrapper}>
                 <Text style={styles.subText}>{item.content}</Text>
                 <Text style={styles.mainText}>
@@ -404,6 +405,8 @@ const ViewTask: React.FC<ViewConfirmProps> = ({ xacNhan, onDelete, refreshing, o
                 </View>
               </View>
             </View>
+              </View>
+           
           </TouchableOpacity>
         </Swipeable>
       )}

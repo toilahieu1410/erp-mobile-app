@@ -12,6 +12,7 @@ import { RectButton, Swipeable, GestureHandlerRootView, RefreshControl } from "r
 import { styles } from '../../../assets/css/ListWorksScreen/_listWork';
 import AppHeader from "../../navigators/AppHeader"
 import { moderateScale } from "../../../screens/size";
+import { SCREENS } from "../../../constants/screens";
 
 interface WorkFromHome {
   id: string,
@@ -64,6 +65,7 @@ const ListWorkFromHome: React.FC = () => {
   const [totalItems, setTotalItems] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(true)
+  
   const routes = useMemo(
     () => [
       {key: 'all', title: 'Tất cả', icon: ''},
@@ -82,9 +84,12 @@ const ListWorkFromHome: React.FC = () => {
     fetchListWorkFromHome(fromDateValue, toDateValue, 1);
   },[initialFromDate, initialToDate])
 
-  const fetchListWorkFromHome = useCallback(async (fromDate: Date | null, toDate: Date | null, page: number) => {
+  const fetchListWorkFromHome = useCallback(async (
+    fromDate: Date | null, 
+    toDate: Date | null, 
+    page: number) => {
     try {
-      if (page === 1) setLoading(true)
+      setLoading(page === 1)
       setLoadingMore(page > 1)
 
       const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : ''
@@ -102,6 +107,7 @@ const ListWorkFromHome: React.FC = () => {
       }
 
       setPageNumber(page)
+      setTotalItems(response.length === 0 ? 0 : response.length)
       setHasMore(response.length === pageSize);
     } catch (error) {
       console.error('Error fetching list confirm', error);
@@ -112,7 +118,7 @@ const ListWorkFromHome: React.FC = () => {
     }
   }, [pageSize])
 
-  const handleDelete = useCallback(async (id: string) => {
+  const handleDelete = async (id: string) => {
     Alert.alert(
       'Xác nhận xóa',
       'Bạn chắc chắn muốn xóa mục này',
@@ -145,13 +151,21 @@ const ListWorkFromHome: React.FC = () => {
       ],
       { cancelable: false },
     )
-  }, [])
+  }
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchListWorkFromHome(fromDate, toDate, 1)
     setRefreshing(false)
-  }, [fromDate, toDate, fetchListWorkFromHome])
+  }, [initialFromDate, initialToDate])
+
+  const handleReloadData = useCallback(async () => {
+    // @ts-ignore
+    navigation.setParams({ fromDate: '', toDate: '' });
+    setFromDate(null);
+    setToDate(null);
+    await fetchListWorkFromHome(null, null, 1);
+  }, [navigation, fetchListWorkFromHome]);
 
   const loadMoreData = useCallback(async () => {
     if (!loadingMore && hasMore) {
@@ -217,25 +231,25 @@ const ListWorkFromHome: React.FC = () => {
         titleColor="#000"
         actions={
           <View style={{ flexDirection: 'row' }}>
-          {/* <TouchableRipple
+           <TouchableRipple
             rippleColor={'transparent'}
             onPress={
                //@ts-ignore
-              () => navigation.navigate(SCREENS.SEARCH_DON_XAC_NHAN.KEY)}>
+              () => navigation.navigate(SCREENS.SEARCH_WORK_FROM_HOME.KEY)}>
             <Icon name="search-outline" size={moderateScale(24)} color={'#2179A9'} />
-          </TouchableRipple> */}
+          </TouchableRipple> 
           <Text>&nbsp;&nbsp;&nbsp;</Text>
-          {/* <TouchableRipple
+           <TouchableRipple
             rippleColor={'transparent'}
             onPress={handleReloadData}>
             <Icon name="reload-outline" size={moderateScale(24)} color={'#2179A9'} />
-          </TouchableRipple> */}
-          {/* <Text>&nbsp;&nbsp;&nbsp;</Text> */}
+          </TouchableRipple> 
+         <Text>&nbsp;&nbsp;&nbsp;</Text> 
           <TouchableRipple
             rippleColor={'transparent'}
             onPress={() =>
               //@ts-ignore
-              navigation.navigate('')
+              navigation.navigate(SCREENS.CREATE_WORK_FROM_HOME.KEY)
             }>
             <Icon
               name="add-circle-outline"
@@ -339,8 +353,10 @@ const ViewTask: React.FC<ViewWorkFromHomeProps> = ({
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.boxWrapper}
-            
-          >
+            onPress={() =>
+              navigation.navigate(SCREENS.EDIT_WORK_FROM_HOME.KEY, { item: item })
+            }>
+            <View style={styles.boxContent}>
             <View style={styles.itemWrapper}>
               <View style={styles.contentWrapper}>
                 <Text style={styles.subText}>{item.content}</Text>
@@ -350,7 +366,7 @@ const ViewTask: React.FC<ViewWorkFromHomeProps> = ({
                 <Text style={styles.mainText}>
                   Đến ngày: {moment(item.endDate).format('DD/MM/YYYY')}
                 </Text>
-               
+            
               </View>
               <View style={styles.statusWrapper}>
                 <Text>{checkStatusIcon(item.status)}</Text>
@@ -363,6 +379,18 @@ const ViewTask: React.FC<ViewWorkFromHomeProps> = ({
                 </View>
               </View>
             </View>
+            <View style={styles.bottomCreate}>
+            <Icon
+              name="time-outline"
+              size={moderateScale(18)}
+              color={'#2179A9'}
+            />
+            <Text>&nbsp;</Text>
+              <Text style={styles.textCreated}>Ngày tạo: </Text>
+              <Text style={styles.textCreated}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+            </View>
+            </View>
+           
           </TouchableOpacity>
         </Swipeable>
       )}

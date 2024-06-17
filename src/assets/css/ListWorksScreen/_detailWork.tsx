@@ -32,11 +32,12 @@ export const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
-    paddingVertical:moderateScale(15),
+    paddingTop:moderateScale(20),
   
   },
   flexColumn: {
     flexDirection:'column',
+    paddingTop:moderateScale(20),
   },
 
   flexFromTo: {
@@ -162,15 +163,21 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(14),
   },
   dropdown: {
-    height: moderateScale(40),
+    borderWidth: 1,
     position:'relative',
     borderColor: '#ddd',
-    borderWidth: 1,
     borderRadius: moderateScale(5),
-    paddingHorizontal: moderateScale(10),
-    marginVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(5),
+
+  },
+  iconStyle: {
+    width: moderateScale(24),
   },
   dropdownContainer: {
+    
+    borderWidth: 1,
+    position:'relative',
+    borderColor: '#ddd',
     width:'90%',
     left:20,
     top:0,
@@ -179,7 +186,13 @@ export const styles = StyleSheet.create({
   dropdownItemText: {
     fontSize: moderateScale(16),
   },
+  searchStyle: {
+    borderBottomWidth: 1,
+    position:'relative',
+    borderColor: '#ddd',
+  },
   dropdownSelectedText: {
+    
     fontSize: moderateScale(16),
     color: '#2179A9',
   },

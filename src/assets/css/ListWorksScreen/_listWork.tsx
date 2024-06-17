@@ -23,9 +23,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: moderateScale(5),
   },
-
-  itemWrapper: {
-    backgroundColor: '#fff',
+  boxContent: {
+    backgroundColor: '#f4f4f4',
     borderRadius: moderateScale(5),
     shadowColor: '#333',
     shadowOffset: {
@@ -36,12 +35,27 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 2,
+    padding: moderateScale(10),
+  },
+
+  itemWrapper: {
+ 
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: moderateScale(10),
+
   },
   contentWrapper: {
     flex: 1,
+  },
+  bottomCreate: {
+    borderTopColor: '#ccc',
+    borderTopWidth: 1,
+    borderStyle: 'dashed',
+    marginTop: moderateScale(10),
+    paddingTop: moderateScale(5),
+    flexDirection: 'row',
+    alignItems:'center',
+    alignContent:'center',
   },
   btnDate: {
     borderBottomColor: '#ccc',
@@ -124,6 +138,11 @@ export const styles = StyleSheet.create({
     color: '#2179A9',
     fontWeight: '700',
   },
+  textCreated: {
+    color: '#2179A9',
+    fontSize: moderateScale(14),
+  },
+
   statusWrapper: {
     borderRadius: moderateScale(4),
     alignItems: 'flex-end',

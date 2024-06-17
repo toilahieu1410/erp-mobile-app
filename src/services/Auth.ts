@@ -31,6 +31,19 @@ export const AuthenticateService = {
     throw new Error('Token không tồn tại');
   },
 
+  async UpdateUser(id: string, data: any): Promise<BaseResponse<any>> {
+    const token = await Token.getToken()
+    if(token) {
+      const response = await http.put(`/user/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      })
+      return response.data
+    }
+    throw new Error('Token không tồn tại')
+  },
   // async UpdateAvatar(avatarUrl: string): Promise<BaseResponse<any>> {
   //   const token = await Token.getToken()
   //   if(token) {
