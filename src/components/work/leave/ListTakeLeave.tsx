@@ -415,6 +415,7 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
             activeOpacity={0.8}
             style={styles.boxWrapper}
             onPress={() => navigation.navigate(SCREENS.EDIT_NGHI_PHEP.KEY, { item: item })}>
+            <View style={styles.boxContent}>
             <View style={styles.itemWrapper}>
               <View style={styles.contentWrapper}>
                 <Text style={styles.subText}>{item.content}</Text>
@@ -461,6 +462,8 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
                 </View>
               </View>
             </View>
+            </View>
+         
           </TouchableOpacity>
         </Swipeable>
       )}

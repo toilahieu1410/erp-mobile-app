@@ -9,54 +9,55 @@ import {SCREENS} from '../../../constants/screens';
 interface TaskProps {
   task: Task;
 }
+
 const TaskFlatListComponent = (props: TaskProps) => {
-  const task = props.task;
+  const task = props;
   const navigator = useNavigation();
 
-  const renderWatchingItems = () => {
-    const watchingItems: JSX.Element[] = [];
+  // const renderWatchingItems = () => {
+  //   const watchingItems: JSX.Element[] = [];
 
-    for (let index = 0; index < task.watching.length; index++) {
-      if (task.watching.length > 0) {
-        const watchingItem = task.watching[index];
-        if (index < 3) {
-          watchingItems.push(
-            <View
-              className="absolute top-0"
-              style={{left: index * 13}}
-              key={index.toString()}>
-              <Avatar.Image
-                style={{
-                  backgroundColor: 'white',
-                  borderColor: 'white',
-                  borderWidth: 1,
-                }}
-                size={20}
-                source={{uri: watchingItem.avatar!}}
-                onError={err => {}}
-              />
-            </View>,
-          );
-        } else {
-          watchingItems.push(
-            <View
-              key={index.toString()}
-              className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
-              style={{left: index * 13}}>
-              <Text className="text-[12px] text-white">
-                {task.watching.length - 3 < 99
-                  ? `+${task.watching.length - 3}`
-                  : `99+`}
-              </Text>
-            </View>,
-          );
-          break;
-        }
-      }
-    }
+  //   for (let index = 0; index < task.watching.length; index++) {
+  //     if (task.watching.length > 0) {
+  //       const watchingItem = task.watching[index];
+  //       if (index < 3) {
+  //         watchingItems.push(
+  //           <View
+  //             className="absolute top-0"
+  //             style={{left: index * 13}}
+  //             key={index.toString()}>
+  //             <Avatar.Image
+  //               style={{
+  //                 backgroundColor: 'white',
+  //                 borderColor: 'white',
+  //                 borderWidth: 1,
+  //               }}
+  //               size={20}
+  //               source={{uri: watchingItem.avatar!}}
+  //               onError={err => {}}
+  //             />
+  //           </View>,
+  //         );
+  //       } else {
+  //         watchingItems.push(
+  //           <View
+  //             key={index.toString()}
+  //             className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
+  //             style={{left: index * 13}}>
+  //             <Text className="text-[12px] text-white">
+  //               {task.watching.length - 3 < 99
+  //                 ? `+${task.watching.length - 3}`
+  //                 : `99+`}
+  //             </Text>
+  //           </View>,
+  //         );
+  //         break;
+  //       }
+  //     }
+  //   }
 
-    return watchingItems;
-  };
+  //   return watchingItems;
+  // };
   return (
     <TouchableRipple
       rippleColor={'transparent'}
@@ -96,15 +97,15 @@ const TaskFlatListComponent = (props: TaskProps) => {
                 </Text>
               </View>
             </View>
-            <View>
-              <BottomActionComponent title={task.title!} id={task.id} />
-            </View>
+            {/* <View>
+              <BottomActionComponent title={task.title} id={task.id} />
+            </View> */}
           </View>
           <View className="h-[35%] w-full bg-gray-200 flex flex-row flex-nowrap justify-between items-center ml-[3px] p-2 rounded-md border-l-2 border-l-primary">
-            <View className="h-full">
+            {/* <View className="h-full">
               <View className="relative">{renderWatchingItems()}</View>
-            </View>
-            <View>
+            </View> */}
+            {/* <View>
               {task.status == 'todo' ? (
                 <Text className="text-gray-400 bg-white px-4 rounded-[4px]">
                   {task.status}
@@ -114,7 +115,7 @@ const TaskFlatListComponent = (props: TaskProps) => {
                   {task.status}
                 </Text>
               )}
-            </View>
+            </View> */}
           </View>
         </View>
       </View>

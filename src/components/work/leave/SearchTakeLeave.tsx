@@ -1,13 +1,13 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {View, TouchableOpacity, Text, SafeAreaView} from 'react-native'
-import { SCREENS } from "../../../constants/screens";
+import { useNavigation } from "@react-navigation/native";
+import DatePicker from "react-native-date-picker";
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from "moment";
 import AppHeader from "../../navigators/AppHeader";
-import DatePicker from "react-native-date-picker";
-import {styles} from '../../../assets/css/ListWorksScreen/_listWork';
+import { SCREENS } from "../../../constants/screens";
 import { moderateScale } from "../../../screens/size";
+import {styles} from '../../../assets/css/ListWorksScreen/_listWork';
 
 const SearchTakeLeave: React.FC = () => {
 

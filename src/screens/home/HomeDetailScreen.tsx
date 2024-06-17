@@ -28,7 +28,12 @@ const HomeDetailScreen = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <AppHeader title="Chi tiết bảng tin" showButtonBack={true}></AppHeader>
+      <AppHeader 
+      title="Chi tiết bảng tin" 
+      showButtonBack={true}
+      backgroundColor='#fff'
+      titleColor='#000'
+      />
       <ScrollView>
         <View>
           <View>

@@ -4,8 +4,8 @@ import http from "../../../store/http"
 interface WorkFromHomePayLoad {
   content: string,
   equipmentBorrow: string,
-  fromDate: string,
-  toDate: string
+  startDate: string,
+  endDate: string
 }
 
 interface ListWorkFromHome {
@@ -38,6 +38,15 @@ export const ServiceWorkFromHome = {
     try {
       const response = await http.get(`/work_from_home_application?FromDate=${fromDate}&ToDate=${toDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`)
       return response.data.value.items
+    } catch (error) {
+      throw error
+    }
+  },
+
+  async updateWorkFromHome(id: string, data: WorkFromHomePayLoad): Promise<BaseResponse<any>> {
+    try {
+      const response = await http.put(`/work_from_home_application/${id}`, data)
+      return response.data
     } catch (error) {
       throw error
     }

@@ -122,7 +122,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
-    
+    paddingBottom: moderateScale(5)
   },
   icon: {
     marginRight: moderateScale(10),

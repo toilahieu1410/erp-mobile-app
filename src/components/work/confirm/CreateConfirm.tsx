@@ -117,10 +117,10 @@ const CreateConfirm = () => {
         endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : "",
         dateNeedConfirm: moment(dateTime).format('DD/MM/YYYY'),
       };
-      await ServiceConfirm.createConfirm(payload);
-   
+      const response = await ServiceConfirm.createConfirm(payload);
+      const message = response.value
       showMessage({
-        message: 'Tạo đơn thành công',
+        message: message,
         description: 'Đơn xác nhận của bạn đã được tạo trên hệ thống',
         type: 'success'
       })

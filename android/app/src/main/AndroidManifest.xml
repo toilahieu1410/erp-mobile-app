@@ -37,20 +37,19 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="hoplonglms" />
-            
         </intent-filter>
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="http" />
             <data android:scheme="https" />
-            <data android:host="hoplonglms.com" />
+            <data android:host="lms.giga.vn" />
+            <data android:pathPrefix="/path" />
         </intent-filter>
       </activity>
       <meta-data 
         android:name="com.google.android.geo.API_KEY"
-        android:value="Cmjtd|luur2108n1,7w=o5-gz8a"
+        android:value="AIzaSyBqnaTZHOfI539sJlwuXY5uDsoJP_DPI4I"
       />
 
       

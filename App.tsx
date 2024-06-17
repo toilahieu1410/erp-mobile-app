@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Alert, LogBox, SafeAreaView, StatusBar} from 'react-native';
+import {Alert, LogBox, SafeAreaView, StatusBar, Platform, I18nManager } from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store, persistor} from './store/store';
 import FlashMessage from 'react-native-flash-message';
@@ -12,11 +12,12 @@ import {SCREENS} from './src/constants/screens';
 import MainStack from './src/screens/stack/MainStack';
 import {PaperProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
-import {Platform} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
 import {PersistGate} from 'redux-persist/integration/react';
 import { navigationRef } from './store/navigationRef';
+
+
 
 const config = {
   screens: {
@@ -113,6 +114,25 @@ const RootNavigator = () => {
 };
 
 const App = () => {
+
+  // useEffect(() => {
+  //   const setLanguage = () => {
+  //     const locales = getLocales()
+  //     if (locales.length > 0) {
+  //       const currentLocale = locales[0].languageTag; // Lấy ngôn ngữ hiện tại
+  //       const targetLocale = 'en'; // Ví dụ: chuyển sang tiếng Anh
+
+  //       if (currentLocale !== targetLocale) {
+  //         // Cập nhật ngôn ngữ
+  //         I18nManager.forceRTL(targetLocale === 'en'); // Chuyển sang RTL nếu cần thiết
+  //         RNRestart.Restart(); // Khởi động lại ứng dụng để áp dụng thay đổi ngôn ngữ
+  //       }
+  //     }
+  //   };
+
+  //   setLanguage();
+  // }, []);
+
   LogBox.ignoreAllLogs();
   return (
     <PaperProvider>

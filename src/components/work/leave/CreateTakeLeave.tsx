@@ -55,7 +55,7 @@ const CreateTakeLeave = () => {
 
   const [selectTakeLeave, setSelectTakeLeave] = useState<NghiPhepType | null>(null)
   const [takeleaveType, setTakeleaveType] = useState<NghiPhepType[]>([])
-  const [handOverToUserId, setHandOverToUserId] = useState('3fa85f64-5717-4562-b3fc-2c963f66afa6')
+  const [handOverToUserId, setHandOverToUserId] = useState('')
   const [handOverContent, setHandOverContent] = useState('')
   const [lyDoXinNghi, setLyDoXinNghi] = useState('')
   const [disabled, setDisabled] = useState(true)

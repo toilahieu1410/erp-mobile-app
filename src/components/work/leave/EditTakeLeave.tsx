@@ -302,15 +302,17 @@ const EditTakeLeave: React.FC = () => {
             <Text style={{ color: '#2179A9' }}>Thêm mục</Text>
           </TouchableOpacity>
           <View style={styles.flexVertical}>
-            <Text style={styles.textLeft}>Người bàn giao</Text>
+            <Text style={styles.textLeft}>Người bàn giao </Text>
             <TextInput
               editable={false}
-              style={styles.inputEdit}
+              style={[styles.inputEdit, {color:'#2179A9'}]}
               placeholder="Tìm kiếm người bàn giao"
               value={selectedUser}
               onChangeText={setSearchText}
             />
             <Dropdown
+            inputSearchStyle={styles.searchStyle}
+              iconStyle={styles.iconStyle}
               style={styles.dropdown}
               containerStyle={styles.dropdownContainer}
               itemTextStyle={styles.dropdownItemText}
@@ -347,8 +349,6 @@ const EditTakeLeave: React.FC = () => {
             ))}
           </Picker>
         </View>
-
-       
         <View style={styles.flexColumn}>
           <View style={styles.flexTitleDetail}>
             <Text style={styles.textLeft}>Nội dung bàn giao</Text>
@@ -362,11 +362,14 @@ const EditTakeLeave: React.FC = () => {
             maxLength={200}
           />
         </View>
-        <View style={styles.buttonTop}>
+        {item.status === 'Pending' && (
+          <View style={styles.buttonTop}>
           <TouchableOpacity onPress={handleUpdate} style={styles.buttonSave}>
             <Text style={styles.textWhite}>Sửa</Text>
           </TouchableOpacity>
         </View>
+         )}
+      
       </View>
     </ScrollView>
   )

@@ -8,7 +8,7 @@ import HomeDetailScreen from '../home/HomeDetailScreen';
 import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
 // import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
-import WorkFromHomeScreen from '../work/WorkfromhomeScreen';
+
 import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
 // Don xac nhan
 import CreateConfirm from '../../components/work/confirm/CreateConfirm';
@@ -21,7 +21,13 @@ import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
 import CreateTakeLeave from '../../components/work/leave/CreateTakeLeave';
 import SearchTakeLeave from '../../components/work/leave/SearchTakeLeave';
 import EditTakeLeave from '../../components/work/leave/EditTakeLeave';
+
+// Don lam viec tai nha
 import ListWorkFromHome from '../../components/work/workhome/ListWorkFromHome';
+import SearchWorkFromHome from '../../components/work/workhome/SearchWorkFromHome';
+import CreateWorkFromHome from '../../components/work/workhome/CreateWorkFromHome';
+import EditWorkFromHome from '../../components/work/workhome/EditWorkFromHome';
+import EditAccountScreen from '../account/EditAccountScreen';
 
 
 const MainStack = () => {
@@ -41,6 +47,19 @@ const MainStack = () => {
         component={HomeDetailScreen}
         options={{
           title: SCREENS.HOMEDETAIL.NAME,
+          headerShown: APPHEADER.headerShown,
+          headerTintColor: 'transparent',
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+      />
+       <Stack.Screen
+        name={SCREENS.EDIT_ACCOUNT.KEY}
+        component={EditAccountScreen}
+        options={{
+          title: SCREENS.EDIT_ACCOUNT.NAME,
           headerShown: APPHEADER.headerShown,
           headerTintColor: 'transparent',
           headerTitleStyle: {
@@ -196,7 +215,6 @@ const MainStack = () => {
         component={SearchTakeLeave}
       />
 
-
       <Stack.Screen
         name={SCREENS.LIST_WORK_FROM_HOME.KEY}
         options={{
@@ -209,6 +227,45 @@ const MainStack = () => {
           },
         }}
         component={ListWorkFromHome}
+      />
+      <Stack.Screen
+        name={SCREENS.CREATE_WORK_FROM_HOME.KEY}
+        options={{
+          title: SCREENS.CREATE_WORK_FROM_HOME.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={CreateWorkFromHome}
+      />
+      <Stack.Screen
+        name={SCREENS.EDIT_WORK_FROM_HOME.KEY}
+        options={{
+          title: SCREENS.EDIT_WORK_FROM_HOME.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={EditWorkFromHome}
+      />
+      <Stack.Screen
+        name={SCREENS.SEARCH_WORK_FROM_HOME.KEY}
+        options={{
+          title: SCREENS.SEARCH_WORK_FROM_HOME.NAME,
+          headerTintColor: 'transparent',
+          headerShown: APPHEADER.headerShown,
+          headerTitleStyle: {
+            fontWeight: APPHEADER.headerStyle.fontWeight,
+            fontSize: APPHEADER.headerStyle.fontSize,
+          },
+        }}
+        component={SearchWorkFromHome}
       />
       <Stack.Screen
         name={SCREENS.OFFERPAYMENTS.KEY}
