@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.app_hoplonglms">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
@@ -38,13 +38,13 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="hoplonglms" />
         </intent-filter>
-        <intent-filter>
+        <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https" />
             <data android:host="lms.giga.vn" />
-            <data android:pathPrefix="/path" />
+            <!-- <data android:pathPrefix="/path" /> -->
         </intent-filter>
       </activity>
       <meta-data 

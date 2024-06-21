@@ -38,6 +38,10 @@ const AccountScreen = () => {
   const [hovaten, setHovaten] = useState(null);
   const [email, setEmail] = useState(null);
 
+  const [selectedImage, setSelectedImage] = useState(
+    'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  );
+
   const ListItem: Item[] = [
 
 
@@ -166,6 +170,7 @@ const AccountScreen = () => {
           setUserName(user.userName);
           setHovaten(user.hoTen);
           setEmail(user.email);
+          setSelectedImage(user.avatar)
         }
       } catch (error) {
         console.error('Không lấy đc dữ liệu', error);
@@ -189,11 +194,12 @@ const AccountScreen = () => {
               <View style={styles.flexCenter}>
                 <View style={styles.borderAvatar}>
                   <Avatar.Image
-                    style={styles.image}
+                    style={styles.imageAvatar}
                     size={Dimensions.get('screen').width * 0.15}
-                    source={{
-                      uri: 'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-                    }}></Avatar.Image>
+                    source={{uri: selectedImage}}
+                    >
+
+                    </Avatar.Image>
                 </View>
 
                 <View style={styles.textRight}>

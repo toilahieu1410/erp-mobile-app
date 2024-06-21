@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {SCREENS} from '../constants/screens';
@@ -11,6 +11,7 @@ import TaskStack from './stack/TaskStack';
 
 const Main = () => {
   const Tab = createBottomTabNavigator();
+
   return (
     <Tab.Navigator
       initialRouteName={SCREENS.HOMESTACK.KEY}

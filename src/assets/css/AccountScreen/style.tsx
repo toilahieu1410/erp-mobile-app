@@ -10,7 +10,82 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    position:'relative'
+  },
+  body: {
+    flexGrow: 1,
+    padding: moderateScale(15),
+    borderRadius:moderateScale(15),
+    margin: moderateScale(15),
+    marginBottom: moderateScale(10),
+    backgroundColor:'#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 4,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  content: {
+     flexGrow: 1,
+  },
+  searchStyle: {
+    borderTopWidth: 1,
+    position:'relative',
+    borderColor: '#ddd',
+  },
+  btnDate: {
+    marginTop:moderateScale(10),
+    fontSize: moderateScale(14),
+    borderWidth: 1,
+    borderColor: '#e2e2e2',
+    color:'#808080',
+    padding: moderateScale(10),
+    borderRadius: moderateScale(5),
+    backgroundColor: '#F7F8FB'
+  },
+  inputEdit: {
+    marginTop:moderateScale(10),
+    fontSize: moderateScale(14),
+    borderWidth: 1,
+    borderColor: '#e2e2e2',
+    color:'#808080',
+    padding: moderateScale(8),
+    borderRadius: moderateScale(5),
+    backgroundColor: '#F7F8FB'
+  },
+  textTitle: {
+    color:'#555',
+    fontSize:moderateScale(14),
+  },
+  textPicker: {
+    color:'#555',
+    fontSize:moderateScale(14),
+  },
+  radioButtonHorizonal: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'space-evenly'
+  },
+  radioGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  dropdown: {
+    marginTop:moderateScale(10),
+    height: moderateScale(40),
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 8,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   boxInfo: {
     padding:moderateScale(15),
@@ -19,6 +94,33 @@ export const styles = StyleSheet.create({
     zIndex:1,
     bottom:0,
     maxHeight: moderateScale(100),
+  },
+  boxButton: {
+   margin: moderateScale(15),
+    justifyContent:'center',
+    flexDirection:'row'
+  },
+  buttonSave: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 4,
+      height: 4,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 6,
+    elevation: 6,
+    backgroundColor: '#00BFFF',
+    borderColor: '#00BFFF',
+    padding: moderateScale(10),
+    borderWidth:1,
+    width: '100%',
+    borderRadius: moderateScale(50),
+   
+  },
+  textSave: {
+    color : '#fff',
+    textAlign:'center',
+    fontSize: moderateScale(14)
   },
   button: {
     backgroundColor: '#0984e3',
@@ -60,10 +162,7 @@ export const styles = StyleSheet.create({
     padding: moderateScale(10),
     borderRadius: moderateScale(5),
   },
-  radioGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+
   textRight: {
     marginLeft: moderateScale(15)
   },
@@ -81,13 +180,15 @@ export const styles = StyleSheet.create({
   },
   borderAvatar: {
     borderWidth: 2,
-    borderColor: '#2179A9',
-    borderRadius: Dimensions.get('screen').width * 0.15
+    borderColor: '#cecece',
+    width: moderateScale(70),
+    height: moderateScale(70),
+    backgroundColor:'#fff',
+    justifyContent: 'center', 
+    alignItems: 'center',  
+    borderRadius: moderateScale(70) / 2 
   },
-  image: {
 
-  
-  },
   height: {
     height: height,
     position:'relative',
@@ -143,6 +244,19 @@ export const styles = StyleSheet.create({
   infoContainer: {
     alignItems: 'center',
     marginTop: moderateScale(10),
+  },
+  boxAvatar: {
+    width: moderateScale(110),
+    height: moderateScale(110),
+    backgroundColor:'#fff',
+    justifyContent: 'center', 
+    alignItems: 'center',  
+    borderRadius: moderateScale(110) / 2 
+  },
+  imageAvatar: {
+    backgroundColor:'transparent',
+    resizeMode:'cover',
+    
   },
   userName: {
     fontSize: 24,

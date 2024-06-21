@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { View, Button, StyleSheet, SafeAreaView, ScrollView, Text, Alert, TextInput } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Button, StyleSheet, SafeAreaView, ScrollView, Text, Alert, TextInput,TouchableOpacity, Dimensions } from 'react-native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
-import { RadioButton } from 'react-native-paper';
+import { Avatar, RadioButton } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import AuthenticateService from '../../services/Auth';
-import { TouchableOpacity } from 'react-native';
+import ServiceTakeLeave from '../../services/listWorks/serviceTakeLeave';
+import { Dropdown } from "react-native-element-dropdown";
+import moment from 'moment';
+import AppHeader from '../../components/navigators/AppHeader';
+import { showMessage } from 'react-native-flash-message';
+import { styles } from '../../assets/css/AccountScreen/style';
+import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
+import { COLORS } from '../../constants/screens';
+
 
 interface FormData {
   hoTen: string;
   ngaySinh: string;
   gioiTinh: number;
+  phoneNumber: string;
   maPhongBan: string;
   chucVu: string;
   ngayThuViec: string;
@@ -23,18 +32,25 @@ interface FormData {
   isLeader: boolean;
   maXacNhan: string;
   leaderId: string;
-  tokenSmart: string;
-  maKhachHangGiga: string
+  tokenSmart?: string;
+  maKhachHangGiga?: string
 
+}
+interface ListUsers {
+  id: string;
+  hoTen: string;
+  userName: string;
 }
 
 const EditAccountScreen = () => {
+
   const navigation = useNavigation();
   const route = useRoute();
   const { userInfo }: any = route.params;
 
-  const {control, handleSubmit, setValue} = useForm<FormData>()
-
+  const {control, handleSubmit, setValue } = useForm<FormData>()
+  const [userData, setUserData] = useState(userInfo)
+  const [selectedImage, setSelectedImage] = useState(userInfo.avatar)
   const [ngaySinh, setNgaySinh] = useState(new Date(userInfo.ngaySinh))
   const [ngayThuViec, setNgayThuViec] = useState(new Date(userInfo.ngayThuViec))
   const [ngayLamChinhThuc, setNgayLamChinhThuc] = useState(new Date(userInfo.ngayLamChinhThuc))
@@ -43,10 +59,13 @@ const EditAccountScreen = () => {
   const [openNgayThuViec, setOpenNgayThuViec] = useState(false)
   const [openNgayLamChinhThuc, setOpenNgayLamChinhThuc] = useState(false)
   const [gender, setGender] = useState(userInfo.gioiTinh)
+  const [phoneNumber, setPhoneNumber] = useState(userInfo.phoneNumber)
+  const [users, setUsers] = useState<ListUsers[]>([]);
+  const [leaderName, setLeaderName] = useState<string>('');
 
   const genderOptions = [
-    { id: '0', label: 'Nữ', value: 0 },
-    { id: '1', label: 'Nam', value: 1 },
+    { id: 0, label: 'Nữ', value: 0 },
+    { id: 1, label: 'Nam', value: 1 },
   ]
 
   useEffect(() => {
@@ -57,15 +76,92 @@ const EditAccountScreen = () => {
     }
   }, [userInfo, setValue])
 
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUsers = async () => {
+        try {
+          const response = await ServiceTakeLeave.getUserHandOver('');
+          setUsers(response);
+
+          const leader = response.find(user => user.id === userInfo.leaderId);
+          if (leader) {
+            setLeaderName(leader.hoTen);
+          }
+        } catch (error) {
+          console.error('Không thể lấy danh sách người dùng', error);
+        }
+      };
+
+      fetchUsers();
+    }, [userInfo.leaderId])
+  );
+  
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
 
-  const onSubmit = async (data: FormData) => {
+
+  const handleImageSelect = async (image) => {
+    const newAvatarPath = image.uri;
+    setSelectedImage(newAvatarPath);
+    setUserData(prevUserData => ({
+      ...prevUserData,
+      avatar: newAvatarPath
+    }));
+  
     try {
-      const response = await AuthenticateService.UpdateUser(userInfo.id, data);
+      if (userInfo && userInfo.id) {
+        const response = await AuthenticateService.UpdateUser(userInfo.id, { avatar: newAvatarPath });
+        if (response.isSuccess) {
+          showMessage({
+            message: 'Avatar updated successfully',
+            description: 'Your avatar has been updated',
+            type: 'success'
+          });
+        } else {
+          showMessage({
+            message: 'Failed to update avatar',
+            description: response.error.message || 'An error occurred',
+            type: 'danger'
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update avatar', error);
+      showMessage({
+        message: 'Failed to update avatar',
+        description: error.message || 'An error occurred',
+        type: 'danger'
+      });
+    }
+  };
+
+  const onSubmit = async (data: FormData) => {
+    if(!validateEmail(data.email)) {
+      Alert.alert('Invalid Email', 'Vui lòng nhập đúng định dạng email')
+      return
+    }
+    try {
+      const response = await AuthenticateService.UpdateUser(userInfo.id, {
+        ...data,
+        phoneNumber: data.phoneNumber,
+        gioiTinh: Number(data.gioiTinh),
+        ngaySinh: moment(ngaySinh).format('DD/MM/YYYY'),
+        ngayThuViec: moment(ngayThuViec).format('DD/MM/YYYY'),
+        ngayLamChinhThuc: moment(ngayLamChinhThuc).format('DD/MM/YYYY')
+      });
+      console.log(response,'resssss')
+      const selectedUser = users.find(user => user.hoTen === leaderName);
+      if (selectedUser) {
+        data.leaderId = selectedUser.id;
+      }
       if (response.isSuccess) {
+        showMessage({
+          message: 'Dữ liệu đã được cập nhật',
+          description: 'Thông tin cá nhân của bạn đã được cập nhật trên hệ thống',
+          type: 'success'
+        })
         navigation.goBack();
       } else {
         console.error(response.error.message);
@@ -75,321 +171,297 @@ const EditAccountScreen = () => {
     }
   };
 
-  // const onSubmit = async (data) => {
-  //   if (!validateEmail(data.email)) {
-  //     Alert.alert('Invalid Email', 'Please enter a valid email address.');
-  //     return;
-  //   }
-  //   try {
-  //     const userId = userInfo.id;
-  //     const response = await AuthenticateService.UpdateUser(userId, {
-  //       ...data,
-  //       gioiTinh: Number(data.gioiTinh),
-  //       ngaySinh: data.ngaySinh.toISOString(),
-  //       ngayThuViec: data.ngayThuViec.toISOString(),
-  //       ngayLamChinhThuc: data.ngayLamChinhThuc.toISOString(),
-  //     });
-  //     navigation.goBack();
-  //   } catch (error) {
-  //     console.error('Unable to update user information', error);
-  //   }
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView>
+      <AppHeader
+        title="Cập nhật thông tin cá nhân"
+        centerTitle={true}
+        showButtonBack={true}
+        backgroundColor="#fff"
+        titleColor="#000"
+      />
+     
+      <ScrollView contentContainerStyle={styles.content} >
+      <View style={styles.body}>
+      {/* <View className="relative">
+              <Avatar.Image
+                size={Dimensions.get('screen').width * 0.25}
+                source={{ uri: selectedImage }}>
+              </Avatar.Image>
+              <View className="absolute p-0 bottom-0 right-0">
+                <SelectPhoto
+                mediaType='photo'
+                  onSelect={handleImageSelect}>
+                  <Avatar.Icon
+                    size={(Dimensions.get('screen').width * 0.3) / 4.5}
+                    icon="plus-circle-outline"
+                    color={COLORS.WHITE}
+                    style={{
+                      backgroundColor: '#027BE3',
+                    }}
+                  />
+                </SelectPhoto>
+              </View>
+            </View> */}
         <View style={styles.formGroup}>
-         <Controller
-          control={control}
-          name="hoTen"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View style={styles.inputContainer}>
-              <Text>Họ tên</Text>
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            </View>
-          )}
-        />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text>Ngày sinh</Text>
-          <TouchableOpacity onPress={() => setOpenNgaySinh(true)}>
-            <TextInput
-              style={styles.input}
-              editable={false}
-              value={ngaySinh.toISOString().split('T')[0]}
+        <Text style={styles.textTitle}>Họ tên</Text>
+            <Controller 
+              control={control}
+              name='hoTen'
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.inputEdit}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
             />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textTitle}>Ngày sinh</Text>
+          <TouchableOpacity onPress={() => setOpenNgaySinh(true)} style={styles.btnDate}>
+            <Text style={styles.textPicker}>{moment(ngaySinh).format('DD/MM/YYYY')}</Text>
           </TouchableOpacity>
-          <DatePicker
+          <DatePicker 
+            mode='date'
             modal
             open={openNgaySinh}
             date={ngaySinh}
-            mode="date"
             onConfirm={(date) => {
-              setOpenNgaySinh(false);
-              setNgaySinh(date);
+              setNgaySinh(date)
+              setOpenNgaySinh(false)
             }}
-            onCancel={() => setOpenNgaySinh(false)}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text>Giới tính</Text>
-          <RadioGroup
-            radioButtons={genderOptions}
-            onPress={(radioButtonsArray) => {
-              const selectedGender = radioButtonsArray.find((rb) => rb.selected);
-              if (selectedGender) {
-                setGender(selectedGender.value);
-              }
+            onCancel={() => {
+              setOpenNgaySinh(false)
             }}
-            layout="row"
-            containerStyle={styles.radioGroup}
           />
         </View>
         <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Email"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="maPhongBan"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Mã phòng ban"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="chucVu"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Chức vụ"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text>Ngày thử việc</Text>
-          <Button title={getValues('ngayThuViec').toDateString()} onPress={() => {
-            setSelectedDateField('ngayThuViec');
-            setDatePickerVisible(true);
-          }} />
-        </View>
-        <View style={styles.formGroup}>
-          <Text>Ngày làm chính thức</Text>
-          <Button title={getValues('ngayLamChinhThuc').toDateString()} onPress={() => {
-            setSelectedDateField('ngayLamChinhThuc');
-            setDatePickerVisible(true);
-          }} />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="maChamCong"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Mã chấm công"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="emailCongTy"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Email công ty"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="avatar"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Avatar"
-              />
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text>Is Admin</Text>
-          <Controller
-            control={control}
-            name="isAdmin"
-            render={({ field: { onChange, value } }) => (
-              <RadioButton.Group
-                onValueChange={(newValue) => onChange(newValue === 'true')}
-                value={value ? 'true' : 'false'}
-              >
-                <View style={styles.radioGroup}>
-                  <Text>Yes</Text>
-                  <RadioButton value="true" />
-                  <Text>No</Text>
-                  <RadioButton value="false" />
+            <Text style={styles.textTitle}>Giới tính</Text>
+            <RadioButton.Group
+              onValueChange={(newValue) => setGender(newValue)}
+              value={gender}
+            >
+              <View style={styles.radioButtonHorizonal}>
+                {genderOptions.map((option) => (
+                <View style={styles.radioButtonContainer} key={option.id}>
+                   <RadioButton value={option.value} />
+                  <Text>{option.label}</Text>
                 </View>
-              </RadioButton.Group>
-            )}
-          />
+              ))}
+            </View>
+            </RadioButton.Group>
+       
+           
         </View>
         <View style={styles.formGroup}>
-          <Text>Is Leader</Text>
-          <Controller
+          <Text style={styles.textTitle}>Số điện thoại</Text>
+          <Controller 
             control={control}
-            name="isLeader"
-            render={({ field: { onChange, value } }) => (
-              <RadioButton.Group
-                onValueChange={(newValue) => onChange(newValue === 'true')}
-                value={value ? 'true' : 'false'}
-              >
-                <View style={styles.radioGroup}>
-                  <Text>Yes</Text>
-                  <RadioButton value="true" />
-                  <Text>No</Text>
-                  <RadioButton value="false" />
-                </View>
-              </RadioButton.Group>
-            )}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Controller
-            control={control}
-            name="maXaNhan"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
+            name='phoneNumber'
+            render={({field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
                 onChangeText={onChange}
-                value={value}
-                placeholder="Mã xác nhận"
+                value={value ? value.toString() : ''}
+                keyboardType='phone-pad'
               />
             )}
           />
         </View>
         <View style={styles.formGroup}>
+          <Text style={styles.textTitle}>Email</Text>
+          <Controller 
+            control={control}
+            name='email'
+            render={({field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
+                onChangeText={onChange}
+                value={value}
+                keyboardType='email-address'
+              />
+            )}
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textTitle}>Email Công ty</Text>
+          <Controller 
+            control={control}
+            name='emailCongTy'
+            render={({field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
+                onChangeText={onChange}
+                value={value}
+                keyboardType='email-address'
+              />
+            )}
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <Text>Leader ID</Text>
           <Controller
             control={control}
             name="leaderId"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
+            render={({ field: { onChange, value } }) => (
+              <Dropdown
+                search
+                inputSearchStyle={styles.searchStyle}
+                searchPlaceholder="Gõ để tìm kiếm"
+                style={styles.dropdown}
+                data={users.map(user => ({ label: user.hoTen, value: user.id }))}
+                labelField="label"
+                valueField="value"
                 value={value}
-                placeholder="Leader ID"
+                onChange={item => {
+                  setLeaderName(item.label);
+                  onChange(item.value);
+                }}
+                placeholder="Chọn người lãnh đạo"
               />
             )}
           />
         </View>
         <View style={styles.formGroup}>
-          <Controller
+          <Text style={styles.textTitle}>Mã phòng ban</Text>
+          <Controller 
             control={control}
-            name="tokenSmart"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
+            name='maPhongBan'
+            render={({field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
                 onChangeText={onChange}
                 value={value}
-                placeholder="Token Smart"
               />
             )}
           />
         </View>
         <View style={styles.formGroup}>
-          <Controller
+          <Text style={styles.textTitle}>Chức vụ</Text>
+          <Controller 
             control={control}
-            name="maKhachHangGiga"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
+            name='chucVu'
+            render={({field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
                 onChangeText={onChange}
                 value={value}
-                placeholder="Mã khách hàng Giga"
               />
             )}
           />
         </View>
-        <Button title="Save" onPress={handleSubmit(onSubmit)} />
+     
+        <View style={styles.formGroup}>
+            <Text style={styles.textTitle}>Ngày thử việc</Text>
+            <TouchableOpacity onPress={() => setOpenNgayThuViec(true)} style={styles.btnDate}>
+              <Text style={styles.textPicker}>{moment(ngayThuViec).format('DD/MM/YYYY')}</Text>
+            </TouchableOpacity>
+            <DatePicker 
+              mode='date'
+              modal
+              open={openNgayThuViec}
+              date={ngayThuViec}
+              onConfirm={(date) => {
+                setNgayThuViec(date)
+                setOpenNgayThuViec(false)
+              }}
+              onCancel={() => {
+                setOpenNgayThuViec(false)
+              }}
+            />
+        </View>
+        <View style={styles.formGroup}>
+            <Text style={styles.textTitle}>Ngày làm chính thức</Text>
+            <TouchableOpacity onPress={() => setOpenNgayLamChinhThuc(true)} style={styles.btnDate}>
+              <Text style={styles.textPicker}>{moment(ngayLamChinhThuc).format('DD/MM/YYYY')}</Text>
+            </TouchableOpacity>
+            <DatePicker 
+              mode='date'
+              modal
+              open={openNgayLamChinhThuc}
+              date={ngayLamChinhThuc}
+              onConfirm={(date) => {
+                setNgayLamChinhThuc(date)
+                setOpenNgayLamChinhThuc(false)
+              }}
+              onCancel={() => {
+                setOpenNgayLamChinhThuc(false)
+              }}
+            />
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textTitle}>Mã chấm công</Text>
+          <Controller 
+            control={control}
+            name='maChamCong'
+            render={({ field: {onChange, value}}) => (
+              <TextInput 
+                style={styles.inputEdit}
+                onChangeText={(value) => onChange(parseInt(value))}
+                value={value ? value.toString() : ''}
+                keyboardType='numeric'
+              />
+            )}
+          />
+          
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.textTitle}>Avatar</Text>
+          <Controller
+            control={control}
+            name="avatar"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={styles.inputEdit}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.radioButtonHorizonal}>
+        <View style={[styles.formGroup, styles.radioButtonContainer]}>
+        <Controller 
+            control={control}
+            name='isAdmin'
+            render={({field: {onChange, value}}) => (
+              <RadioButton 
+                value={value}
+                status={value ? 'checked' : 'unchecked'}
+                onPress={() => onChange(!value)}
+              />
+            )}
+          />
+          <Text style={styles.textTitle}>Is Admin</Text>
+          
+        </View>
+        <View style={[styles.formGroup, styles.radioButtonContainer]}>
+        <Controller 
+            control={control}
+            name='isLeader'
+            render={({field: {onChange, value}}) => (
+              <RadioButton 
+                value={value}
+                status={value ? 'checked' : 'unchecked'}
+                onPress={() => onChange(!value)}
+              />
+            )}
+          />
+          <Text style={styles.textTitle}>Is Leader</Text>
+          </View>
+        </View>
+      </View>
       </ScrollView>
-      <DatePicker
-        modal
-        open={datePickerVisible}
-        date={getValues(selectedDateField)}
-        onConfirm={(date) => {
-          setValue(selectedDateField, date);
-          setDatePickerVisible(false);
-        }}
-        onCancel={() => {
-          setDatePickerVisible(false);
-        }}
-      /> */}
+      <View style={styles.boxButton}>
+        <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(onSubmit)} >
+          <Text style={styles.textSave}>Lưu thông tin</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  formGroup: {
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 8,
-    borderRadius: 4,
-  },
-  radioGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+
 
 export default EditAccountScreen;

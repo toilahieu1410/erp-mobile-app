@@ -302,7 +302,7 @@ const EditTakeLeave: React.FC = () => {
             <Text style={{ color: '#2179A9' }}>Thêm mục</Text>
           </TouchableOpacity>
           <View style={styles.flexVertical}>
-            <Text style={styles.textLeft}>Người bàn giao </Text>
+            <Text style={styles.textLeft}>Bàn giao cho</Text>
             <TextInput
               editable={false}
               style={[styles.inputEdit, {color:'#2179A9'}]}

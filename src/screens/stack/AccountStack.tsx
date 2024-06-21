@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SCREENS} from '../../constants/screens';
 import AccountScreen from '../navigators/AccountScreen';
 import InfoAccountScreen from '../account/InfoAccountScreen';
 import {APPHEADER} from '../../constants/appHeaderNavigator';
 import CheckInWFHScreen from '../account/attendance/CheckInWFHScreen';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
+
+  // const navigation = useNavigation();
+  // const isFocused = useIsFocused();
+
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     // @ts-ignore
+  //     navigation.navigate(SCREENS.ACCOUNT.KEY);
+  //   }
+  // }, [isFocused, navigation]);
+
   return (
     <Stack.Navigator initialRouteName={SCREENS.ACCOUNT.KEY}>
       <Stack.Screen
