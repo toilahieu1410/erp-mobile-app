@@ -7,9 +7,9 @@ import {
   Text,
   Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, Avatar} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ScrollView} from 'react-native-gesture-handler';
 import AppHeader from '../../components/navigators/AppHeader';
@@ -22,7 +22,7 @@ import {styles} from '../../assets/css/AccountScreen/style';
 import {ICON_INFO_ACCOUNT} from '../../constants/screens';
 import moment from 'moment';
 import Svg, {Path} from 'react-native-svg';
-import {moderateScale} from '../size';
+import {moderateScale, widthScale} from '../size';
 
 
 const InfoAccountScreen = () => {
@@ -32,33 +32,59 @@ const InfoAccountScreen = () => {
     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
   );
 
+  console.log(selectedImage,'selectedImage')
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = await AsyncStorage.getItem('accessToken');
-        if (token) {
-          const response = await AuthenticateService.GetUser();
-          const user = response.value;
-          setUserInfo(user);
-          if(user.avatar) {
-            setSelectedImage(user.avatar)
-          }
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (token) {
+        const response = await AuthenticateService.GetUser();
+        const user = response.value;
+        setUserInfo(user);
+        if(user.avatar) {
+          setSelectedImage(user.avatar)
         }
-       
-      } catch (error) {
-        console.error('Không lấy được dữ liệu', error);
       }
-      //  finally {
-      //   setLoading(false)
-      // }
-    };
+     
+    } catch (error) {
+      console.error('Không lấy được dữ liệu', error);
+    }
+     finally {
+      setLoading(false)
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+      setSelectedTab(1)
+    }, [])
+  );
+
+
+  const handleImageSelect = async (image) => {
+    const newAvatarPath = image.uri
+    setSelectedImage(newAvatarPath)
+    setUserInfo(prevUserInfo => ({
+      ...prevUserInfo,
+      avatar: newAvatarPath
+    }))
+
+    try {
+      if(userInfo && userInfo.id) {
+        await AuthenticateService.UpdateUser(userInfo.id, {avatar: newAvatarPath})
+      }
+    } catch (error) {
+      console.error('Failed to update avatar', error)
+    }
+  }
   // const handleImageSelect = async (image) => {
   //   setSelectedImage(image.uri)
   //   try {
@@ -106,7 +132,7 @@ const InfoAccountScreen = () => {
           <View>
             <InfoAccountComponent
               title={'Số điện thoại'}
-              value={userInfo.maPhongBan}
+              value={userInfo.phoneNumber}
               icon="person-sharp"
               color="#3498db"
             />
@@ -177,27 +203,28 @@ const InfoAccountScreen = () => {
         titleColor='#000'
          />
         <LinearGradient
-          colors={['#eaf5fb', '#fff', '#fff', '#eaf5fb']}
+          colors={['#ccf2ff', '#fff', '#fff', '#ccf2ff']}
           start={{x: 0.0, y: 0.25}}
           end={{x: 1, y: 1.0}}
           className="flex-1">
           <Svg height={moderateScale(75)} viewBox="0 50 1300 200">
             <Path
               d="M0,32L48,80C96,128,192,224,288,261.3C384,299,480,277,576,256C672,235,768,213,864,181.3C960,149,1056,107,1152,122.7C1248,139,1344,213,1392,250.7L1440,288L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
-              fill={'#2179A9'}></Path>
+              fill={'#027BE3'}></Path>
           </Svg>
           <ScrollView>
             <View className="w-full flex flex-col justify-center items-center">
-              <View className="relative">
+              <View className="relative" style={styles.boxAvatar}>
                 <Avatar.Image
-                  size={Dimensions.get('screen').width * 0.25}
+                  size={widthScale(90)}
+                  style={styles.imageAvatar}
                   source={{uri: selectedImage}}>
                 </Avatar.Image>
                 <View className="absolute p-0 bottom-0 right-0">
+                  
                   <SelectPhoto
-                    onSelect={value => {
-                      setSelectedImage(value.uri);
-                    }}>
+                    mediaType='photo'
+                    onSelect={handleImageSelect}>
                     <Avatar.Icon
                       size={(Dimensions.get('screen').width * 0.3) / 4.5}
                       icon="plus-circle-outline"
@@ -280,12 +307,15 @@ const InfoAccountScreen = () => {
               <View className="m-2 overflow-hidden">{renderTabContent()}</View>
             </View>
           </ScrollView>
+          <View style={styles.boxButton}>
           <TouchableOpacity onPress={() => 
           //@ts-ignore
             navigator.navigate(SCREENS.EDIT_ACCOUNT.KEY, {userInfo})}
-             style={styles.buttonEdit}>
-            <Text style={styles.textWhite}>Sửa</Text>
+             style={styles.buttonSave}>
+            <Text style={styles.textWhite}>Sửa thông tin</Text>
           </TouchableOpacity>
+          </View>
+  
         </LinearGradient>
       </SafeAreaView>
     </>

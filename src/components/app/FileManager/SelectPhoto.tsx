@@ -19,6 +19,7 @@ const SelectPhoto = ({children, onSelect, mediaType = 'photo'}: SelectPhotoProps
     //@ts-ignore
     launchImageLibrary(options, response => {
       if (response.didCancel) {
+        console.log('User cancelled image picker');
         //@ts-ignore
       } else if (response.error) {
       } else {
