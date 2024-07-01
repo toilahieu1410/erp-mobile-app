@@ -1,8 +1,9 @@
 import React from 'react';
+import {Platform, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import {Platform, Text} from 'react-native';
+
 import { moderateScale } from '../../screens/size';
 
 type AppBarProps = {
@@ -25,12 +26,14 @@ const AppHeader = ({
   const navigator = useNavigation();
 
   return (
+    <SafeAreaView style={{backgroundColor: backgroundColor}}>
     <Appbar.Header
-      style={{
-        elevation: Platform.OS === 'ios' ? 1 : 4,
-        backgroundColor: backgroundColor,
-        height: 50,
-      }}
+      style={
+        [
+          styles.header, {backgroundColor},
+          Platform.OS === 'ios' && styles.iosHeader
+        ]
+      }
       statusBarHeight={Platform.OS === 'ios' ? 0 : undefined}
       mode={
         Platform.OS === 'ios' || centerTitle == true
@@ -48,18 +51,38 @@ const AppHeader = ({
       ) : null}
       <Appbar.Content
         title={`${title}`}
-        titleStyle={{fontSize: 16, fontWeight: 'bold', color: titleColor}}
+        titleStyle={[styles.title, {color: titleColor}]}
       />
-
+      {typeof title === 'string' ? title : ''}
       {actions && (
-        <Text style={{marginRight:moderateScale(5)}}>
+        <Text style={styles.actions}>
           {/* Thêm View bao bọc actions với marginRight */}
           {actions}
         </Text>
       )}
     </Appbar.Header>
+    </SafeAreaView>
+
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    elevation: Platform.OS === 'ios' ? 1 : 4,
+    height: moderateScale(50)
+  },
+  iosHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc'
+  },
+  title: {
+    fontSize: moderateScale(16),
+    fontWeight: '700'
+  },
+  actions: {
+    marginRight: moderateScale(5)
+  }
+})
 
 AppHeader.propTypes = {
   showButtonBack: PropTypes.bool,
