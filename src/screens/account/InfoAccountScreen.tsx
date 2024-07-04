@@ -33,6 +33,7 @@ const InfoAccountScreen = () => {
   );
 
 
+
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
@@ -94,7 +95,7 @@ const InfoAccountScreen = () => {
   //     }
   //   }
   // }
-  console.log(userInfo,'userInfouserInfo')
+
   const renderTabContent = () => {
     if (!userInfo) return null;
     switch (selectedTab) {
@@ -115,7 +116,7 @@ const InfoAccountScreen = () => {
             />
             <InfoAccountComponent
               title={'Giới tính'}
-              value={userInfo?.gioiTinh === "0" ? 'Nam' : 'Nữ'}
+              value={userInfo?.gioiTinh === "Nam" ? 'Nam' : 'Nữ'}
               icon="male-female"
               color="#e67e22"
             />
