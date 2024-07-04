@@ -16,6 +16,7 @@ interface ConfirmType {
 
 interface ListConfirm {
   id: string,
+  code: string,
   content: string,
   dateNeedConfirm: string,
   type: string,

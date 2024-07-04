@@ -1,3 +1,4 @@
+import React from 'react'
 import {FlatList, Image, SafeAreaView, View} from 'react-native';
 import HomeComponent from '../../components/home/HomeComponent';
 import AppHeader from '../../components/navigators/AppHeader';
@@ -345,7 +346,7 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <AppHeader title="Bảng tin" centerTitle={true}></AppHeader>
+      <AppHeader title="Bảng tin" centerTitle={true} backgroundColor='#fff' titleColor='#000' />
       <View className="flex-1">
         <View>
           <Image

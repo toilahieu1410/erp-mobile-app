@@ -30,7 +30,7 @@ const SearchTaskScreen = () => {
           <TextInput
             ref={refInputSearch}
             className="rounded-xl bg-gray-200 text-base px-2"
-            style={{paddingBottom: 3, paddingTop: 3, vericalAlight: 'middle'}}
+            style={{paddingBottom: 3, paddingTop: 3, verticalAlign: 'middle'}}
             placeholder="Tìm kiếm công việc"
           />
         </View>

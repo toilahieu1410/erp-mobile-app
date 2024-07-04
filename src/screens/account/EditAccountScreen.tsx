@@ -18,21 +18,20 @@ import { COLORS } from '../../constants/screens';
 interface FormData {
   hoTen: string;
   ngaySinh: string;
-  gioiTinh: number;
-  phoneNumber: string;
+  gioiTinh: string;
+  soDienThoai: string;
   maPhongBan: string;
   chucVu: string;
   ngayThuViec: string;
   ngayLamChinhThuc: string;
   maChamCong: string;
-  email: string;
+  // email: string;
   emailCongTy: string;
   avatar: string;
   isAdmin: boolean;
   isLeader: boolean;
   maXacNhan: string;
   leaderId: string;
-  tokenSmart?: string;
   maKhachHangGiga?: string
 
 }
@@ -64,8 +63,8 @@ const EditAccountScreen = () => {
   const [leaderName, setLeaderName] = useState<string>('');
 
   const genderOptions = [
-    { id: 0, label: 'Nữ', value: 0 },
-    { id: 1, label: 'Nam', value: 1 },
+    { id: 0, label: 'Nam', value: "Nam" },
+    { id: 1, label: 'Nữ', value: "Nu" },
   ]
 
   useEffect(() => {
@@ -138,24 +137,30 @@ const EditAccountScreen = () => {
   };
 
   const onSubmit = async (data: FormData) => {
-    if(!validateEmail(data.email)) {
-      Alert.alert('Invalid Email', 'Vui lòng nhập đúng định dạng email')
-      return
-    }
+    // if(!validateEmail(data.email)) {
+    //   Alert.alert('Invalid Email', 'Vui lòng nhập đúng định dạng email')
+    //   return
+    // }
+   
     try {
-      const response = await AuthenticateService.UpdateUser(userInfo.id, {
+      const formattedData = {
         ...data,
-        phoneNumber: data.phoneNumber,
-        gioiTinh: Number(data.gioiTinh),
+        gioiTinh: gender,
+        isAdmin: data.isAdmin ?? false,
+        isLeader: data.isLeader ?? false, 
         ngaySinh: moment(ngaySinh).format('DD/MM/YYYY'),
         ngayThuViec: moment(ngayThuViec).format('DD/MM/YYYY'),
         ngayLamChinhThuc: moment(ngayLamChinhThuc).format('DD/MM/YYYY')
-      });
-      console.log(response,'resssss')
+      };
+
+
       const selectedUser = users.find(user => user.hoTen === leaderName);
       if (selectedUser) {
         data.leaderId = selectedUser.id;
       }
+
+      const response = await AuthenticateService.UpdateUser(userInfo.id, formattedData);
+      console.log(response,'resss',formattedData)
       if (response.isSuccess) {
         showMessage({
           message: 'Dữ liệu đã được cập nhật',
@@ -170,7 +175,7 @@ const EditAccountScreen = () => {
       console.error('Error updating user:', error);
     }
   };
-
+  console.log(gender,'gennnnn')
   return (
     <SafeAreaView style={styles.container}>
       <AppHeader
@@ -236,10 +241,13 @@ const EditAccountScreen = () => {
             }}
           />
         </View>
+      
         <View style={styles.formGroup}>
             <Text style={styles.textTitle}>Giới tính</Text>
             <RadioButton.Group
-              onValueChange={(newValue) => setGender(newValue)}
+              onValueChange={(newValue) => {
+                setGender(newValue);
+              }}
               value={gender}
             >
               <View style={styles.radioButtonHorizonal}>
@@ -258,7 +266,7 @@ const EditAccountScreen = () => {
           <Text style={styles.textTitle}>Số điện thoại</Text>
           <Controller 
             control={control}
-            name='phoneNumber'
+            name='soDienThoai'
             render={({field: {onChange, value}}) => (
               <TextInput 
                 style={styles.inputEdit}
@@ -269,7 +277,7 @@ const EditAccountScreen = () => {
             )}
           />
         </View>
-        <View style={styles.formGroup}>
+        {/* <View style={styles.formGroup}>
           <Text style={styles.textTitle}>Email</Text>
           <Controller 
             control={control}
@@ -283,7 +291,7 @@ const EditAccountScreen = () => {
               />
             )}
           />
-        </View>
+        </View> */}
         <View style={styles.formGroup}>
           <Text style={styles.textTitle}>Email Công ty</Text>
           <Controller 
@@ -391,10 +399,10 @@ const EditAccountScreen = () => {
             />
         </View>
         <View style={styles.formGroup}>
-          <Text style={styles.textTitle}>Mã chấm công</Text>
+          <Text style={styles.textTitle}>Mã xác nhận</Text>
           <Controller 
             control={control}
-            name='maChamCong'
+            name='maXacNhan'
             render={({ field: {onChange, value}}) => (
               <TextInput 
                 style={styles.inputEdit}

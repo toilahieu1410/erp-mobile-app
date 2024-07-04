@@ -1,5 +1,6 @@
-import {Image, SafeAreaView, Text, View} from 'react-native';
 import React from 'react';
+import {Image, SafeAreaView, Text, View} from 'react-native';
+
 import AppHeader from '../../components/navigators/AppHeader';
 import {Avatar} from 'react-native-paper';
 import NotificationComponent from '../../components/notification/NotificationComponent';
@@ -7,9 +8,8 @@ import {SCREENS} from '../../constants/screens';
 
 const NotificationScreen = () => {
   return (
-    <>
       <SafeAreaView className="flex-1 bg-white">
-        <AppHeader title="Thông báo" centerTitle={true}></AppHeader>
+        <AppHeader title="Thông báo" centerTitle={true} backgroundColor='#fff' titleColor='#000' />
         <View className="flex-1">
           <NotificationComponent
             avatar="https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg"
@@ -105,7 +105,7 @@ const NotificationScreen = () => {
           </View>
         </View>
       </SafeAreaView>
-    </>
+    
   );
 };
 

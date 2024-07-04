@@ -28,6 +28,7 @@ import { styles } from '../../../assets/css/ListWorksScreen/_listWork';
 
 interface XacNhan {
   id: string;
+  code: string;
   content: string;
   dateNeedConfirm: string;
   type: string;
@@ -98,6 +99,7 @@ const ListConfirm: React.FC = () => {
     [],
   );
 
+  console.log(listXacNhan,'listXacNhan')
   useEffect(() => {
     const fromDateValue = initialFromDate ? moment(initialFromDate, 'DD/MM/YYYY').toDate() : null;
     const toDateValue = initialToDate ? moment(initialToDate, 'DD/MM/YYYY').toDate() : null;

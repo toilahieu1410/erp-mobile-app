@@ -28,15 +28,10 @@ const HomeDetailScreen = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <AppHeader 
-      title="Chi tiết bảng tin" 
-      showButtonBack={true}
-      backgroundColor='#fff'
-      titleColor='#000'
-      />
+      <AppHeader title="Chi tiết bảng tin" showButtonBack={true} backgroundColor='#fff' titleColor='#000' />
       <ScrollView>
         <View>
-          <View>
+        <View>
             <Image
               source={{uri: data.Avatar}}
               style={{
@@ -45,9 +40,9 @@ const HomeDetailScreen = () => {
                 objectFit: 'contain',
               }}
             />
-          </View>
+        
         </View>
-        <View>
+        
           <View
             className="w-full rounded-t-[24px] p-2 z-20  bg-white shadow-md"
             style={{
