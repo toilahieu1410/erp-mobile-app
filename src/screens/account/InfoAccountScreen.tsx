@@ -32,7 +32,6 @@ const InfoAccountScreen = () => {
     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
   );
 
-
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
@@ -94,7 +93,7 @@ const InfoAccountScreen = () => {
   //     }
   //   }
   // }
-  console.log(userInfo,'userInfouserInfo')
+
   const renderTabContent = () => {
     if (!userInfo) return null;
     switch (selectedTab) {
@@ -115,7 +114,7 @@ const InfoAccountScreen = () => {
             />
             <InfoAccountComponent
               title={'Giới tính'}
-              value={userInfo?.gioiTinh === "0" ? 'Nam' : 'Nữ'}
+              value={userInfo?.gioiTinh === "Nam" ? 'Nam' : 'Nữ'}
               icon="male-female"
               color="#e67e22"
             />

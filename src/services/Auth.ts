@@ -34,7 +34,7 @@ export const AuthenticateService = {
   async UpdateUser(id: string, data: any): Promise<BaseResponse<any>> {
     const token = await Token.getToken()
     if(token) {
-      const response = await http.put(`/user/${id}`, data, {
+      const response = await http.put(`/user`, { ...data, userId: id }, {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
           'Content-Type': 'application/json',
