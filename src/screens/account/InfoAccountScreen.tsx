@@ -32,8 +32,6 @@ const InfoAccountScreen = () => {
     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
   );
 
-
-
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);

@@ -60,13 +60,12 @@ const EditAccountScreen = () => {
   const [openNgayThuViec, setOpenNgayThuViec] = useState(false)
   const [openNgayLamChinhThuc, setOpenNgayLamChinhThuc] = useState(false)
   const [gender, setGender] = useState(userInfo.gioiTinh)
-  const [phoneNumber, setPhoneNumber] = useState(userInfo.phoneNumber)
   const [users, setUsers] = useState<ListUsers[]>([]);
   const [leaderName, setLeaderName] = useState<string>(userInfo.leader);
   const [leaderId, setLeaderId] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
 
-  console.log(userInfo,'userInfo.leaderIDDD')
+
   const genderOptions = [
     { id: 0, label: 'Nam', value: "Nam" },
     { id: 1, label: 'Nữ', value: "Nu" },
@@ -275,8 +274,6 @@ const EditAccountScreen = () => {
                   ))}
                 </View>
                 </RadioButton.Group>
-           
-               
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.textTitle}>Số điện thoại</Text>
@@ -448,7 +445,7 @@ const EditAccountScreen = () => {
               />
             </View>
             <View style={styles.radioButtonHorizonal}>
-            <View style={[styles.formGroup, styles.radioButtonContainer]}>
+            {/* <View style={[styles.formGroup, styles.radioButtonContainer]}>
             <Controller 
                 control={control}
                 name='isAdmin'
@@ -462,7 +459,7 @@ const EditAccountScreen = () => {
               />
               <Text style={styles.textTitle}>Is Admin</Text>
               
-            </View>
+            </View> */}
             <View style={[styles.formGroup, styles.radioButtonContainer]}>
             <Controller 
                 control={control}

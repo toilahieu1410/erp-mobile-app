@@ -11,22 +11,22 @@ import PayRollScreen from '../account/PayRollScreen';
 
 // import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
 // Don xac nhan
-import CreateConfirm from '../../components/work/confirm/CreateConfirm';
-import ListConfirm from '../../components/work/confirm/ListConfirm';
-import EditConfirm from '../../components/work/confirm/EditConfirm';
-import SearchConfirm from '../../components/work/confirm/SearchConfirm';
+import CreateConfirm from '../../screens/work/confirm/CreateConfirm';
+import ListConfirm from '../../screens/work/confirm/ListConfirm';
+import EditConfirm from '../../screens/work/confirm/EditConfirm';
+import SearchConfirm from '../../screens/work/confirm/SearchConfirm';
 
 // Don nghi phep
-import ListTakeLeave from '../../components/work/leave/ListTakeLeave';
-import CreateTakeLeave from '../../components/work/leave/CreateTakeLeave';
-import SearchTakeLeave from '../../components/work/leave/SearchTakeLeave';
-import EditTakeLeave from '../../components/work/leave/EditTakeLeave';
+import ListTakeLeave from '../../screens/work/leave/ListTakeLeave';
+import CreateTakeLeave from '../../screens/work/leave/CreateTakeLeave';
+import SearchTakeLeave from '../../screens/work/leave/SearchTakeLeave';
+import EditTakeLeave from '../../screens/work/leave/EditTakeLeave';
 
 // Don lam viec tai nha
-import ListWorkFromHome from '../../components/work/workhome/ListWorkFromHome';
-import SearchWorkFromHome from '../../components/work/workhome/SearchWorkFromHome';
-import CreateWorkFromHome from '../../components/work/workhome/CreateWorkFromHome';
-import EditWorkFromHome from '../../components/work/workhome/EditWorkFromHome';
+import ListWorkFromHome from '../../screens/work/workhome/ListWorkFromHome';
+import SearchWorkFromHome from '../../screens/work/workhome/SearchWorkFromHome';
+import CreateWorkFromHome from '../../screens/work/workhome/CreateWorkFromHome';
+import EditWorkFromHome from '../../screens/work/workhome/EditWorkFromHome';
 import EditAccountScreen from '../account/EditAccountScreen';
 
 
