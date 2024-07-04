@@ -32,7 +32,7 @@ const InfoAccountScreen = () => {
     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
   );
 
-  console.log(selectedImage,'selectedImage')
+
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(1);
@@ -94,7 +94,7 @@ const InfoAccountScreen = () => {
   //     }
   //   }
   // }
-
+  console.log(userInfo,'userInfouserInfo')
   const renderTabContent = () => {
     if (!userInfo) return null;
     switch (selectedTab) {
@@ -115,13 +115,13 @@ const InfoAccountScreen = () => {
             />
             <InfoAccountComponent
               title={'Giới tính'}
-              value={userInfo?.gioiTinh === 1 ? 'Nam' : 'Nữ'}
+              value={userInfo?.gioiTinh === "0" ? 'Nam' : 'Nữ'}
               icon="male-female"
               color="#e67e22"
             />
             <InfoAccountComponent
               title={'Email'}
-              value={userInfo?.email}
+              value={userInfo?.emailCongTy}
               icon="mail-outline"
               color="#7f8c8d"
             />
@@ -132,13 +132,13 @@ const InfoAccountScreen = () => {
           <View>
             <InfoAccountComponent
               title={'Số điện thoại'}
-              value={userInfo.phoneNumber}
+              value={userInfo.soDienThoai}
               icon="person-sharp"
               color="#3498db"
             />
             <InfoAccountComponent
-              title={'Chức vụ'}
-              value={userInfo.chucVu}
+              title={'Leader'}
+              value={userInfo.leader}
               icon="calendar-clear-sharp"
               color="#009432"
             />
@@ -210,7 +210,7 @@ const InfoAccountScreen = () => {
           <Svg height={moderateScale(75)} viewBox="0 50 1300 200">
             <Path
               d="M0,32L48,80C96,128,192,224,288,261.3C384,299,480,277,576,256C672,235,768,213,864,181.3C960,149,1056,107,1152,122.7C1248,139,1344,213,1392,250.7L1440,288L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
-              fill={'#027BE3'}></Path>
+              fill={'#00BFFF'}></Path>
           </Svg>
           <ScrollView>
             <View className="w-full flex flex-col justify-center items-center">

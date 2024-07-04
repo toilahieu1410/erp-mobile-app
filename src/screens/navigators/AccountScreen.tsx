@@ -185,7 +185,7 @@ const AccountScreen = () => {
         <AppHeader
           title="Tài khoản"
           centerTitle={true}
-          backgroundColor="#2179A9" // Màu nền tùy chỉnh
+          backgroundColor="#00BFFF" // Màu nền tùy chỉnh
           titleColor="#fff" // Màu chữ tùy chỉnh
         />
         <View className="h-full flex-1">

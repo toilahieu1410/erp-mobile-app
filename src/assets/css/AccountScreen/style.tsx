@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
   },
   boxInfo: {
     padding:moderateScale(15),
-    backgroundColor: '#2179A9',
+    backgroundColor: '#00BFFF',
     position:'relative',
     zIndex:1,
     bottom:0,
@@ -193,7 +193,7 @@ export const styles = StyleSheet.create({
     height: height,
     position:'relative',
     zIndex:1,
-    top: moderateScale(55)
+    top: moderateScale(70)
   },
   headerContainer: {
     flex: 1,

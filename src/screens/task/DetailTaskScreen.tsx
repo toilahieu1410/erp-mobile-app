@@ -76,6 +76,8 @@ const DetailTaskScreen: React.FC = () => {
         title={data.id}
         centerTitle={true}
         showButtonBack={true}
+        backgroundColor='#fff'
+        titleColor='#000'
         actions={
           <View className="flex flex-row justify-end items-center">
             <ChoiceMenu>

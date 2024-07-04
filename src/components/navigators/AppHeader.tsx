@@ -53,7 +53,7 @@ const AppHeader = ({
         title={`${title}`}
         titleStyle={[styles.title, {color: titleColor}]}
       />
-      {typeof title === 'string' ? title : ''}
+      {/* <Text>{typeof title === 'string' ? title : ''}</Text> */}
       {actions && (
         <Text style={styles.actions}>
           {/* Thêm View bao bọc actions với marginRight */}

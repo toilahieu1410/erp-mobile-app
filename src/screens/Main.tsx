@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {SCREENS} from '../constants/screens';
+import {SCREENS, COLORS, IMAGES} from '../constants/screens'
 import {Image, Text, View} from 'react-native';
-import {COLORS, IMAGES} from '../constants/screens';
 import NotificationScreen from './navigators/NotificationScreen';
 import HomeStack from './stack/HomeStack';
 import AccountStack from './stack/AccountStack';

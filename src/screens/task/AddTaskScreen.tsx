@@ -57,6 +57,8 @@ const AddTaskScreen = () => {
         title="Tạo công việc"
         centerTitle={true}
         showButtonBack={true}
+        backgroundColor='#fff'
+        titleColor='#000'
         actions={
           <TouchableRipple>
             <Text className="px-2 font-bold text-black text-sm">Lưu</Text>

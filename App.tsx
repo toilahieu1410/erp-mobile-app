@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
+import {Alert, LogBox, StatusBar, Platform, I18nManager } from 'react-native';
 import LoginScreen from './src/screens/login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Alert, LogBox, SafeAreaView, StatusBar, Platform, I18nManager } from 'react-native';
+
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {RootState, store, persistor} from './store/store';
 import FlashMessage from 'react-native-flash-message';

@@ -9,7 +9,7 @@ import SearchTaskScreen from '../task/SearchTaskScreen';
 import PayRollScreen from '../account/PayRollScreen';
 // import ItemDetailConfirm from '../../components/work/confirm/ItemDetailConfirm';
 
-import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
+// import OfferPaymentsScreen from '../work/OfferPaymentsScreen';
 // Don xac nhan
 import CreateConfirm from '../../components/work/confirm/CreateConfirm';
 import ListConfirm from '../../components/work/confirm/ListConfirm';
@@ -55,7 +55,7 @@ const MainStack = () => {
           },
         }}
       />
-       <Stack.Screen
+        <Stack.Screen
         name={SCREENS.EDIT_ACCOUNT.KEY}
         component={EditAccountScreen}
         options={{
@@ -67,7 +67,7 @@ const MainStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-      />
+      /> 
       <Stack.Screen
         name={SCREENS.SEARCHTASK.KEY}
         options={{
@@ -267,7 +267,7 @@ const MainStack = () => {
         }}
         component={SearchWorkFromHome}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={SCREENS.OFFERPAYMENTS.KEY}
         options={{
           title: SCREENS.OFFERPAYMENTS.NAME,
@@ -279,7 +279,7 @@ const MainStack = () => {
           },
         }}
         component={OfferPaymentsScreen}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };
