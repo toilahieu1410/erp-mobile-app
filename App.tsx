@@ -18,8 +18,6 @@ import RNRestart from 'react-native-restart';
 import {PersistGate} from 'redux-persist/integration/react';
 import { navigationRef } from './store/navigationRef';
 
-
-
 const config = {
   screens: {
     ChangePasswordScreen: {

@@ -40,6 +40,7 @@ target 'App_HopLongLMS' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
   
+  pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate'
 
   target 'App_HopLongLMSTests' do
     inherit! :complete

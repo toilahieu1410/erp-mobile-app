@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import DatePicker from '@react-native-community/datetimepicker';
 
 interface DatePickerDayProps {
@@ -20,6 +20,7 @@ const DatePickerDay: React.FC<DatePickerDayProps> = ({
         testID="dateTimePicker"
         value={date}
         mode={mode}
+        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
         // is24Hour={true}
         onChange={onChange}
         minuteInterval={5}

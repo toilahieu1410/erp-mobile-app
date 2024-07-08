@@ -14,50 +14,50 @@ const TaskFlatListComponent = (props: TaskProps) => {
   const task = props;
   const navigator = useNavigation();
 
-  // const renderWatchingItems = () => {
-  //   const watchingItems: JSX.Element[] = [];
+  const renderWatchingItems = () => {
+    const watchingItems: JSX.Element[] = [];
 
-  //   for (let index = 0; index < task.watching.length; index++) {
-  //     if (task.watching.length > 0) {
-  //       const watchingItem = task.watching[index];
-  //       if (index < 3) {
-  //         watchingItems.push(
-  //           <View
-  //             className="absolute top-0"
-  //             style={{left: index * 13}}
-  //             key={index.toString()}>
-  //             <Avatar.Image
-  //               style={{
-  //                 backgroundColor: 'white',
-  //                 borderColor: 'white',
-  //                 borderWidth: 1,
-  //               }}
-  //               size={20}
-  //               source={{uri: watchingItem.avatar!}}
-  //               onError={err => {}}
-  //             />
-  //           </View>,
-  //         );
-  //       } else {
-  //         watchingItems.push(
-  //           <View
-  //             key={index.toString()}
-  //             className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
-  //             style={{left: index * 13}}>
-  //             <Text className="text-[12px] text-white">
-  //               {task.watching.length - 3 < 99
-  //                 ? `+${task.watching.length - 3}`
-  //                 : `99+`}
-  //             </Text>
-  //           </View>,
-  //         );
-  //         break;
-  //       }
-  //     }
-  //   }
+    for (let index = 0; index < task.watching.length; index++) {
+      if (task.watching.length > 0) {
+        const watchingItem = task.watching[index];
+        if (index < 3) {
+          watchingItems.push(
+            <View
+              className="absolute top-0"
+              style={{left: index * 13}}
+              key={index.toString()}>
+              <Avatar.Image
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: 'white',
+                  borderWidth: 1,
+                }}
+                size={20}
+                source={{uri: watchingItem.avatar!}}
+                onError={err => {}}
+              />
+            </View>,
+          );
+        } else {
+          watchingItems.push(
+            <View
+              key={index.toString()}
+              className="absolute top-0 h-[23px] w-[23px] rounded-xl border border-white bg-primary text-center flex justify-center items-center"
+              style={{left: index * 13}}>
+              <Text className="text-[12px] text-white">
+                {task.watching.length - 3 < 99
+                  ? `+${task.watching.length - 3}`
+                  : `99+`}
+              </Text>
+            </View>,
+          );
+          break;
+        }
+      }
+    }
 
-  //   return watchingItems;
-  // };
+    return watchingItems;
+  };
   return (
     <TouchableRipple
       rippleColor={'transparent'}

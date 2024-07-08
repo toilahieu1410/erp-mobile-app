@@ -24,6 +24,13 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     color: '#333',
   },
+  actionSheetItem: {
+    paddingVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(15),
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    backgroundColor: '#fff',
+  },
   boxXinNghiPhep: {
     position:'relative',
     marginVertical: moderateScale(8), 
@@ -90,9 +97,15 @@ export const styles = StyleSheet.create({
   pickerDropdown: {
     flex: 1,
     maxWidth: moderateScale(180),
+    minHeight: moderateScale(40),
     borderColor: '#ddd',
     borderRadius: 5,
-    backgroundColor: '#f9f9f9',
+    borderWidth:1,
+    backgroundColor: 'yellow',
+  },
+  textChoose: {
+    textAlign:'center',
+    fontSize: moderateScale(14)
   },
   buttonSaveEnabled: {
     color: '#fff',

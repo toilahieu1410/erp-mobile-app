@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Text,
   View,
@@ -9,19 +9,19 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import {Button, NativeBaseProvider} from 'native-base';
-import {showMessage} from 'react-native-flash-message';
-import {styles} from '../../../assets/css/ListWorksScreen/style';
+import { Picker } from '@react-native-picker/picker';
+import { showMessage } from 'react-native-flash-message';
+import { styles } from '../../../assets/css/ListWorksScreen/style';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {moderateScale} from '../../../screens/size';
+import { moderateScale } from '../../../screens/size';
 import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
 import { useNavigation } from '@react-navigation/native';
 import { SCREENS } from '../../../constants/screens';
 import AppHeader from '../../../components/navigators/AppHeader';
 import DatePickerDay from '../../../components/picker/datePicker';
+import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
 
 const newDate = new Date();
 
@@ -45,6 +45,8 @@ const CreateConfirm = () => {
 
   const [showStartPicker, setShowStartPicker] = useState<'date' | 'time' | null>(null);
   const [showEndPicker, setShowEndPicker] = useState<'date' | 'time' | null>(null);
+
+  const actionSheetRef = useRef<any>(null);
 
   useEffect(() => {
     const fetchConfirmTypes = async () => {
@@ -72,7 +74,6 @@ const CreateConfirm = () => {
     setDateTime(currentDate);
   };
 
-
   const handleConfirm = (itemValue: XacNhanType | null) => {
     setSelectConfirm(itemValue);
     if (itemValue && [1, 4, 5].includes(itemValue.value)) {
@@ -83,25 +84,6 @@ const CreateConfirm = () => {
       setEndDate(null);
     }
   };
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem('token');
-
-  //       if (token) {
-  //         const response = await AuthenticateService.GetUser();
-  //         const user = response.value;
-  //         setUsername(user.userName);
-  //         setEmail(user.email);
-  //         setPhone(user.phoneNumber);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error', error);
-  //     }
-  //   };
-  //   fetchUserData();
-  // }, []);
 
   const handleSubmit = async () => {
     if (!selectConfirm) {
@@ -122,15 +104,15 @@ const CreateConfirm = () => {
         message: message,
         description: 'Đơn xác nhận của bạn đã được tạo trên hệ thống',
         type: 'success'
-      })
-         //@ts-ignore
-         navigation.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY)
+      });
+      // @ts-ignore
+      navigation.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY);
     } catch (error) {
       showMessage({
         message: 'Tạo đơn thất bại',
         description: 'Không thể tạo được đơn',
         type: 'danger'
-      })
+      });
     }
   };
 
@@ -170,7 +152,11 @@ const CreateConfirm = () => {
       }
     }
   };
-  
+
+  const openActionSheet = () => {
+    actionSheetRef.current?.setModalVisible(true);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -182,15 +168,13 @@ const CreateConfirm = () => {
         backgroundColor='#fff'
         titleColor='#000'
         actions={
-          <NativeBaseProvider>
-            <Button
-              backgroundColor={'transparent'}
+            <TouchableOpacity
+              style={{backgroundColor:'transparent', width: moderateScale(50)}}
               disabled={disable}
-              size={moderateScale(50)}
+              
               onPress={handleSubmit}>
               <Text style={disable === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
-            </Button>
-          </NativeBaseProvider>
+            </TouchableOpacity>
         }
       />
       <ScrollView>
@@ -233,21 +217,43 @@ const CreateConfirm = () => {
               )}
             </View>
 
-            <View style={[styles.flexTitle, styles.inputContainer]}>
-              <Text style={styles.label}>Loại xác nhận:</Text>
-
-              <Picker
-                mode="dropdown"
-                style={styles.pickerDropdown}
-                selectedValue={selectConfirm}
-                onValueChange={itemValue => handleConfirm(itemValue)}>
-                 <Picker.Item label={'Loại xác nhận'} value="" /> 
-                {confirmType &&
-                  confirmType.map(item => (
-                    <Picker.Item label={item.display} value={item} />
+            {Platform.OS === 'ios' ? (
+              <View style={[styles.flexTitle, styles.inputContainer]}>
+                <Text style={styles.label}>Loại xác nhận 7777:</Text>
+                <TouchableOpacity
+                  style={styles.pickerDropdown}
+                  onPress={openActionSheet}>
+                  <Text style={styles.textChoose}>{selectConfirm?.display || 'Loại xác nhận'}</Text>
+                </TouchableOpacity>
+                <ActionSheet ref={actionSheetRef}>
+                  {confirmType.map((item) => (
+                    <TouchableOpacity
+                      key={item.value}
+                      style={styles.actionSheetItem}
+                      onPress={() => {
+                        handleConfirm(item);
+                        actionSheetRef.current?.hide();
+                      }}>
+                      <Text>{item.display}</Text>
+                    </TouchableOpacity>
                   ))}
-              </Picker>
-            </View>
+                </ActionSheet>
+              </View>
+            ) : (
+              <View style={[styles.flexTitle, styles.inputContainer]}>
+                <Text style={styles.label}>Loại xác nhận:</Text>
+                <Picker
+                  mode="dropdown"
+                  style={styles.pickerDropdown}
+                  selectedValue={selectConfirm}
+                  onValueChange={itemValue => handleConfirm(itemValue)}>
+                  <Picker.Item label={'Loại xác nhận'} value="" />
+                  {confirmType.map(item => (
+                    <Picker.Item label={item.display} value={item} key={item.value} />
+                  ))}
+                </Picker>
+              </View>
+            )}
             {selectConfirm?.value === 1 ||
             selectConfirm?.value === 4 ||
             selectConfirm?.value === 5 ? (
