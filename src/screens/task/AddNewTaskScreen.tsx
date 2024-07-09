@@ -10,7 +10,7 @@ import {Attachment, Task, Watching} from '../../models/Task';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
 import Select from '../../components/app/input/Select';
 
-const AddTaskScreen = () => {
+const AddNewTaskScreen = () => {
   const [data, setData] = useState<Task>({
     id: 'null',
     title: undefined,
@@ -116,4 +116,4 @@ const AddTaskScreen = () => {
   );
 };
 
-export default AddTaskScreen;
+export default AddNewTaskScreen;

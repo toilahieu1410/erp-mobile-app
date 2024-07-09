@@ -77,24 +77,7 @@ const EditTakeLeave: React.FC = () => {
     fetchTakeLeaveTypes()
   }, [item.typeApplication])
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response: any = await ServiceTakeLeave.getUserHandOver('');
-  //       setUsers(response.value);
-
-  //       // Tìm và đặt tên người bàn giao dựa trên handOverToUserId
-  //       const handOverUser = response.value.find((user: ListUsers) => user.id === item.handOverToUserId);
-  //       if (handOverUser) {
-  //         setSelectedUser(handOverUser.hoTen);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching users', error);
-  //     }
-  //   };
-  //   fetchUsers();
-  // }, [item.handOverToUserId]);
-
+  
   useEffect(() => {
     const fetchUsers = async () => {
       if (searchText.length >= 0) {
