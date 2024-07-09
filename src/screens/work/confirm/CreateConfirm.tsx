@@ -168,13 +168,13 @@ const CreateConfirm = () => {
         backgroundColor='#fff'
         titleColor='#000'
         actions={
-            <TouchableOpacity
-              style={{backgroundColor:'transparent', width: moderateScale(50)}}
-              disabled={disable}
-              
-              onPress={handleSubmit}>
-              <Text style={disable === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
-            </TouchableOpacity>
+        <TouchableOpacity
+          style={{backgroundColor:'transparent', width: moderateScale(50)}}
+          disabled={disable}
+          
+          onPress={handleSubmit}>
+          <Text style={disable === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
+        </TouchableOpacity>
         }
       />
       <ScrollView>
@@ -207,7 +207,6 @@ const CreateConfirm = () => {
                 </TouchableOpacity>
                 <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
               </View>
-
               {showDate && (
                 <DatePickerDay
                   onChange={onChangeDate}
@@ -216,10 +215,9 @@ const CreateConfirm = () => {
                 />
               )}
             </View>
-
             {Platform.OS === 'ios' ? (
               <View style={[styles.flexTitle, styles.inputContainer]}>
-                <Text style={styles.label}>Loại xác nhận 7777:</Text>
+                <Text style={styles.label}>Loại xác nhận:</Text>
                 <TouchableOpacity
                   style={styles.pickerDropdown}
                   onPress={openActionSheet}>

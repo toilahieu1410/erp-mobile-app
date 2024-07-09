@@ -9,9 +9,9 @@ const MenuTaskComponent = () => {
   const navigator = useNavigation();
   return (
     <View>
-      <View className="h-[200]">
-        <View className="flex flex-row flex-wrap justify-start items-start mt-4">
-          <TouchableRipple
+      <View className="">
+        <View className="flex flex-row flex-wrap justify-start items-start">
+          {/* <TouchableRipple
             rippleColor={'transparent'}
             onPress={() =>
               //@ts-ignore
@@ -19,16 +19,16 @@ const MenuTaskComponent = () => {
             }>
             <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
               <View
-                style={{width: 50, height: 50}}
+                style={{width: 40, height: 40}}
                 className="bg-gray-200 rounded-lg items-center justify-center">
                 <Image
                   source={IMAGES.ADD_TO_DO_LIST}
-                  style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
+                  style={{width: 25, height: 25, tintColor: COLORS.PRIMARY}}
                 />
               </View>
               <Text className="text-black">Thêm mới</Text>
             </View>
-          </TouchableRipple>
+          </TouchableRipple> */}
           <TouchableRipple
             rippleColor={'transparent'}
             onPress={() =>
@@ -37,14 +37,14 @@ const MenuTaskComponent = () => {
             }>
             <View className="flex flex-col flex-nowrap justify-center items-center ml-4 mb-4">
               <View
-                style={{width: 50, height: 50}}
+               style={{width: 40, height: 40}}
                 className="bg-gray-200 rounded-lg items-center justify-center">
                 <Image
                   source={IMAGES.TO_DO_LIST}
-                  style={{width: 30, height: 30, tintColor: COLORS.PRIMARY}}
+                  style={{width: 25, height: 25, tintColor: COLORS.PRIMARY}}
                 />
               </View>
-              <Text className="text-black">Danh sách</Text>
+              {/* <Text className="text-black">Danh sách</Text> */}
             </View>
           </TouchableRipple>
 
@@ -61,7 +61,7 @@ const MenuTaskComponent = () => {
             </View> */}
         </View>
       </View>
-      <View className="h-2 bg-gray-300"></View>
+ 
     </View>
   );
 };

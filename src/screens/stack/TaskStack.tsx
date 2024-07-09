@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {SCREENS} from '../../constants/screens';
 import {APPHEADER} from '../../constants/appHeaderNavigator';
 import TaskScreen from '../navigators/TaskScreen';
-import AddTaskScreen from '../task/AddTaskScreen';
+import AddNewTaskScreen from '../task/AddNewTaskScreen';
 import DetailTaskScreen from '../task/DetailTaskScreen';
 import TaskListScreen from '../task/TaskListScreen';
 import EditTaskScreen from '../task/EditTaskScreen';
@@ -37,7 +37,7 @@ const TaskStack = () => {
             fontSize: APPHEADER.headerStyle.fontSize,
           },
         }}
-        component={AddTaskScreen}
+        component={AddNewTaskScreen}
       />
       <Stack.Screen
         name={SCREENS.DETAILTASK.KEY}

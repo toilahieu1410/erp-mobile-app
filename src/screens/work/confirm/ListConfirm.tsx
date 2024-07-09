@@ -240,7 +240,6 @@ const ListConfirm: React.FC = () => {
       />
     ),
   });
-  console.log(listXacNhan,'adasdas')
 
   return (
     <GestureHandlerRootView style={styles.container}>

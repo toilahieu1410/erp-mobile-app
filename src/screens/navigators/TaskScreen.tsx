@@ -1,5 +1,16 @@
-import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import React, { useEffect, useState } from 'react';
+
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  Button,
+  TextInput,
+  FlatList,
+  Alert
+} from 'react-native';
 import {ActivityIndicator, TouchableRipple} from 'react-native-paper';
 import {COLORS, IMAGES} from '../../constants/screens';
 import AppHeader from '../../components/navigators/AppHeader';
@@ -10,58 +21,153 @@ import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../constants/screens';
 import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent';
 import TaskService from '../../services/taskWorks/serviceTask';
+import Icon from 'react-native-vector-icons/Ionicons';
+// import DatePicker from 'react-native-date-picker';
+// import Geolocation from 'react-native-geolocation-service';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import moment from 'moment';
+import { moderateScale } from '../size';
+// import { position } from '../../../utils/geoLocation';
+// import MapView, {Marker, Polyline} from 'react-native-maps';
+
+interface Follower {
+  id: string;
+  userId: string;
+  userName: string;
+  hoTen: string;
+  maPhongBan: string;
+}
 
 interface ListTask {
-  id: string,
-  title: string,
-  typeJob: string,
-  assignTo: string | null, 
-  customerCode: string, 
-  content: string,
-  feedback: string,
-  vote: number,
-  locationCheckIn: string,
-  locationCheckout: string,
-  deadline: string,
-  isDelete: boolean,
-  deletedAt: string | null,
-  createdAt: string,
-  modifiedAt: string | null,
-  createdBy: string,
-  modifiedBy: string | null
+  id: string;
+  title: string;
+  typeJob: string;
+  content: string;
+  feedback: string;
+  vote: string;
+  locationCheckIn: string;
+  locationCheckOut: string;
+  deadline: string;
+  createdAt: string;
+  followers: Follower[];
 }
 
 const TaskScreen = () => {
   const navigation = useNavigation();
-  // const [taskList, setTaskList] = useState<ListTask[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [taskList, setTaskList] = useState<ListTask[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+  const [pageNumber, setPageNumber] = useState('1');
+  const [pageSize, setPageSize] = useState('8');
+  const [openFromDatePicker, setOpenFromDatePicker] = useState(false);
+  const [openToDatePicker, setOpenToDatePicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [checkInLocation, setCheckInLocation] = useState<string | null>(null);
+  const [checkOutLocation, setCheckOutLocation] = useState<string | null>(null);
+
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  const fetchTasks = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const fromDateString = fromDate
+        ? moment(fromDate).format('YYYY-MM-DD')
+        : '';
+      const toDateString = toDate ? moment(toDate).format('YYYY-MM-DD') : '';
+      const pageNumberInt = parseInt(pageNumber);
+      const pageSizeInt = parseInt(pageSize);
+
+      const tasks = await TaskService.getTasks(
+        fromDateString,
+        toDateString,
+        pageNumberInt,
+        pageSizeInt,
+      );
+      setTaskList(tasks);
+    } catch (error) {
+      setError('Không lấy được danh sách công việc');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [pageNumber, pageSize]);
+
+  // const requestLocationPermission = async () => {
+  //   const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+  //   if (result === RESULTS.GRANTED) {
+  //     console.log('Location permission granted');
+  //   } else {
+  //     console.log('Location permission denied');
+  //   }
+  // };
 
   // useEffect(() => {
-  //   const fetchTasks = async () => {
-  //     try {
-  //       const response = await TaskService.getTasks()
-  //       if(response.isSuccess) {
-  //         setTaskList(response.value)
-  //       } else {
-  //         setError('Faild to load tasks')
-  //       }
-  //     } catch (error) {
-  //       setError('An error occured while fetching tasks')
-  //     } finally {
-  //       setLoading (false)
-  //     }
+  //   requestLocationPermission();
+  // }, []);
+  
+  // const handleCheckIn = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const location = await position();
+  //     const lat = location.latitude;
+  //     const lng = location.longitude;
+  //     const locationString = `${lat},${lng}`;
+  //     setCheckInLocation(locationString);
+  //     setMapRegion({
+  //       ...mapRegion,
+  //       latitude: lat,
+  //       longitude: lng,
+  //     });
+  //     Alert.alert('Success', 'Check-In thành công');
+  //   } catch (error) {
+  //     Alert.alert('Error', 'Không lấy được vị trí, vui lòng thử lại');
+  //   } finally {
+  //     setIsLoading(false);
   //   }
-  //   fetchTasks()
-  // }, [])
+  // };
 
-  // if (loading) {
-  //   return (
-  //     <View className="flex-1 justify-center items-center">
-  //       <ActivityIndicator size="large" color={COLORS.PRIMARY} />
-  //     </View>
-  //   );
-  // }
+  // const handleCheckOut = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const location = await position();
+  //     const lat = location.latitude;
+  //     const lng = location.longitude;
+  //     const locationString = `${lat},${lng}`;
+  //     setCheckOutLocation(locationString);
+  //     setMapRegion({
+  //       ...mapRegion,
+  //       latitude: lat,
+  //       longitude: lng,
+  //     });
+  //     Alert.alert('Success', 'Check-Out thành công');
+  //   } catch (error) {
+  //     Alert.alert('Error', 'Không lấy được vị trí, vui lòng thử lại');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+      </View>
+    );
+  }
 
   if (error) {
     return (
@@ -70,157 +176,157 @@ const TaskScreen = () => {
       </View>
     );
   }
-  const taskList: ReadonlyArray<Task> = [
-    {
-      id: 'KAP-1',
-      title: 'Gặp khách hàng tại Đình Thôn',
-      status: 'todo',
-      userCreate: 'Duclv',
-      fullNameCreate: 'Lâm Văn Đức',
-      avatarUserCreate:
-        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-      watching: [
-        {
-          username: 'VinhLQ',
-          fullName: 'Lâm Quang Vinh',
-          avatar:
-            'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-        },
-        {
-          username: 'Duclv',
-          fullName: 'Lâm Văn Đức',
-          avatar:
-            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-        },
-        {
-          username: 'HienLT',
-          fullName: 'Lâm Thị Hiền',
-          avatar:
-            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-        },
-        {
-          username: 'TanNM',
-          fullName: 'Nguyễn Minh Tân',
-          avatar:
-            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
-        },
-        {
-          username: 'VinhLQ',
-          fullName: 'Lâm Quang Vinh',
-          avatar:
-            'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-        },
-      ],
-      type: null,
-      customer: null,
-      customerName: null,
-      description: null,
-      Attachment: [],
-      deadline: null,
-    },
-    {
-      id: 'KAP-2',
-      title: 'Ký hợp đồng tại Mỹ đình',
-      status: 'done',
-      userCreate: 'Duclv',
-      fullNameCreate: 'Lâm Văn Đức',
-      avatarUserCreate:
-        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-      watching: [
-        {
-          username: 'HienLT',
-          fullName: 'Lâm Thị Hiền',
-          avatar:
-            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-        },
-        {
-          username: 'Duclv',
-          fullName: 'Lâm Văn Đức',
-          avatar:
-            'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-        },
-        {
-          username: 'TanNM',
-          fullName: 'Nguyễn Minh Tân',
-          avatar:
-            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
-        },
-      ],
-      type: null,
-      customer: null,
-      customerName: null,
-      description: null,
-      Attachment: [],
-      deadline: null,
-    },
-    {
-      id: 'KAP-3',
-      title: 'Khảo sát thị trường mới',
-      status: 'todo',
-      userCreate: 'Duclv',
-      fullNameCreate: 'Lâm Văn Đức',
-      avatarUserCreate:
-        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-      watching: [
-        {
-          username: 'HienLT',
-          fullName: 'Lâm Thị Hiền',
-          avatar:
-            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-        },
-        {
-          username: 'TanNM',
-          fullName: 'Nguyễn Minh Tân',
-          avatar:
-            'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
-        },
-      ],
-      type: null,
-      customer: null,
-      customerName: null,
-      description: null,
-      Attachment: [],
-      deadline: null,
-    },
-    {
-      id: 'KAP-4',
-      title: 'Khảo sát thị trường mới',
-      status: 'done',
-      userCreate: 'Duclv',
-      fullNameCreate: 'Lâm Văn Đức',
-      avatarUserCreate:
-        'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-      watching: [
-        {
-          username: 'HienLT',
-          fullName: 'Lâm Thị Hiền',
-          avatar:
-            'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-        },
-      ],
-      type: null,
-      customer: null,
-      customerName: null,
-      description: null,
-      Attachment: [],
-      deadline: null,
-    },
-    {
-      id: 'KAP-5',
-      title: 'Khảo sát thị trường mới',
-      status: 'todo',
-      fullNameCreate: 'Lâm Văn Đức',
-      avatarUserCreate: 'a',
-      userCreate: 'Duclv',
-      watching: [],
-      type: null,
-      customer: null,
-      customerName: null,
-      description: null,
-      Attachment: [],
-      deadline: null,
-    },
-  ];
+  // const taskList: ReadonlyArray<Task> = [
+  //   {
+  //     id: 'KAP-1',
+  //     title: 'Gặp khách hàng tại Đình Thôn',
+  //     status: 'todo',
+  //     userCreate: 'Duclv',
+  //     fullNameCreate: 'Lâm Văn Đức',
+  //     avatarUserCreate:
+  //       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //     watching: [
+  //       {
+  //         username: 'VinhLQ',
+  //         fullName: 'Lâm Quang Vinh',
+  //         avatar:
+  //           'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+  //       },
+  //       {
+  //         username: 'Duclv',
+  //         fullName: 'Lâm Văn Đức',
+  //         avatar:
+  //           'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //       },
+  //       {
+  //         username: 'HienLT',
+  //         fullName: 'Lâm Thị Hiền',
+  //         avatar:
+  //           'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+  //       },
+  //       {
+  //         username: 'TanNM',
+  //         fullName: 'Nguyễn Minh Tân',
+  //         avatar:
+  //           'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+  //       },
+  //       {
+  //         username: 'VinhLQ',
+  //         fullName: 'Lâm Quang Vinh',
+  //         avatar:
+  //           'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+  //       },
+  //     ],
+  //     type: null,
+  //     customer: null,
+  //     customerName: null,
+  //     description: null,
+  //     Attachment: [],
+  //     deadline: null,
+  //   },
+  //   {
+  //     id: 'KAP-2',
+  //     title: 'Ký hợp đồng tại Mỹ đình',
+  //     status: 'done',
+  //     userCreate: 'Duclv',
+  //     fullNameCreate: 'Lâm Văn Đức',
+  //     avatarUserCreate:
+  //       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //     watching: [
+  //       {
+  //         username: 'HienLT',
+  //         fullName: 'Lâm Thị Hiền',
+  //         avatar:
+  //           'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+  //       },
+  //       {
+  //         username: 'Duclv',
+  //         fullName: 'Lâm Văn Đức',
+  //         avatar:
+  //           'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //       },
+  //       {
+  //         username: 'TanNM',
+  //         fullName: 'Nguyễn Minh Tân',
+  //         avatar:
+  //           'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+  //       },
+  //     ],
+  //     type: null,
+  //     customer: null,
+  //     customerName: null,
+  //     description: null,
+  //     Attachment: [],
+  //     deadline: null,
+  //   },
+  //   {
+  //     id: 'KAP-3',
+  //     title: 'Khảo sát thị trường mới',
+  //     status: 'todo',
+  //     userCreate: 'Duclv',
+  //     fullNameCreate: 'Lâm Văn Đức',
+  //     avatarUserCreate:
+  //       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //     watching: [
+  //       {
+  //         username: 'HienLT',
+  //         fullName: 'Lâm Thị Hiền',
+  //         avatar:
+  //           'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+  //       },
+  //       {
+  //         username: 'TanNM',
+  //         fullName: 'Nguyễn Minh Tân',
+  //         avatar:
+  //           'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+  //       },
+  //     ],
+  //     type: null,
+  //     customer: null,
+  //     customerName: null,
+  //     description: null,
+  //     Attachment: [],
+  //     deadline: null,
+  //   },
+  //   {
+  //     id: 'KAP-4',
+  //     title: 'Khảo sát thị trường mới',
+  //     status: 'done',
+  //     userCreate: 'Duclv',
+  //     fullNameCreate: 'Lâm Văn Đức',
+  //     avatarUserCreate:
+  //       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //     watching: [
+  //       {
+  //         username: 'HienLT',
+  //         fullName: 'Lâm Thị Hiền',
+  //         avatar:
+  //           'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+  //       },
+  //     ],
+  //     type: null,
+  //     customer: null,
+  //     customerName: null,
+  //     description: null,
+  //     Attachment: [],
+  //     deadline: null,
+  //   },
+  //   {
+  //     id: 'KAP-5',
+  //     title: 'Khảo sát thị trường mới',
+  //     status: 'todo',
+  //     fullNameCreate: 'Lâm Văn Đức',
+  //     avatarUserCreate: 'a',
+  //     userCreate: 'Duclv',
+  //     watching: [],
+  //     type: null,
+  //     customer: null,
+  //     customerName: null,
+  //     description: null,
+  //     Attachment: [],
+  //     deadline: null,
+  //   },
+  // ];
 
   return (
     <>
@@ -228,42 +334,146 @@ const TaskScreen = () => {
         <AppHeader
           title="Lịch công việc"
           centerTitle={true}
-          backgroundColor='#fff'
-          titleColor='#000'
+          backgroundColor="#fff"
+          titleColor="#000"
           actions={
-            <TouchableRipple
+            <View style={{flexDirection: 'row'}}>
+              <TouchableRipple
               rippleColor="transparent"
               onPress={() =>
                 //@ts-ignore
                 navigation.navigate(SCREENS.SEARCHTASK.KEY)
               }
-              style={{marginRight: 10}}>
-              <Image
-                source={IMAGES.SEARCH}
-                style={{
-                  width: 20,
-                  height: 20,
-                  tintColor: COLORS.PRIMARY,
-                }}
+              >
+             <Icon
+                name="search-outline"
+                size={moderateScale(24)}
+                color={'#2179A9'}
               />
             </TouchableRipple>
+            <Text>&nbsp;&nbsp;&nbsp;</Text>
+            <TouchableRipple
+              rippleColor={'transparent'}
+              onPress={() =>
+                //@ts-ignore
+                navigation.navigate(SCREENS.ADDNEWTASK.KEY)
+              }>
+              <Icon
+                name="add-circle-outline"
+                size={moderateScale(24)}
+                color={'#2179A9'}
+              />
+            </TouchableRipple>
+            </View>
+        
+            
           }
         />
         <ScrollView>
           <View className="flex-1">
-            <View className="w-full">
-              <View>
-                <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
+            <View className="w-full p-5">
+              <View className='flex-row items-center justify-between'>
+                <Text className="text-black text-lg font-bold mb-4">
+                  Trạng thái công việc
+                </Text>
+                <MenuTaskComponent />
+            
               </View>
-              <MenuTaskComponent />
-              <View className="my-4 px-2 flex flex-row flex-nowrap justify-between items-center">
-                <Text className="text-black text-lg font-bold">Công việc</Text>
+              <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
+              {/* <View style={{width: '100%'}}>
+                <Button
+                  title="Ngày bắt đầu"
+                  onPress={() => setOpenFromDatePicker(true)}
+                />
+                <Text>
+                  {fromDate ? fromDate.toDateString() : 'Chưa chọn ngày'}
+                </Text>
+                <DatePicker
+                  modal
+                  open={openFromDatePicker}
+                  date={fromDate || new Date()}
+                  mode="date"
+                  onConfirm={date => {
+                    setOpenFromDatePicker(false);
+                    setFromDate(date);
+                  }}
+                  onCancel={() => {
+                    setOpenFromDatePicker(false);
+                  }}
+                />
+                <Button
+                  title="Ngày kết thúc"
+                  onPress={() => setOpenToDatePicker(true)}
+                />
+                <Text>{toDate ? toDate.toDateString() : 'Chưa chọn ngày'}</Text>
+                <DatePicker
+                  modal
+                  open={openToDatePicker}
+                  date={toDate || new Date()}
+                  mode="date"
+                  onConfirm={date => {
+                    setOpenToDatePicker(false);
+                    setToDate(date);
+                  }}
+                  onCancel={() => {
+                    setOpenToDatePicker(false);
+                  }}
+                />
+      
+                <Button title="Fetch Tasks" onPress={fetchTasks} />
+              </View> */}
+               {/* <Button title="Check In" onPress={handleCheckIn} />
+            <Text>Check-In Location: {checkInLocation}</Text>
+            <Button title="Check Out" onPress={handleCheckOut} />
+            <Text>Check-Out Location: {checkOutLocation}</Text>
+            <MapView
+                style={{height: 300, marginTop: 20}}
+                region={mapRegion}
+              >
+                {checkInLocation && (
+                  <Marker
+                    coordinate={{
+                      latitude: parseFloat(checkInLocation.split(',')[0]),
+                      longitude: parseFloat(checkInLocation.split(',')[1]),
+                    }}
+                    title="Check-In"
+                  />
+                )}
+                {checkOutLocation && (
+                  <Marker
+                    coordinate={{
+                      latitude: parseFloat(checkOutLocation.split(',')[0]),
+                      longitude: parseFloat(checkOutLocation.split(',')[1]),
+                    }}
+                    title="Check-Out"
+                  />
+                )}
+                {checkInLocation && checkOutLocation && (
+                  <Polyline
+                    coordinates={[
+                      {
+                        latitude: parseFloat(checkInLocation.split(',')[0]),
+                        longitude: parseFloat(checkInLocation.split(',')[1]),
+                      },
+                      {
+                        latitude: parseFloat(checkOutLocation.split(',')[0]),
+                        longitude: parseFloat(checkOutLocation.split(',')[1]),
+                      },
+                    ]}
+                    strokeColor="#000"
+                    strokeWidth={3}
+                  />
+                )}
+              </MapView> */}
+              <View className="my-4  flex flex-row flex-nowrap justify-between items-center">
+                <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
               </View>
-              <View className="px-2">
-                {taskList.map(item => {
-                  return <TaskFlatListComponent task={item} key={item.id} />;
-                })} 
-              </View>
+              <FlatList
+                data={taskList}
+                keyExtractor={item => item.id}
+                renderItem={({item}) => <TaskFlatListComponent task={item} />}
+                // contentContainerStyle={{paddingHorizontal: 0}}
+              />
             </View>
           </View>
         </ScrollView>
