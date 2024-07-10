@@ -139,10 +139,11 @@ export const styles = StyleSheet.create({
     marginBottom:moderateScale(10)
   },
   pickerDropdown: {
+    padding: moderateScale(10),
     flex:1,
     maxWidth:moderateScale(180),
     borderColor: '#ddd',
-    borderRadius: 5,
+    borderRadius: moderateScale(5),
     backgroundColor: '#f9f9f9',
   },
   btnShowDate: {
@@ -166,6 +167,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     position:'relative',
     borderColor: '#ddd',
+    height:moderateScale(40),
     borderRadius: moderateScale(5),
     paddingHorizontal: moderateScale(5),
 
@@ -196,6 +198,12 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     color: '#2179A9',
   },
+  actionSheetItem: {
+    padding: moderateScale(15),
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    backgroundColor: '#fff',
+  },
   colorGreen: {
     backgroundColor: 'green',
     padding: moderateScale(5),
@@ -225,6 +233,11 @@ export const styles = StyleSheet.create({
   textLeft: {
     fontSize: moderateScale(14),
     color:'#777',
+  },
+  textChoose: {
+    textAlign:'center',
+    color:'#000',
+    fontSize: moderateScale(14),
   },
   textRight: {
     fontSize: moderateScale(14),

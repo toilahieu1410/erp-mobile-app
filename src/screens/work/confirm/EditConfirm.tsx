@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -6,19 +6,21 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-} from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+  Platform,
+} from 'react-native'
+import {useNavigation, useRoute} from '@react-navigation/native'
+import DatePicker from 'react-native-date-picker'
+import {showMessage} from 'react-native-flash-message'
+import {Picker} from '@react-native-picker/picker'
+import Icon from 'react-native-vector-icons/Ionicons'
+import ActionSheet from 'react-native-actions-sheet'
+import moment from 'moment'
 
-import DatePicker from 'react-native-date-picker';
-import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
-import moment from 'moment';
-import {showMessage} from 'react-native-flash-message';
-import {Picker} from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {SCREENS} from '../../../constants/screens';
-import {moderateScale} from '../../../screens/size';
-import {styles} from '../../../assets/css/ListWorksScreen/_detailWork';
-import AppHeader from '../../../components/navigators/AppHeader';
+import ServiceConfirm from '../../../services/listWorks/serviceConfirm'
+import {SCREENS} from '../../../constants/screens'
+import {moderateScale} from '../../../screens/size'
+import {styles} from '../../../assets/css/ListWorksScreen/_detailWork'
+import AppHeader from '../../../components/navigators/AppHeader'
 
 interface XacNhanType {
   value: number;
@@ -28,49 +30,49 @@ interface XacNhanType {
 const newDate = new Date();
 
 const EditConfirm: React.FC = () => {
-  const navigation: any = useNavigation();
-  const route = useRoute();
+  const navigation: any = useNavigation()
+  const route = useRoute()
 
-  const {item}: any = route.params;
+  const {item}: any = route.params
+  const actionSheetRef = useRef<any>(null)
 
   const [selectConfirm, setSelectConfirm] = useState<XacNhanType | null>(null);
-  const [confirmTypes, setConfirmTypes] = useState<XacNhanType[]>([]);
+  const [confirmTypes, setConfirmTypes] = useState<XacNhanType[]>([])
   const [startDate, setStartDate] = useState<Date | null>(
     item.startDate ? new Date(item.startDate) : null,
-  );
+  )
   const [endDate, setEndDate] = useState<Date | null>(
     item.endDate ? new Date(item.endDate) : null,
-  );
-  const [content, setContent] = useState(item.content);
+  )
+  const [content, setContent] = useState(item.content)
   const [dateNeedConfirm, setDateNeedConfirm] = useState(
     new Date(item.dateNeedConfirm),
-  );
+  )
 
-  const [showStartDateNeedConfirm, setShowStartDateNeedConfirm] =
-    useState(false);
+  const [showStartDateNeedConfirm, setShowStartDateNeedConfirm] = useState(false)
 
   const [showStartDatePicker, setShowStartDatePicker] = useState<
     'date' | 'time' | null
-  >(null);
+  >(null)
   const [showEndDatePicker, setShowEndDatePicker] = useState<
     'date' | 'time' | null
-  >(null);
+  >(null)
 
-  const [btnShowDate, setBtnShowDate] = useState(false);
+  const [btnShowDate, setBtnShowDate] = useState(false)
 
   useEffect(() => {
     const fetchConfirmTypes = async () => {
       try {
-        const types = await ServiceConfirm.getConfirmTypes();
-        setConfirmTypes(types);
-        const selectedType = types.find(type => type.display === item.type);
-        setSelectConfirm(selectedType || null);
+        const types = await ServiceConfirm.getConfirmTypes()
+        setConfirmTypes(types)
+        const selectedType = types.find(type => type.display === item.type)
+        setSelectConfirm(selectedType || null)
       } catch (error) {
-        console.error('Error' + error);
+        console.error('Error' + error)
       }
     };
-    fetchConfirmTypes();
-  }, []);
+    fetchConfirmTypes()
+  }, [])
 
   useEffect(() => {
     if (dateNeedConfirm) {
@@ -112,13 +114,13 @@ const EditConfirm: React.FC = () => {
   };
 
   const handleConfirm = (itemValue: XacNhanType | null) => {
-    setSelectConfirm(itemValue);
+    setSelectConfirm(itemValue)
     if (itemValue && [1, 4, 5].includes(itemValue.value)) {
-      setStartDate(newDate);
-      setEndDate(newDate);
+      setStartDate(newDate)
+      setEndDate(newDate)
     } else {
-      setStartDate(null);
-      setEndDate(null);
+      setStartDate(null)
+      setEndDate(null)
     }
   };
 
@@ -127,11 +129,11 @@ const EditConfirm: React.FC = () => {
     mode: 'date' | 'time',
   ) => {
     if (picker === 'startDate') {
-      setShowStartDatePicker(mode);
-      setShowEndDatePicker(null);
+      setShowStartDatePicker(mode)
+      setShowEndDatePicker(null)
     } else {
-      setShowEndDatePicker(mode);
-      setShowStartDatePicker(null);
+      setShowEndDatePicker(mode)
+      setShowStartDatePicker(null)
     }
   };
 
@@ -141,31 +143,35 @@ const EditConfirm: React.FC = () => {
     mode: 'date' | 'time',
   ) => {
     if (picker === 'startDate') {
-      const currentDate = selectedDate || startDate;
+      const currentDate = selectedDate || startDate
       if (mode === 'date') {
-        setShowStartDatePicker('time');
-        setStartDate(currentDate);
+        setShowStartDatePicker('time')
+        setStartDate(currentDate)
       } else {
         setShowStartDatePicker(null);
-        setStartDate(currentDate);
+        setStartDate(currentDate)
         if (endDate && currentDate && endDate < currentDate) {
-          setEndDate(currentDate);
+          setEndDate(currentDate)
         }
       }
     } else {
-      const currentDate = selectedDate || endDate;
+      const currentDate = selectedDate || endDate
       if (mode === 'date') {
-        setShowEndDatePicker('time');
-        setEndDate(currentDate);
+        setShowEndDatePicker('time')
+        setEndDate(currentDate)
       } else {
-        setShowEndDatePicker(null);
-        setEndDate(currentDate);
+        setShowEndDatePicker(null)
+        setEndDate(currentDate)
         if (startDate && currentDate && startDate > currentDate) {
-          setStartDate(currentDate);
+          setStartDate(currentDate)
         }
       }
     }
-  };
+  }
+
+  const openActionSheet = () => {
+    actionSheetRef.current?.setModalVisible(true)
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -238,7 +244,32 @@ const EditConfirm: React.FC = () => {
             onCancel={() => setShowStartDateNeedConfirm(false)}
           />
         </View>
-        <View style={styles.flexVertical}>
+        {Platform.OS === 'ios' ? (
+          <View style={styles.flexVertical}>
+            <Text style={styles.textLeft}>Loại xác nhận</Text>
+            <TouchableOpacity
+              style={styles.pickerDropdown}
+              onPress={openActionSheet}
+            >
+              <Text style={styles.textLeft}>{selectConfirm?.display || 'Loại xác nhận'}</Text>
+            </TouchableOpacity>
+            <ActionSheet ref={actionSheetRef}>
+              {confirmTypes.map((item) => (
+                <TouchableOpacity
+                  key={item.value}
+                  style={styles.actionSheetItem}
+                  onPress={() => {
+                    handleConfirm(item)
+                    actionSheetRef.current?.hide()
+                  }}
+                >
+                  <Text>{item.display}</Text>
+                </TouchableOpacity>
+              ))}
+            </ActionSheet>
+          </View>
+        ) : (
+          <View style={styles.flexVertical}>
           <Text style={styles.textLeft}>Loại xác nhận</Text>
           <Picker
             mode="dropdown"
@@ -255,6 +286,8 @@ const EditConfirm: React.FC = () => {
               ))}
           </Picker>
         </View>
+        )}
+     
         {selectConfirm?.value === 1 ||
         selectConfirm?.value === 4 ||
         selectConfirm?.value === 5 ? (
