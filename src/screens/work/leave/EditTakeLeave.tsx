@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
-import {View, Text, ScrollView, Alert, TextInput, TouchableOpacity} from 'react-native'
+import React, {useState, useEffect, useRef} from "react";
+import {View, Text, ScrollView, Alert, TextInput, TouchableOpacity, Platform} from 'react-native'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
 import DatePicker from "react-native-date-picker";
 import { Picker } from "@react-native-picker/picker";
-
+import ActionSheet from "react-native-actions-sheet";
 import moment from "moment";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { moderateScale } from "../../../screens/size";
@@ -36,6 +36,10 @@ const newDate = new Date()
 const EditTakeLeave: React.FC = () => {
 
   const navigation: any = useNavigation()
+
+  const actionSheetRef = useRef<any>(null)
+  const actionSheetTimeRef = useRef<any>(null) 
+
   const route = useRoute()
 
   const {item}: any = route.params
@@ -182,6 +186,14 @@ const EditTakeLeave: React.FC = () => {
   }
 
 
+  const openActionSheet = () => {
+    actionSheetRef.current?.setModalVisible(true)
+  }
+
+  const openTimeActionSheet = () => {
+    actionSheetTimeRef.current?.setModalVisible(true)
+  }
+
   return (
     <ScrollView style={styles.container}>
       <AppHeader 
@@ -252,7 +264,34 @@ const EditTakeLeave: React.FC = () => {
                 />
               )}
             </View>
-            <View style={[styles.flexVertical, {paddingVertical: moderateScale(0)}]}>
+            {Platform.OS === 'ios' ? (
+              <View style={styles.flexVertical}>
+                <Text style={styles.textLeft}>Thời gian nghỉ</Text>
+                <TouchableOpacity
+                  style={styles.pickerDropdown}
+                  onPress={openTimeActionSheet}
+                >
+                  <Text style={styles.textChoose}>
+                    {timeTypes.find(t => t.value === detail.timeType)?.display || 'Chọn thời gian nghỉ'}
+                  </Text>
+                </TouchableOpacity>
+                <ActionSheet ref={actionSheetTimeRef}>
+                  {timeTypes.map((item) => (
+                    <TouchableOpacity
+                      key={item.value}
+                      style={styles.actionSheetItem}
+                      onPress={() => {
+                        actionSheetTimeRef.current?.hide()
+                        handleTimeTypeChange(index, item.value)
+                      }}
+                    >
+                      <Text>{item.display}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ActionSheet>
+              </View>
+            ) : (
+              <View style={[styles.flexVertical, {paddingVertical: moderateScale(0)}]}>
               <Text style={styles.textLeft}>Thời gian nghỉ</Text>
               <Picker
                 mode="dropdown"
@@ -265,6 +304,8 @@ const EditTakeLeave: React.FC = () => {
                 ))}
               </Picker>
             </View>
+            )}
+          
             {leaveApplicationDetails.length > 1 && (
               <TouchableOpacity onPress={() => handleRemoveDetail(index)} style={styles.positionRemove}>
                  <Icon
@@ -295,7 +336,7 @@ const EditTakeLeave: React.FC = () => {
               onChangeText={setSearchText}
             />
             <Dropdown
-            inputSearchStyle={styles.searchStyle}
+              inputSearchStyle={styles.searchStyle}
               iconStyle={styles.iconStyle}
               style={styles.dropdown}
               containerStyle={styles.dropdownContainer}
@@ -320,7 +361,34 @@ const EditTakeLeave: React.FC = () => {
             multiline
           />
         </View>
-        <View style={styles.flexVertical}>
+        {Platform.OS === 'ios' ? (
+           <View style={styles.flexVertical}>
+           <Text style={styles.textLeft}>Loại nghỉ phép</Text>
+           <TouchableOpacity
+             style={styles.pickerDropdown}
+             onPress={openActionSheet}
+           >
+             <Text style={styles.textChoose}>
+              {selectTakeLeave?.display || 'Loại nghỉ phép'}
+             </Text>
+           </TouchableOpacity>
+           <ActionSheet ref={actionSheetRef}>
+             {takeLeaveTypes.map((item) => (
+               <TouchableOpacity
+                 key={item.value}
+                 style={styles.actionSheetItem}
+                 onPress={() => {
+                  setSelectTakeLeave(item)
+                  actionSheetRef.current?.hide()
+                 }}
+               >
+                 <Text>{item.display}</Text>
+               </TouchableOpacity>
+             ))}
+           </ActionSheet>
+         </View>
+        ) : (
+          <View style={styles.flexVertical}>
           <Text style={styles.textLeft}>Loại nghỉ phép</Text>
           <Picker
             mode="dropdown"
@@ -333,6 +401,8 @@ const EditTakeLeave: React.FC = () => {
             ))}
           </Picker>
         </View>
+        )}
+  
         <View style={styles.flexColumn}>
           <View style={styles.flexTitleDetail}>
             <Text style={styles.textLeft}>Nội dung bàn giao</Text>

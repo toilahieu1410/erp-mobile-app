@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import {
   View,
   Text,
@@ -8,24 +8,22 @@ import {
   TextInput,
   Alert,
   TouchableOpacity
-} from 'react-native';
-import { Button, NativeBaseProvider } from 'native-base';
-import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
+} from 'react-native'
+import { Picker } from '@react-native-picker/picker'
+import ActionSheet from 'react-native-actions-sheet'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native'
 import { Dropdown } from 'react-native-element-dropdown'
-import { styles } from '../../../assets/css/ListWorksScreen/style';
-import moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { moderateScale } from '../../../screens/size';
+import { showMessage } from 'react-native-flash-message'
+import moment from 'moment'
+import { moderateScale } from '../../../screens/size'
+import ServiceTakeLeave from '../../../services/listWorks/serviceTakeLeave'
+import { SCREENS } from '../../../constants/screens'
+import DatePickerDay from '../../../components/picker/datePicker'
+import AppHeader from '../../../components/navigators/AppHeader'
+import { styles } from '../../../assets/css/ListWorksScreen/style'
 
-import ServiceTakeLeave from '../../../services/listWorks/serviceTakeLeave';
-import { showMessage } from 'react-native-flash-message';
-import { SCREENS } from '../../../constants/screens';
-import DatePickerDay from '../../../components/picker/datePicker';
-import AppHeader from '../../../components/navigators/AppHeader';
-
-
-const newDate = new Date();
+const newDate = new Date()
 
 interface NghiPhepType {
   value: number,
@@ -52,7 +50,10 @@ const timeTypes = [
 
 const CreateTakeLeave = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
+
+  const actionSheetRef = useRef<any>(null)
+  const actionSheetTimeRef = useRef<any>(null) 
 
   const [selectTakeLeave, setSelectTakeLeave] = useState<NghiPhepType | null>(null)
   const [takeleaveType, setTakeleaveType] = useState<NghiPhepType[]>([])
@@ -174,6 +175,14 @@ const CreateTakeLeave = () => {
     }
   }
 
+  const openActionSheet = () => {
+    actionSheetRef.current?.setModalVisible(true)
+  }
+
+  const openTimeActionSheet = () => {
+    actionSheetTimeRef.current?.setModalVisible(true)
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -185,15 +194,12 @@ const CreateTakeLeave = () => {
         backgroundColor='#fff'
         titleColor='#000'
         actions={
-          <NativeBaseProvider>
-            <Button
-              backgroundColor={'transparent'}
+            <TouchableOpacity
+              style={{backgroundColor:'transparent', width: moderateScale(50)}}
               disabled={disabled}
-              size={moderateScale(50)}
               onPress={handleSubmit}>
               <Text style={disabled === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
-            </Button>
-          </NativeBaseProvider>
+            </TouchableOpacity>
         }
       />
       <ScrollView>
@@ -233,7 +239,34 @@ const CreateTakeLeave = () => {
                     />
                   )}
                 </View>
-                <View style={[styles.flexTitle, styles.inputContainer, {marginBottom: 0}]}>
+                {Platform.OS === 'ios' ? (
+                  <View style={[styles.flexTitle, styles.inputContainer, {marginTop: moderateScale(10)}]}>
+                     <Text style={styles.label}>Thời gian xin nghỉ</Text>
+                      <TouchableOpacity
+                        style={styles.pickerDropdown}
+                        onPress={openTimeActionSheet}
+                      >
+                      <Text style={styles.textChoose}>
+                        {timeTypes.find(t => t.value === detail.timeType)?.display || 'Chọn thời gian nghỉ'}
+                        </Text>
+                      </TouchableOpacity> 
+                      <ActionSheet ref={actionSheetTimeRef}>
+                        {timeTypes.map((item) => (
+                          <TouchableOpacity
+                            key={item.value}
+                            style={styles.actionSheetItem}
+                            onPress={() => {
+                              handleTimeTypeChange(index, item.value)
+                              actionSheetTimeRef.current?.hide()
+                            }}
+                          >
+                            <Text>{item.display}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ActionSheet>
+                  </View>
+                ) : (
+                  <View style={[styles.flexTitle, styles.inputContainer, {marginBottom: 0}]}>
                   <Text style={styles.label}>Thời gian xin nghỉ:</Text>
                   <Picker
                     mode="dropdown"
@@ -246,6 +279,8 @@ const CreateTakeLeave = () => {
                     ))}
                   </Picker>
                 </View>
+                )}
+            
                 {leaveApplicationDetails.length > 1 && (
               <TouchableOpacity onPress={() => handleRemoveDetail(index)} style={styles.positionRemove}>
                  <Icon
@@ -298,22 +333,49 @@ const CreateTakeLeave = () => {
                 maxLength={200}
               />
             </View>
-            <View style={[styles.flexTitle, styles.inputContainer]}>
-              <Text style={styles.label}>Loại nghỉ phép</Text>
-              <Picker
-                mode='dropdown'
-                style={styles.pickerDropdown}
-                selectedValue={selectTakeLeave}
-                onValueChange={itemValue => setSelectTakeLeave(itemValue)}
-              >
-                <Picker.Item label='Chọn loại nghỉ phép' value={''} />
-                {takeleaveType &&
-                  takeleaveType.map(item => (
-                    <Picker.Item key={item.value} label={item.display} value={item} />
-                  ))
-                }
-              </Picker>
-            </View>
+            {Platform.OS === 'ios' ? (
+              <View style={[styles.flexTitle, styles.inputContainer]}>
+                <Text style={styles.label}>Loại nghỉ phép</Text>
+                <TouchableOpacity
+                  style={styles.pickerDropdown}
+                  onPress={openActionSheet}
+                > 
+                <Text style={styles.textChoose}>{selectTakeLeave?.display || 'Loại nghỉ phép'}</Text>
+                </TouchableOpacity>
+                <ActionSheet ref={actionSheetRef}>
+                  {takeleaveType.map((item) => (
+                    <TouchableOpacity
+                      key={item.value}
+                      style={styles.actionSheetItem}
+                      onPress={() => {
+                        setSelectTakeLeave(item)
+                        actionSheetRef.current?.hide()
+                      }}
+                    >
+                    <Text>{item.display}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ActionSheet>
+              </View>
+            ) : (
+                <View style={[styles.flexTitle, styles.inputContainer]}>
+                  <Text style={styles.label}>Loại nghỉ phép</Text>
+                <Picker
+                  mode='dropdown'
+                  style={styles.pickerDropdown}
+                  selectedValue={selectTakeLeave}
+                  onValueChange={itemValue => setSelectTakeLeave(itemValue)}
+                >
+                  <Picker.Item label='Chọn loại nghỉ phép' value={''} />
+                  {takeleaveType &&
+                    takeleaveType.map(item => (
+                      <Picker.Item key={item.value} label={item.display} value={item} />
+                    ))
+                  }
+                </Picker>
+              </View>
+            )}
+         
             <View style={styles.inputContainer}>
               <View style={styles.flexTitle}>
                 <Text style={styles.label}>Nội dung bàn giao</Text>
