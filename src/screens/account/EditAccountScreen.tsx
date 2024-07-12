@@ -88,7 +88,6 @@ const EditAccountScreen = () => {
           setUsers(response);
 
           const leader = response.find(user => user.hoTen === userInfo.leader);
-          console.log(leader,'leaderrrrrr',leaderId)
           if (leader) {
             setLeaderId(leader.id)
             setLeaderName(leader.hoTen);

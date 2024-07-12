@@ -1,7 +1,6 @@
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  Image,
   SafeAreaView,
   ScrollView,
   Text,
@@ -9,7 +8,7 @@ import {
   Button,
   TextInput,
   FlatList,
-  Alert
+  RefreshControl
 } from 'react-native';
 import {ActivityIndicator, TouchableRipple} from 'react-native-paper';
 import {COLORS, IMAGES} from '../../constants/screens';
@@ -17,11 +16,12 @@ import AppHeader from '../../components/navigators/AppHeader';
 import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
 import {Task} from '../../models/Task';
 import ProcessTaskTodayComponent from '../../components/task/taskMain/ProcessTaskTodayComponent';
-import {useNavigation} from '@react-navigation/native';
-import {SCREENS} from '../../constants/screens';
-import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent';
-import TaskService from '../../services/taskWorks/serviceTask';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {useFocusEffect, useIsFocused, useNavigation, useRoute} from '@react-navigation/native'
+import {SCREENS} from '../../constants/screens'
+import MenuTaskComponent from '../../components/task/taskMain/MenuTaskComponent'
+import TaskService from '../../services/taskWorks/serviceTask'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 // import DatePicker from 'react-native-date-picker';
 // import Geolocation from 'react-native-geolocation-service';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
@@ -53,20 +53,28 @@ interface ListTask {
 }
 
 const TaskScreen = () => {
-  const navigation = useNavigation();
-  const [taskList, setTaskList] = useState<ListTask[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
-  const [pageNumber, setPageNumber] = useState('1');
-  const [pageSize, setPageSize] = useState('8');
-  const [openFromDatePicker, setOpenFromDatePicker] = useState(false);
-  const [openToDatePicker, setOpenToDatePicker] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [checkInLocation, setCheckInLocation] = useState<string | null>(null);
-  const [checkOutLocation, setCheckOutLocation] = useState<string | null>(null);
+  const navigation = useNavigation()
+  const route = useRoute()
+  const isFocused = useIsFocused()
 
+  const [taskList, setTaskList] = useState<ListTask[]>([])
+  const [filteredTaskList, setFilteredTaskList] = useState<ListTask[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [fromDate, setFromDate] = useState<Date | null>(null)
+  const [toDate, setToDate] = useState<Date | null>(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [openFromDatePicker, setOpenFromDatePicker] = useState(false)
+  const [openToDatePicker, setOpenToDatePicker] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [checkInLocation, setCheckInLocation] = useState<string | null>(null)
+  const [checkOutLocation, setCheckOutLocation] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  const [searchQuery, setSearchQuery] = useState<string>('')
+
+ 
   const [mapRegion, setMapRegion] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -74,35 +82,77 @@ const TaskScreen = () => {
     longitudeDelta: 0.0421,
   });
 
-  const fetchTasks = async () => {
-    setLoading(true);
-    setError(null);
+  const fetchTasks = async (isRefreshing = false) => {
+      if (isRefreshing) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
+    setError(null)
 
     try {
-      const fromDateString = fromDate
-        ? moment(fromDate).format('YYYY-MM-DD')
-        : '';
+      const fromDateString = fromDate ? moment(fromDate).format('YYYY-MM-DD') : '';
       const toDateString = toDate ? moment(toDate).format('YYYY-MM-DD') : '';
-      const pageNumberInt = parseInt(pageNumber);
-      const pageSizeInt = parseInt(pageSize);
 
-      const tasks = await TaskService.getTasks(
-        fromDateString,
-        toDateString,
-        pageNumberInt,
-        pageSizeInt,
-      );
-      setTaskList(tasks);
+      const tasks = await TaskService.getTasks(fromDateString, toDateString, pageNumber, pageSize)
+
+      setTaskList(tasks)
+      setFilteredTaskList(tasks)
     } catch (error) {
       setError('Không lấy được danh sách công việc');
     } finally {
-      setLoading(false);
+      if (isRefreshing) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
     }
   };
+
+  const filterTasks = (query: string) => {
+    if (!query) {
+      setFilteredTaskList(taskList);
+    } else {
+      const filtered = taskList.filter(task => task.title.toLowerCase().includes(query.toLowerCase()));
+      setFilteredTaskList(filtered);
+    }
+  };
+
+  const onRefresh = () => {
+    fetchTasks(true);
+  }
+
+  useEffect(() => {
+    if (isFocused) {
+      const query = route.params?.searchQuery ?? '';
+      if (query && query.trim() !== '') {
+        setSearchQuery(query);
+        setIsSearching(true);
+        filterTasks(query);
+      } else {
+        setSearchQuery('');
+        setIsSearching(false);
+        fetchTasks();
+      }
+    } else {
+      setSearchQuery('');
+      setIsSearching(false);
+      fetchTasks();
+      // Xóa searchQuery khỏi route params sau khi xử lý
+      navigation.setParams({ searchQuery: '' });
+    }
+  }, [isFocused, route.params?.searchQuery]);
+
 
   useEffect(() => {
     fetchTasks();
   }, [pageNumber, pageSize]);
+
+
+  const handleDeleteTask = (taskId: string) => {
+    setTaskList(prevList => prevList.filter(task => task.id !== taskId))
+    setFilteredTaskList(prevList => prevList.filter(task => task.id !== taskId))
+  }
 
   // const requestLocationPermission = async () => {
   //   const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -161,7 +211,7 @@ const TaskScreen = () => {
 
 
 
-  if (loading) {
+  if (loading && !refreshing) {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color={COLORS.PRIMARY} />
@@ -328,6 +378,106 @@ const TaskScreen = () => {
   //   },
   // ];
 
+  const ListHeader = () => (
+    <View className="mt-3">
+    <View className='flex-row items-center justify-between'>
+      <Text className="text-black text-lg font-bold mb-4">Trạng thái công việc</Text>
+      <MenuTaskComponent />
+      {/* <View style={{width: '100%'}}>
+              <Button
+                title="Ngày bắt đầu"
+                onPress={() => setOpenFromDatePicker(true)}
+              />
+              <Text>
+                {fromDate ? fromDate.toDateString() : 'Chưa chọn ngày'}
+              </Text>
+              <DatePicker
+                modal
+                open={openFromDatePicker}
+                date={fromDate || new Date()}
+                mode="date"
+                onConfirm={date => {
+                  setOpenFromDatePicker(false);
+                  setFromDate(date);
+                }}
+                onCancel={() => {
+                  setOpenFromDatePicker(false);
+                }}
+              />
+              <Button
+                title="Ngày kết thúc"
+                onPress={() => setOpenToDatePicker(true)}
+              />
+              <Text>{toDate ? toDate.toDateString() : 'Chưa chọn ngày'}</Text>
+              <DatePicker
+                modal
+                open={openToDatePicker}
+                date={toDate || new Date()}
+                mode="date"
+                onConfirm={date => {
+                  setOpenToDatePicker(false);
+                  setToDate(date);
+                }}
+                onCancel={() => {
+                  setOpenToDatePicker(false);
+                }}
+              />
+    
+              <Button title="Fetch Tasks" onPress={fetchTasks} />
+            </View> */}
+             {/* <Button title="Check In" onPress={handleCheckIn} />
+          <Text>Check-In Location: {checkInLocation}</Text>
+          <Button title="Check Out" onPress={handleCheckOut} />
+          <Text>Check-Out Location: {checkOutLocation}</Text>
+          <MapView
+              style={{height: 300, marginTop: 20}}
+              region={mapRegion}
+            >
+              {checkInLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(checkInLocation.split(',')[0]),
+                    longitude: parseFloat(checkInLocation.split(',')[1]),
+                  }}
+                  title="Check-In"
+                />
+              )}
+              {checkOutLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(checkOutLocation.split(',')[0]),
+                    longitude: parseFloat(checkOutLocation.split(',')[1]),
+                  }}
+                  title="Check-Out"
+                />
+              )}
+              {checkInLocation && checkOutLocation && (
+                <Polyline
+                  coordinates={[
+                    {
+                      latitude: parseFloat(checkInLocation.split(',')[0]),
+                      longitude: parseFloat(checkInLocation.split(',')[1]),
+                    },
+                    {
+                      latitude: parseFloat(checkOutLocation.split(',')[0]),
+                      longitude: parseFloat(checkOutLocation.split(',')[1]),
+                    },
+                  ]}
+                  strokeColor="#000"
+                  strokeWidth={3}
+                />
+              )}
+            </MapView> */}
+    </View>
+    <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
+    <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
+      <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
+    </View>
+  </View>
+  );
+
+
+
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">
@@ -369,114 +519,22 @@ const TaskScreen = () => {
             
           }
         />
-        <ScrollView>
           <View className="flex-1">
-            <View className="w-full p-5">
-              <View className='flex-row items-center justify-between'>
-                <Text className="text-black text-lg font-bold mb-4">
-                  Trạng thái công việc
-                </Text>
-                <MenuTaskComponent />
-            
-              </View>
-              <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
-              {/* <View style={{width: '100%'}}>
-                <Button
-                  title="Ngày bắt đầu"
-                  onPress={() => setOpenFromDatePicker(true)}
-                />
-                <Text>
-                  {fromDate ? fromDate.toDateString() : 'Chưa chọn ngày'}
-                </Text>
-                <DatePicker
-                  modal
-                  open={openFromDatePicker}
-                  date={fromDate || new Date()}
-                  mode="date"
-                  onConfirm={date => {
-                    setOpenFromDatePicker(false);
-                    setFromDate(date);
-                  }}
-                  onCancel={() => {
-                    setOpenFromDatePicker(false);
-                  }}
-                />
-                <Button
-                  title="Ngày kết thúc"
-                  onPress={() => setOpenToDatePicker(true)}
-                />
-                <Text>{toDate ? toDate.toDateString() : 'Chưa chọn ngày'}</Text>
-                <DatePicker
-                  modal
-                  open={openToDatePicker}
-                  date={toDate || new Date()}
-                  mode="date"
-                  onConfirm={date => {
-                    setOpenToDatePicker(false);
-                    setToDate(date);
-                  }}
-                  onCancel={() => {
-                    setOpenToDatePicker(false);
-                  }}
-                />
-      
-                <Button title="Fetch Tasks" onPress={fetchTasks} />
-              </View> */}
-               {/* <Button title="Check In" onPress={handleCheckIn} />
-            <Text>Check-In Location: {checkInLocation}</Text>
-            <Button title="Check Out" onPress={handleCheckOut} />
-            <Text>Check-Out Location: {checkOutLocation}</Text>
-            <MapView
-                style={{height: 300, marginTop: 20}}
-                region={mapRegion}
-              >
-                {checkInLocation && (
-                  <Marker
-                    coordinate={{
-                      latitude: parseFloat(checkInLocation.split(',')[0]),
-                      longitude: parseFloat(checkInLocation.split(',')[1]),
-                    }}
-                    title="Check-In"
-                  />
-                )}
-                {checkOutLocation && (
-                  <Marker
-                    coordinate={{
-                      latitude: parseFloat(checkOutLocation.split(',')[0]),
-                      longitude: parseFloat(checkOutLocation.split(',')[1]),
-                    }}
-                    title="Check-Out"
-                  />
-                )}
-                {checkInLocation && checkOutLocation && (
-                  <Polyline
-                    coordinates={[
-                      {
-                        latitude: parseFloat(checkInLocation.split(',')[0]),
-                        longitude: parseFloat(checkInLocation.split(',')[1]),
-                      },
-                      {
-                        latitude: parseFloat(checkOutLocation.split(',')[0]),
-                        longitude: parseFloat(checkOutLocation.split(',')[1]),
-                      },
-                    ]}
-                    strokeColor="#000"
-                    strokeWidth={3}
-                  />
-                )}
-              </MapView> */}
-              <View className="my-4  flex flex-row flex-nowrap justify-between items-center">
-                <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
-              </View>
-              <FlatList
-                data={taskList}
+            <FlatList
+                data={filteredTaskList}
                 keyExtractor={item => item.id}
-                renderItem={({item}) => <TaskFlatListComponent task={item} />}
-                // contentContainerStyle={{paddingHorizontal: 0}}
+                renderItem={({item}) => <TaskFlatListComponent task={item} onDelete={handleDeleteTask}/>}
+                refreshControl={
+                  <RefreshControl 
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    colors={[COLORS.PRIMARY]}
+                  />
+                }
+                ListHeaderComponent={ListHeader}
+                 contentContainerStyle={{paddingHorizontal: moderateScale(15)}}
               />
-            </View>
           </View>
-        </ScrollView>
       </SafeAreaView>
     </>
   );

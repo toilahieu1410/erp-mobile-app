@@ -1,16 +1,49 @@
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, View,Text,  RefreshControl } from 'react-native';
+
 import AppHeader from '../../components/navigators/AppHeader';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskFlatListComponent from '../../components/task/taskMain/TaskFlatListComponent';
 import { Task } from '../../models/Task';
 import moment from 'moment';
 import 'moment/locale/vi';  // Import locale tiếng Việt
+import TaskService from '../../services/taskWorks/serviceTask';
+import { COLORS } from '../../constants/screens';
 
 moment.locale('vi');  // Thiết lập locale là tiếng Việt
 
+interface Follower {
+  id: string;
+  userId: string;
+  userName: string;
+  hoTen: string;
+  maPhongBan: string;
+}
+
+interface ListTask {
+  id: string;
+  title: string;
+  typeJob: string;
+  content: string;
+  feedback: string;
+  vote: string;
+  locationCheckIn: string;
+  locationCheckOut: string;
+  deadline: string;
+  createdAt: string;
+  followers: Follower[];
+}
+
 const TaskListScreen = () => {
-  const [selected, setSelected] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [taskList, setTaskList] = useState<ListTask[]>([])
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [fromDate, setFromDate] = useState<Date | null>(null)
+  const [toDate, setToDate] = useState<Date | null>(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+
   const locale = {
     name: 'vi',
     config: {
@@ -57,9 +90,56 @@ const TaskListScreen = () => {
     },
   };
 
-  const taskList: ReadonlyArray<Task> = [
-    // ... (Danh sách các task như trong mã gốc của bạn)
-  ];
+  // const taskList: ReadonlyArray<Task> = [
+  //   // ... (Danh sách các task như trong mã gốc của bạn)
+  // ];
+
+  // const fetchListTask = async () => {
+  //   setLoading(false)
+  //   try {
+  //     const fromDateString = fromDate ? moment(fromDate).format('YYYY-MM-DD') : '';
+  //     const toDateString = toDate ? moment(toDate).format('YYYY-MM-DD') : ''; 
+
+  //     const response = await TaskService.getTasks(fromDateString, toDateString, pageNumber, pageSize)
+  //     const taskListFilter = response || []
+  //     console.log(taskListFilter,'tasssss')
+  //     //@ts-ignore
+  //     const filteredTasks = taskListFilter.filter(task => moment(task.createdAt).format('YYYY-MM-DD') === moment(new Date()).format('YYYY-MM-DD'))
+  //     setTaskList(filteredTasks)
+  //     console.log(filteredTasks,'tasssss222222', fromDateString)
+  //   } catch (error) {
+  //     console.error('Error fetching tasks:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+
+  const fetchListTask = async (date: Date) => {
+    setLoading(true);
+    try {
+      const formattedDate = moment(date).format('DD/MM/YYYY');
+      const response = await TaskService.getTasks(formattedDate, formattedDate, pageNumber, pageSize);
+      const taskListFilter = response || [];
+      console.log(taskListFilter,'taskkkk')
+           //@ts-ignore
+      const filteredTasks = taskListFilter.filter(task => moment(task.createdAt).format('DD/MM/YYYY') === formattedDate);
+      setTaskList(filteredTasks);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchListTask(selectedDate)
+  }, [selectedDate])
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchListTask(selectedDate).finally(() => setRefreshing(false));
+  }, [selectedDate]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -72,7 +152,7 @@ const TaskListScreen = () => {
       />
       <View className="flex-1">
         <CalendarStrip
-          selectedDate={selected}
+          selectedDate={selectedDate}
           calendarAnimation={{ type: 'sequence', duration: 30 }}
           style={{ paddingTop: 10, paddingBottom: 10 }}
           innerStyle={[]}
@@ -89,18 +169,28 @@ const TaskListScreen = () => {
           locale={locale}
           scrollerPaging={true}
           onDateSelected={date => {
-            setSelected(date.toDate());
+            setSelectedDate(date.toDate());
           }}
         />
 
         <View style={styles.body}>
-          <ScrollView>
-            <View>
-              {taskList.flatMap((task, index) => {
-                return <TaskFlatListComponent task={task} key={index} />;
-              })}
-            </View>
-          </ScrollView>
+          <FlatList 
+            data={taskList}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => <TaskFlatListComponent task={item}/>}
+            refreshControl={
+              <RefreshControl 
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[COLORS.PRIMARY]}
+              />
+            }
+            ListEmptyComponent={!loading && (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color:'red' }}>Không có công việc nào</Text>
+              </View>
+            )}
+          />
         </View>
       </View>
     </SafeAreaView>

@@ -10,7 +10,6 @@ import {
   Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import {Button, Button as ButtonCreate, NativeBaseProvider} from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {styles} from '../../../assets/css/ListWorksScreen/style';
 import moment from 'moment';
@@ -92,16 +91,12 @@ const CreateWorkFromHome = () => {
           backgroundColor='#fff'
           titleColor='#000'
           actions={
-            <NativeBaseProvider>
-              <Button
-                backgroundColor={'transparent'}
-                disabled={disabled}
-                size={moderateScale(50)}
-                onPress={handleSubmit}
-                >
-                <Text style={disabled === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
-              </Button>
-            </NativeBaseProvider>
+            <TouchableOpacity
+              style={{backgroundColor:'transparent', width: moderateScale(50)}}
+              disabled={disabled}
+              onPress={handleSubmit}>
+              <Text style={disabled === true ? styles.buttonSaveDisabled : styles.buttonSaveEnabled} >Lưu</Text>
+            </TouchableOpacity>
           }
       />
       <ScrollView>

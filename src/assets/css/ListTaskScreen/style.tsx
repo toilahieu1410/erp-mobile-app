@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   boxRight: {
     flexDirection:'column',
     alignContent:'center',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
   },
   boxRightTop: {
     backgroundColor: '#338384',
@@ -37,7 +37,8 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     width: moderateScale(170),
     height:moderateScale(70),
-    borderRadius:moderateScale(10)
+    borderRadius:moderateScale(10),
+    paddingLeft: moderateScale(20)
   },
   boxRightBottom: {
     backgroundColor: '#F36072',
@@ -46,7 +47,8 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     width: moderateScale(170),
     height:moderateScale(70),
-    borderRadius:moderateScale(10)
+    borderRadius:moderateScale(10),
+    paddingLeft: moderateScale(20)
   },
   textTitle: {
     fontWeight:'700',
@@ -65,7 +67,7 @@ export const styles = StyleSheet.create({
     backgroundColor:'#fefefe',
     textAlignVertical:'center',
     textAlign:'center',
-    marginLeft:moderateScale(20)
+   
   },
   textRight: {
     marginLeft: moderateScale(10)
