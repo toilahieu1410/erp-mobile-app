@@ -468,12 +468,12 @@ const TaskScreen = () => {
                 />
               )}
             </MapView> */}
-    </View>
-    <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} />
-    <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
-      <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
-    </View>
-  </View>
+          </View>
+          <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} taskList={taskList}/>
+          <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
+            <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
+          </View>
+        </View>
   );
 
 

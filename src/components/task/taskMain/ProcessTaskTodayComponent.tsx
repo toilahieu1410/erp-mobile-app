@@ -5,19 +5,20 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from '../../../assets/css/ListTaskScreen/style';
 import {moderateScale} from '../../../screens/size';
+
 interface ProcessTaskTodayComponentProps {
   countDoneTask: number;
   totalTask: number;
+  taskList: [];
 }
 
 const ProcessTaskTodayComponent = ({
   countDoneTask,
   totalTask,
+  taskList,
 }: ProcessTaskTodayComponentProps) => {
   return (
-    <View
-      className="w-full overflow-hidden"
-      >
+    <View className="w-full overflow-hidden" >
       <View style={styles.listStatusWork}>
         <View style={styles.boxLeft}>
           <Icon
@@ -26,7 +27,7 @@ const ProcessTaskTodayComponent = ({
             size={moderateScale(24)}
             color={'#7798A8'}
           />
-          <Text style={styles.textTitle}>14 Jobs</Text>
+          <Text style={styles.textTitle}>{taskList.length} Jobs</Text>
           <Text style={styles.textDescription}>Tổng việc tháng này</Text>
         </View>
         <View style={styles.boxRight}>
