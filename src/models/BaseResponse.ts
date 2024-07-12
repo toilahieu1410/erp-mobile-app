@@ -7,6 +7,10 @@ export interface BaseResponse<T = object> {
     code: string;
     message: string;
   };
+  errors: {
+    code: string;
+    message: string;
+  };
 }
 
 export interface ListData<T = object> {
