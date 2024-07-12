@@ -9,6 +9,9 @@ import moment from 'moment';
 import 'moment/locale/vi';  // Import locale tiếng Việt
 import TaskService from '../../services/taskWorks/serviceTask';
 import { COLORS } from '../../constants/screens';
+import { moderateScale } from '../size';
+import { Icon } from 'react-native-paper';
+
 
 moment.locale('vi');  // Thiết lập locale là tiếng Việt
 
@@ -94,26 +97,6 @@ const TaskListScreen = () => {
   //   // ... (Danh sách các task như trong mã gốc của bạn)
   // ];
 
-  // const fetchListTask = async () => {
-  //   setLoading(false)
-  //   try {
-  //     const fromDateString = fromDate ? moment(fromDate).format('YYYY-MM-DD') : '';
-  //     const toDateString = toDate ? moment(toDate).format('YYYY-MM-DD') : ''; 
-
-  //     const response = await TaskService.getTasks(fromDateString, toDateString, pageNumber, pageSize)
-  //     const taskListFilter = response || []
-  //     console.log(taskListFilter,'tasssss')
-  //     //@ts-ignore
-  //     const filteredTasks = taskListFilter.filter(task => moment(task.createdAt).format('YYYY-MM-DD') === moment(new Date()).format('YYYY-MM-DD'))
-  //     setTaskList(filteredTasks)
-  //     console.log(filteredTasks,'tasssss222222', fromDateString)
-  //   } catch (error) {
-  //     console.error('Error fetching tasks:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
 
   const fetchListTask = async (date: Date) => {
     setLoading(true);
@@ -121,7 +104,6 @@ const TaskListScreen = () => {
       const formattedDate = moment(date).format('DD/MM/YYYY');
       const response = await TaskService.getTasks(formattedDate, formattedDate, pageNumber, pageSize);
       const taskListFilter = response || [];
-      console.log(taskListFilter,'taskkkk')
            //@ts-ignore
       const filteredTasks = taskListFilter.filter(task => moment(task.createdAt).format('DD/MM/YYYY') === formattedDate);
       setTaskList(filteredTasks);
@@ -152,6 +134,7 @@ const TaskListScreen = () => {
       />
       <View className="flex-1">
         <CalendarStrip
+       
           selectedDate={selectedDate}
           calendarAnimation={{ type: 'sequence', duration: 30 }}
           style={{ paddingTop: 10, paddingBottom: 10 }}
@@ -164,11 +147,13 @@ const TaskListScreen = () => {
           disabledDateNameStyle={{ color: 'grey' }}
           disabledDateNumberStyle={{ color: 'grey' }}
           scrollable={true}
-          leftSelector={[]}
-          rightSelector={[]}
+          useNativeDriver={true}
           locale={locale}
           scrollerPaging={true}
+      
+          iconContainer={{flex: 0.1}}
           onDateSelected={date => {
+            //@ts-ignore
             setSelectedDate(date.toDate());
           }}
         />
@@ -203,8 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopWidth: 0.5,
     borderTopColor: '#DDDDDD',
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingHorizontal: moderateScale(15)
   },
 });
 
