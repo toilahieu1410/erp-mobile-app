@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import LinearGradient from 'react-native-linear-gradient';

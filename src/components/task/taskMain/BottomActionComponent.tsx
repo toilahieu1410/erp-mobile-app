@@ -1,18 +1,56 @@
+import React, {useRef, useState} from 'react';
 import {View, Alert} from 'react-native';
-import React, {useRef} from 'react';
+
 import {Icon, TouchableRipple} from 'react-native-paper';
 import ActionSheet from 'react-native-actionsheet';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../../constants/screens';
+import TaskService from '../../../services/taskWorks/serviceTask';
+import { showMessage } from 'react-native-flash-message';
 
 interface BottomActionTaskPropes {
   title: string;
   id: string;
+  onDelete: (id: string) => void;
 }
 
-const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
+
+const BottomActionComponent = ({title, id, onDelete}: BottomActionTaskPropes) => {
+
   const actionRef = useRef();
   const navigator = useNavigation();
+
+  const handleDelete = async () => {
+    Alert.alert('Xác nhận xóa', 'Bạn chắc chắn muốn xóa mục này', [
+      {
+        text: 'Hủy',
+        onPress: () => console.log('Cancel'),
+        style: 'cancel'
+      },
+      {
+        text: 'Đồng ý',
+        onPress: async () => {
+          try {
+            await TaskService.deleteTask(id);
+            onDelete(id);
+            showMessage({
+              message: 'Success',
+              description: 'Xóa báo cáo công việc thành công',
+              type: 'success',
+            });
+          } catch (error) {
+            showMessage({
+              message: 'Error',
+              description: 'Xóa báo cáo công việc thất bại',
+              type: 'danger',
+            });
+          }
+        }
+      }
+    ]);
+  };
+
+
   return (
     <View>
       <TouchableRipple
@@ -21,7 +59,7 @@ const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
           actionRef?.current?.show();
         }}
         rippleColor={'transparent'}>
-        <Icon source="dots-horizontal" size={24} color="black" />
+        <Icon source="dots-horizontal" size={24} color="#fff" />
       </TouchableRipple>
       <ActionSheet
         ref={actionRef}
@@ -41,15 +79,7 @@ const BottomActionComponent = ({title, id}: BottomActionTaskPropes) => {
               break;
             case 2:
               // xóa
-              Alert.alert(title, 'Bạn có chắc chắn xóa ?', [
-                {
-                  text: 'Hủy',
-                  style: 'destructive',
-                },
-                {
-                  text: 'Đồng ý',
-                },
-              ]);
+              handleDelete();
               break;
             case 3:
               //cancel

@@ -150,7 +150,6 @@ const TaskListScreen = () => {
           useNativeDriver={true}
           locale={locale}
           scrollerPaging={true}
-      
           iconContainer={{flex: 0.1}}
           onDateSelected={date => {
             //@ts-ignore

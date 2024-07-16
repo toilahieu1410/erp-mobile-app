@@ -95,40 +95,42 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
     </RectButton>
     )
   }
-  // const calculateDistance = () => {
-  //   if (task.locationCheckIn && task.locationCheckOut) {
-  //     const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
-  //     const [checkOutLat, checkOutLng] = task.locationCheckOut.split(',');
+  const calculateDistance = () => {
+    if (task.locationCheckIn && task.locationCheckOut) {
+      const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
+      const [checkOutLat, checkOutLng] = task.locationCheckOut.split(',');
 
-  //     const checkInLatNum = parseFloat(checkInLat);
-  //     const checkInLngNum = parseFloat(checkInLng);
-  //     const checkOutLatNum = parseFloat(checkOutLat);
-  //     const checkOutLngNum = parseFloat(checkOutLng);
+      const checkInLatNum = parseFloat(checkInLat);
+      const checkInLngNum = parseFloat(checkInLng);
+      const checkOutLatNum = parseFloat(checkOutLat);
+      const checkOutLngNum = parseFloat(checkOutLng);
 
-  //     if (
-  //       isNaN(checkInLatNum) ||
-  //       isNaN(checkInLngNum) ||
-  //       isNaN(checkOutLatNum) ||
-  //       isNaN(checkOutLngNum)
-  //     ) {
-  //       console.error('Invalid coordinates:', {
-  //         checkInLatNum,
-  //         checkInLngNum,
-  //         checkOutLatNum,
-  //         checkOutLngNum,
-  //       });
-  //       return null;
-  //     }
+      if (
+        isNaN(checkInLatNum) ||
+        isNaN(checkInLngNum) ||
+        isNaN(checkOutLatNum) ||
+        isNaN(checkOutLngNum)
+      ) {
+        console.error('Invalid coordinates:', {
+          checkInLatNum,
+          checkInLngNum,
+          checkOutLatNum,
+          checkOutLngNum,
+        });
+        return null;
+      }
 
-  //     return getDistance(
-  //       { latitude: checkInLatNum, longitude: checkInLngNum },
-  //       { latitude: checkOutLatNum, longitude: checkOutLngNum }
-  //     );
-  //   }
-  //   return null;
-  // };
+      const distance = getDistance(
+        { latitude: checkInLatNum, longitude: checkInLngNum },
+        { latitude: checkOutLatNum, longitude: checkOutLngNum }
+      );
 
-  // const distance = calculateDistance();
+      return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
+    }
+    return null;
+  };
+
+  const distance = calculateDistance()
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
@@ -139,16 +141,17 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
         navigator.navigate(SCREENS.DETAILTASK.KEY, {id: task.id})
       }>
       <View className="mb-4">
-        <View className="bg-blue-500 inline-block p-2">
+        <View className="bg-blue-500 flex-row items-center justify-between p-2">
           <Text numberOfLines={2} className="text-white text-sm tracking-wider">
             {moment(task.createdAt).format('DD/MM/YYYY')}
           </Text>
+          <BottomActionComponent title={task.title} id={task.id} onDelete={handleDelete}/>
         </View>
 
-        <View className="rounded-b-lg border w-full border-gray-300 p-2 min-h-[100px] h-[120px] bg-white">
+        <View className="rounded-b-lg border w-full border-gray-300 p-2 min-h-[100px] h-[150px] bg-white">
           <View className="flex flex-col flex-nowrap justify-between h-full ">
             <View className="flex flex-row flex-nowrap justify-between items-start flex-1 ">
-              <View className="flex-1 flex-col justify-between ">
+              <View className=" justify-between flex-1">
                 <View className="flex-1 flex-row flex-nowrap">
                   <Avatar.Image
                     style={{
@@ -163,37 +166,47 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
                     }}
                     onError={err => {}}
                   />
-                  <View>
+                  <View className='flex-1'>
                     <Text
                       numberOfLines={2}
                       className="text-black text-sm font-bold tracking-wider">
                       {task.title}
                     </Text>
-                    <HTML contentWidth={width} source={{html: task.content}} />
+                    <HTML contentWidth={width} source={{html: task.content}}  />
                   </View>
                 </View>
-                <View className="">
+                <View className="flex-row justify-between items-center">
+                  <View className='flex-1'>
                   <Text
                     numberOfLines={2}
                     className="text-black text-sm font-bold tracking-wider">
                     Người theo dõi: {followerNames}
                   </Text>
+                  {distance && (
+                    <Text className="text-gray-600 text-xs">
+                      Quãng đường: {distance} km
+                    </Text>
+                  )}
+                  </View>
+                  <View className={task.vote === 'TrungBinh' ? 'bg-yellow-400 p-1' : task.vote === 'Kem' ? 'bg-red-400 p-1' : 'bg-green-400 p-1'} >
+                  <Text
+                    className={task.vote === 'TrungBinh' ? 'text-black text-sm tracking-wider' : 'text-white text-sm tracking-wider'} >
+                    {task.vote}
+                  </Text>
+                  
+                  </View>
                 </View>
                 {/* <Text className="text-gray-600 text-xs">
-                  Check-in: {task.locationCheckIn || checkInLocation}
+                  Check-in: {task.locationCheckIn}
                 </Text>
                 <Text className="text-gray-600 text-xs">
-                  Check-out: {task.locationCheckOut || checkOutLocation}
-                </Text>
-                {distance && (
-                  <Text className="text-gray-600 text-xs">
-                    Distance: {distance} meters
-                  </Text>
-                )} */}
+                  Check-out: {task.locationCheckOut }
+                </Text> */}
+               
               </View>
-              <View>
-                <BottomActionComponent title={task.title} id={task.id} />
-              </View>
+              {/* <View>
+                
+              </View> */}
             </View>
           </View>
         </View>

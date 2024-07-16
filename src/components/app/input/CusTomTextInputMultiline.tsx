@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 
 type CustomInputProps = {
@@ -15,7 +15,16 @@ const CusTomTextInputMultiline = ({
 
   const richText = useRef<RichEditor>(null)
 
+ 
+  const dismissKeyboard = () => {
+    if (richText.current) {
+      richText.current.dismissKeyboard()
+    }
+    Keyboard.dismiss()
+  }
+
   return (
+    <TouchableWithoutFeedback onPress={dismissKeyboard} accessible={false}>
     <View className="mb-4">
       {label && <Text className="text-black text-base">{label}</Text>}
       <View className="w-full overflow-hidden border border-gray-400 rounded-lg flex flex-row justify-between items-center px-2 focus:border-primary">
@@ -34,6 +43,9 @@ const CusTomTextInputMultiline = ({
         selectedButtonStyle={{ backgroundColor: 'transparent' }}
       />
     </View>
+  </TouchableWithoutFeedback>
+
+
   );
 };
 
