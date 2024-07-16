@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -7,7 +8,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React from 'react';
+
 import {useNavigation, useRoute} from '@react-navigation/native';
 import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
@@ -15,60 +16,92 @@ import {Divider, Icon, Menu} from 'react-native-paper';
 import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
 import {SCREENS} from '../../constants/screens';
 
+interface Follower {
+  id: string;
+  userId: string;
+  userName: string;
+  hoTen: string;
+  maPhongBan: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  typejob: number;
+  customerCode: string;
+  content: string;
+  feedback: string;
+  vote: number;
+  deadline: string;
+  followers: Follower[];
+}
+
 const DetailTaskScreen: React.FC = () => {
   // Sử dụng hook useRoute để lấy params từ route
   const route = useRoute();
   const navigator = useNavigation();
 
   //@ts-ignore
-  const {id} = route.params;
+  const {id} = route.params as {id: string};
 
-  const data = {
-    id: 'KAP-1',
-    title: 'Gặp khách hàng tại Đình Thôn',
-    status: 'todo',
-    userCreate: 'Duclv',
-    fullNameCreate: 'Lâm Văn Đức',
-    type: 'visit',
-    customer: 'Công ty TNHH ....',
-    customerCode: 'KH000001',
-    descreption: 'Công ty TNHH ....',
-    avatarUserCreate:
-      'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-    watching: [
-      {
-        username: 'VinhLQ',
-        fullName: 'Lâm Quang Vinh',
-        avatar:
-          'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-      },
-      {
-        username: 'Duclv',
-        fullName: 'Lâm Văn Đức',
-        avatar:
-          'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-      },
-      {
-        username: 'HienLT',
-        fullName: 'Lâm Thị Hiền',
-        avatar:
-          'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-      },
-      {
-        username: 'TanNM',
-        fullName: 'Nguyễn Minh Tân',
-        avatar:
-          'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
-      },
-      {
-        username: 'VinhLQ',
-        fullName: 'Lâm Quang Vinh',
-        avatar:
-          'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-      },
-    ],
-    attachment: [{}],
-  };
+  const [task, setTask] = useState<Task | null>(null)
+
+  useEffect(() => {
+    const fetchTaskDetail = async () => {
+      try {
+        const response = await TaskService.
+      } catch {
+
+      }
+    }
+    fetchTaskDetail()
+  }, [])
+  // const data = {
+  //   id: 'KAP-1',
+  //   title: 'Gặp khách hàng tại Đình Thôn',
+  //   status: 'todo',
+  //   userCreate: 'Duclv',
+  //   fullNameCreate: 'Lâm Văn Đức',
+  //   type: 'visit',
+  //   customer: 'Công ty TNHH ....',
+  //   customerCode: 'KH000001',
+  //   descreption: 'Công ty TNHH ....',
+  //   avatarUserCreate:
+  //     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //   watching: [
+  //     {
+  //       username: 'VinhLQ',
+  //       fullName: 'Lâm Quang Vinh',
+  //       avatar:
+  //         'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+  //     },
+  //     {
+  //       username: 'Duclv',
+  //       fullName: 'Lâm Văn Đức',
+  //       avatar:
+  //         'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
+  //     },
+  //     {
+  //       username: 'HienLT',
+  //       fullName: 'Lâm Thị Hiền',
+  //       avatar:
+  //         'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
+  //     },
+  //     {
+  //       username: 'TanNM',
+  //       fullName: 'Nguyễn Minh Tân',
+  //       avatar:
+  //         'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
+  //     },
+  //     {
+  //       username: 'VinhLQ',
+  //       fullName: 'Lâm Quang Vinh',
+  //       avatar:
+  //         'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
+  //     },
+  //   ],
+  //   attachment: [{}],
+  // };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>

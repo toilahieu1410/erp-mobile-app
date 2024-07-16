@@ -169,7 +169,7 @@ const AddNewTaskScreen = () => {
     };
 
     try {
-      const response = await TaskService.createListTask(payload);
+      const response = await TaskService.createTask(payload);
       if (response.isSuccess) {
         showMessage({
           message: 'Success',
