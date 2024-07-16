@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Alert, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 
 import AppHeader from '../../components/navigators/AppHeader';
 import CustomTextInput from '../../components/app/input/CustomTextInput';
@@ -16,8 +16,21 @@ import { moderateScale } from '../size';
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
 import ServiceTakeLeave from '../../services/listWorks/serviceTakeLeave';
-import { Dropdown } from 'react-native-element-dropdown';
+import { MultiSelect  } from 'react-native-element-dropdown';
 import { styles } from '../../assets/css/ListTaskScreen/addTaskScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
+import CheckInOutMap from '../../components/task/taskMain/checkInOutMap';
+import { position } from '../../../utils/geoLocation';
+import MapView, {Marker, Polyline} from 'react-native-maps';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import Geocoder from 'react-native-geocoding';
+import { getDistance } from 'geolib';
+import axios from 'axios';
+import polyline from '@mapbox/polyline';
+
+const apiKey = 'AIzaSyBqnaTZHOfI539sJlwuXY5uDsoJP_DPI4I';
+
+Geocoder.init(apiKey, { language: 'vi' });
 
 enum TypeJob {
   Kem = 1,
@@ -52,8 +65,7 @@ const AddNewTaskScreen = () => {
 
   const [searchText, setSearchText] = useState('');
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState<string>('');
-  const [handOverToUserId, setHandOverToUserId] = useState<string>('');
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([])
 
   const countries = [
     {value: 'Task', label: 'Task'},
@@ -64,7 +76,35 @@ const AddNewTaskScreen = () => {
   const [Attachment, setAttachment] = useState<Attachment[]>([]);
   const [watchings, setWatchings] = useState<Watching[]>([]);
 
-  console.log(taskData,'taskDatataskData',users)
+  const [showCheckInMap, setShowCheckInMap] = useState(false);
+  const [showCheckOutMap, setShowCheckOutMap] = useState(false);
+  const [addressCheckIn, setAddressCheckIn] = useState('');
+  const [addressCheckOut, setAddressCheckOut] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalDistance, setTotalDistance] = useState<string | null>(null)
+  const [routeCoords, setRouteCoords] = useState([]);
+  const [mapKey, setMapKey] = useState(0);
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 21.028511, // Vĩ độ của Hà Nội
+    longitude: 105.804817, // Kinh độ của Hà Nội
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  const requestLocationPermission = async () => {
+    const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    if (result === RESULTS.GRANTED) {
+      console.log('Location permission granted');
+    } else {
+      console.log('Location permission denied');
+    }
+  };
+
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
   useEffect(() => {
     const fetchJobTypes = async () => {
       try {
@@ -82,6 +122,14 @@ const AddNewTaskScreen = () => {
   }, []);
 
   useEffect(() => {
+    if (taskData.locationCheckIn && taskData.locationCheckOut) {
+      const distance = calculateDistance(taskData.locationCheckIn, taskData.locationCheckOut);
+      setTotalDistance(distance);
+    }
+  }, [taskData.locationCheckIn, taskData.locationCheckOut]);
+
+
+  useEffect(() => {
     const fetchUsers = async () => {
       if (searchText.length >= 0) {
         try {
@@ -97,19 +145,31 @@ const AddNewTaskScreen = () => {
     fetchUsers();
   }, [searchText]);
 
+  useEffect(() => {
+    // Thiết lập giá trị giả mạo cho check-in và check-out
+    setTaskData({
+      ...taskData,
+      locationCheckIn: '21.010868729802763, 105.82114304463225',
+      locationCheckOut: '20.997527485233064, 105.85684860886734'
+    });
+  }, []);
 
-
-
-
-
-
-
-
+  useEffect(() => {
+    if (taskData.locationCheckIn && taskData.locationCheckOut) {
+      fetchRoute(taskData.locationCheckIn, taskData.locationCheckOut);
+    }
+  }, [taskData.locationCheckIn, taskData.locationCheckOut]);
 
 
   const handleSave = async () => {
+   
+    const payload = {
+      ...taskData,
+      followers: selectedUserIds // Đảm bảo followers là một mảng các đối tượng có thuộc tính id
+    };
+
     try {
-      const response = await TaskService.createListTask(taskData);
+      const response = await TaskService.createListTask(payload);
       if (response.isSuccess) {
         showMessage({
           message: 'Success',
@@ -119,23 +179,160 @@ const AddNewTaskScreen = () => {
         navigation.goBack();
       } 
     } catch (error) {
-      console.log(error,'ressssss')
       // Xử lý lỗi từ phản hồi API trong catch
-      const errorMessages = error.response?.data?.errors?.map(err => err.message).join('\n') || 'Failed to create task.';
+      console.log(error,'error')
+      const errorMessages = error.response?.data?.errors?.map(err => err.message).join('\n') || error.response.data.detail;
+      console.log(errorMessages,'errorMessages')
       showMessage({
         message: 'Error',
-        description: errorMessages,
+        description: errorMessages ,
         type: 'danger',
       });
     }
   };
 
-  const handleUserSelect = (item) => {
-    setHandOverToUserId(item.id);
-    setSelectedUser(item.hoTen);
-    setTaskData({ ...taskData, followers: [...taskData.followers, item.id] });
+  const handleUserSelect = (selectedItems) => {
+    if (selectedItems && Array.isArray(selectedItems)) {
+      setSelectedUserIds(selectedItems);
+      setTaskData({ ...taskData, followers: selectedItems.map(id => ({ id })) });
+    } else {
+      setSelectedUserIds([]);
+      setTaskData({ ...taskData, followers: [] });
+    }
   };
 
+  const handleLocationSave = async (type, location) => {
+    const { coords } = location;
+    const locationString = `${coords.latitude},${coords.longitude}`;
+    let address = '';
+    try {
+      const response = await Geocoder.from(coords.latitude, coords.longitude);
+      address = response.results[0].formatted_address;
+    } catch (error) {
+      console.error('Error fetching address:', error);
+      address = 'Không xác định được địa chỉ';
+    }
+
+    if (type === 'checkin') {
+      setTaskData((prevData) => ({
+        ...prevData,
+        locationCheckIn: locationString,
+      }));
+      setAddressCheckIn(address);
+    } else if (type === 'checkout') {
+      setTaskData((prevData) => ({
+        ...prevData,
+        locationCheckOut: locationString,
+      }));
+      setAddressCheckOut(address);
+    }
+    setMapRegion({
+      ...mapRegion,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
+
+    setMapKey(mapKey + 1); // Thay đổi key của MapView để tái tạo lại
+  };
+
+  const handleCheckIn = async () => {
+    setIsLoading(true);
+    try {
+      const location = await position();
+      console.log(location,'loooo')
+      await handleLocationSave('checkin', { coords: location });
+      Alert.alert('Success', 'Check-In thành công');
+    } catch (error) {
+      Alert.alert('Error', 'Không lấy được vị trí, vui lòng thử lại');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCheckOut = async () => {
+    // Kiểm tra nếu đã checkin thì mới được checkout
+    if(!taskData.locationCheckIn) {
+      Alert.alert('Error', 'Bạn phải thực hiện việc check-in trước ')
+      return
+    }
+    setIsLoading(true);
+    try {
+      const location = await position();
+      await handleLocationSave('checkout', { coords: location });
+      Alert.alert('Success', 'Check-Out thành công');
+    } catch (error) {
+      Alert.alert('Error', 'Không lấy được vị trí, vui lòng thử lại');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const calculateDistance = (locationCheckIn, locationCheckOut) => {
+    if (locationCheckIn && locationCheckOut) {
+      const [checkInLat, checkInLng] = locationCheckIn.split(',');
+      const [checkOutLat, checkOutLng] = locationCheckOut.split(',');
+
+      const checkInLatNum = parseFloat(checkInLat);
+      const checkInLngNum = parseFloat(checkInLng);
+      const checkOutLatNum = parseFloat(checkOutLat);
+      const checkOutLngNum = parseFloat(checkOutLng);
+
+      if (
+        isNaN(checkInLatNum) ||
+        isNaN(checkInLngNum) ||
+        isNaN(checkOutLatNum) ||
+        isNaN(checkOutLngNum)
+      ) {
+        console.error('Invalid coordinates:', {
+          checkInLatNum,
+          checkInLngNum,
+          checkOutLatNum,
+          checkOutLngNum,
+        });
+        return null;
+      }
+
+      const distance = getDistance(
+        { latitude: checkInLatNum, longitude: checkInLngNum },
+        { latitude: checkOutLatNum, longitude: checkOutLngNum }
+      );
+      console.log(distance,'distance')
+      return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
+    }
+    return null;
+  };
+
+  const fetchRoute = async (startLoc, destinationLoc) => {
+    console.log(`Fetching route from ${startLoc} to ${destinationLoc}`);
+    const { coords, distance } = await getDirections(startLoc, destinationLoc, apiKey);
+    setRouteCoords(coords);
+    setTotalDistance(distance);
+  };
+
+  const getDirections = async (startLoc, destinationLoc, apiKey) => {
+    console.log(startLoc,'startLoc',destinationLoc)
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${apiKey}`
+      );
+      if (response.data.routes.length === 0) {
+        throw new Error('No routes found');
+      }
+      const points = polyline.decode(response.data.routes[0].overview_polyline.points);
+      const coords = points.map(point => ({
+        latitude: point[0],
+        longitude: point[1],
+      }));
+      const distance = response.data.routes[0].legs[0].distance.text;
+      return { coords, distance };
+    } catch (error) {
+      console.error('Error fetching directions:', error);
+      return { coords: [], distance: null };
+    }
+  };
+    
+ 
+  console.log(totalDistance,'total')
   // useEffect(() => {
   //   const data = [
   //     {
@@ -159,7 +356,9 @@ const AddNewTaskScreen = () => {
   //   ];
   //   setWatchings(data);
   // }, []);
+  
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView className="flex-1 bg-white">
     <AppHeader
         title="Tạo công việc"
@@ -175,18 +374,19 @@ const AddNewTaskScreen = () => {
       />
       <View style={{flex:1, marginVertical: moderateScale(10)}}>
         <ScrollView contentContainerStyle={{paddingHorizontal: 10}}>
-        <View >
-            <Text>Loại công việc</Text>
+        <View className='flex flex-row justify-between items-center'>
+            <Text className='text-black text-base'>Loại công việc: </Text>
             <Picker
+            style={{backgroundColor:'#efefef', flex:1, }}
+              // className='border-b-4 border-indigo-500 h-[150px] w-full bg-blue'
               selectedValue={selectedJobType}
-              style={{ height: 50, width: '100%' }}
               onValueChange={(itemValue) => {
                 setSelectedJobType(itemValue);
                 setTaskData({ ...taskData, typejob: itemValue });
               }}
             >
               {jobTypes.map((type) => (
-                <Picker.Item label={type.display} value={type.value} key={type.value} />
+                <Picker.Item style={{textAlign:'center', width:'100%'}} label={type.display} value={type.value} key={type.value} />
               ))}
             </Picker>
           </View>
@@ -207,66 +407,153 @@ const AddNewTaskScreen = () => {
                 onChangeText={text => setTaskData({ ...taskData, customerCode: text })}
                 value={taskData.customerCode}
               />
+
               <CusTomTextInputMultiline
                 label="Nội dung"
                 onChangeText={text => setTaskData({ ...taskData, content: text })}
                 value={taskData.content}
               />
+         
                 <View style={styles.flexVertical}>
-            <Text style={styles.textLeft}>Bàn giao cho</Text>
-            <TextInput
-              editable={false}
-              style={[styles.inputEdit, {color:'#2179A9'}]}
-              placeholder="Tìm kiếm người bàn giao"
-              value={selectedUser}
-              onChangeText={setSearchText}
-            />
-            <Dropdown
-              inputSearchStyle={styles.searchStyle}
-              iconStyle={styles.iconStyle}
-              style={styles.dropdown}
-              containerStyle={styles.dropdownContainer}
-              itemTextStyle={styles.dropdownItemText}
-              selectedTextStyle={styles.dropdownSelectedText}
-              data={users}
-              labelField="hoTen"
-              valueField="id"
-              placeholder="Người bàn giao"
-              search
-              searchPlaceholder="Gõ để tìm kiếm"
-              value={handOverToUserId}
-              onChange={handleUserSelect}
-            />
-        </View>
+          
+                <View style={[styles.flexVertical, { alignItems:'flex-start' }]}>
+                  <Text style={styles.textLeft}>Người theo dõi</Text>
+                <View style={styles.boxSub}>
+                <MultiSelect
+                  style={styles.dropdownSub}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  search
+                  data={users}
+                  labelField="hoTen"
+                  valueField="id"
+                  placeholder="Chọn người theo dõi"
+                  searchPlaceholder="Gõ để tìm kiếm"
+                  value={selectedUserIds}
+                  onChange={handleUserSelect}
+                  renderLeftIcon={() => (
+                    <Icon name='close' size={moderateScale(20)} color={'#ff6600'}/>
+                  )}
+                  selectedStyle={styles.selectedStyle}
+                />
+                </View>
+                
+              </View>
+              </View>
                 <CusTomTextInputMultiline
-                label="Phản hồi"
+                label="Phản hồi "
                 onChangeText={text => setTaskData({ ...taskData, feedback: text })}
                 value={taskData.feedback}
               />
+              <View className='border rounded-md border-gray-300'>
+                <Picker
+                  selectedValue={taskData.vote}
+                  style={{height:moderateScale(50), width:'100%'}}
+                  onValueChange={(itemValue) => {
+                    setTaskData({...taskData, vote: itemValue})
+                  }}
+                >
+                  <Picker.Item label="Kém" value={TypeJob.Kem} />
+                    <Picker.Item label="Trung bình" value={TypeJob.TrungBinh} />
+                    <Picker.Item label="Tốt" value={TypeJob.Tot} />
+                </Picker>
+              </View>
+              <View className='flex-row flex-1 justify-between items-center'>
               <CustomTextInput
-                label="Bình chọn"
-                keyboardType="numeric"
-                onChangeText={text => setTaskData({ ...taskData, vote: Number(text) })}
-                value={String(taskData.vote)}
-              />
+                  label="Vị trí CheckIn"
+                  value={taskData.locationCheckIn}
+                  editable={false}
+                />
+                <TouchableOpacity onPress={handleCheckIn} className='min-w-[85px] ml-5 mt-3 bg-blue-400 hover:bg-blue-500  font-semibold p-2 border border-blue-400 hover:border-transparent rounded'>
+                  <Text className='text-center text-white'>Check-In</Text>
+                </TouchableOpacity>
+              </View>
+              <View className='flex-row flex-1 justify-between items-center'>
               <CustomTextInput
-                label="Vị trí CheckIn"
-                onChangeText={text => setTaskData({ ...taskData, locationCheckIn: text })}
-                value={taskData.locationCheckIn}
-              />
-              <CustomTextInput
-                label="Vị trí CheckOut"
-                onChangeText={text => setTaskData({ ...taskData, locationCheckOut: text })}
-                value={taskData.locationCheckOut}
-              />
+                  label="Vị trí CheckOut"
+                  value={taskData.locationCheckOut}
+                  editable={false}
+                />
+                <TouchableOpacity onPress={handleCheckOut} style={{backgroundColor: !taskData.locationCheckIn ? 'transparent' : '#60a5fa'}} disabled={!taskData.locationCheckIn} className='min-w-[85px] ml-5 mt-3 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white p-2 border border-blue-500 hover:border-transparent rounded'>
+                  <Text className='text-center' style={{color: !taskData.locationCheckIn ? 'gray' : '#fff'}}>Check-Out</Text>
+                </TouchableOpacity>
+              </View>
+                   {/* <CustomTextInput
+                  label="Địa chỉ CheckIn"
+                  value={addressCheckIn}
+                  editable={false}
+                /> */}
+                
+              
+                 {/* <CustomTextInput
+                  label="Địa chỉ CheckOut"
+                  value={addressCheckOut}
+                  editable={false}
+                /> */}
+              
+                <MapView
+                  style={{ height: 300, marginTop: 20 }}
+                  region={mapRegion}
+                  key={mapKey}
+                >
+                  {taskData.locationCheckIn && (
+                    <Marker
+                      coordinate={{
+                        latitude: parseFloat(taskData.locationCheckIn.split(',')[0]),
+                        longitude: parseFloat(taskData.locationCheckIn.split(',')[1]),
+                      }}
+                      title="Check-In"
+                    />
+                  )}
+                  {taskData.locationCheckOut && (
+                    <Marker
+                      coordinate={{
+                        latitude: parseFloat(taskData.locationCheckOut.split(',')[0]),
+                        longitude: parseFloat(taskData.locationCheckOut.split(',')[1]),
+                      }}
+                      title="Check-Out"
+                    />
+                  )}
+               {routeCoords.length > 0 && (
+                    <Polyline
+                      coordinates={routeCoords}
+                      strokeColor="red"
+                      strokeWidth={3}
+                    />
+                  )}
+                  {/* {taskData.locationCheckIn && taskData.locationCheckOut && (
+                    <Polyline
+                      coordinates={[
+                        {
+                          latitude: parseFloat(taskData.locationCheckIn.split(',')[0]),
+                          longitude: parseFloat(taskData.locationCheckIn.split(',')[1]),
+                        },
+                        {
+                          latitude: parseFloat(taskData.locationCheckOut.split(',')[0]),
+                          longitude: parseFloat(taskData.locationCheckOut.split(',')[1]),
+                        },
+                      ]}
+                      strokeColor="#000"
+                      strokeWidth={3}
+                    />
+                  )} */}
+                </MapView>
+                <CustomTextInput
+                  
+                  label="Tổng quãng đường (km)"
+                  value={totalDistance !== null ? `${totalDistance} km` : ''}
+                  editable={false}
+                />
               <SelectDateTime
                 title="Deadline"
                 onSelect={date => setTaskData({ ...taskData, deadline: moment(date).format('DD/MM/YYYY') })}
               />
-              <AttachmentTaskComponent
+              {/* <AttachmentTaskComponent
                 data={taskData.attachment || []}
                 onChangeValue={value => setTaskData({ ...taskData, attachment: value })}
-              />
+              /> */}
                   
             </View>
           )}
@@ -321,6 +608,8 @@ const AddNewTaskScreen = () => {
         </ScrollView>
       </View> */}
     </SafeAreaView>
+      </TouchableWithoutFeedback>
+   
   );
 };
 

@@ -6,6 +6,7 @@ import {
   Text,
   View,
   Button,
+  Alert,
   TextInput,
   FlatList,
   RefreshControl
@@ -23,12 +24,12 @@ import TaskService from '../../services/taskWorks/serviceTask'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 // import DatePicker from 'react-native-date-picker';
-// import Geolocation from 'react-native-geolocation-service';
+ import Geolocation from 'react-native-geolocation-service';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import moment from 'moment';
 import { moderateScale } from '../size';
-// import { position } from '../../../utils/geoLocation';
-// import MapView, {Marker, Polyline} from 'react-native-maps';
+ import { position } from '../../../utils/geoLocation';
+ import MapView, {Marker, Polyline} from 'react-native-maps';
 
 interface Follower {
   id: string;
@@ -154,18 +155,18 @@ const TaskScreen = () => {
     setFilteredTaskList(prevList => prevList.filter(task => task.id !== taskId))
   }
 
-  // const requestLocationPermission = async () => {
-  //   const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-  //   if (result === RESULTS.GRANTED) {
-  //     console.log('Location permission granted');
-  //   } else {
-  //     console.log('Location permission denied');
-  //   }
-  // };
+  const requestLocationPermission = async () => {
+    const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    if (result === RESULTS.GRANTED) {
+      console.log('Location permission granted');
+    } else {
+      console.log('Location permission denied');
+    }
+  };
 
-  // useEffect(() => {
-  //   requestLocationPermission();
-  // }, []);
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
   
   // const handleCheckIn = async () => {
   //   setIsLoading(true);
@@ -425,49 +426,7 @@ const TaskScreen = () => {
     
               <Button title="Fetch Tasks" onPress={fetchTasks} />
             </View> */}
-             {/* <Button title="Check In" onPress={handleCheckIn} />
-          <Text>Check-In Location: {checkInLocation}</Text>
-          <Button title="Check Out" onPress={handleCheckOut} />
-          <Text>Check-Out Location: {checkOutLocation}</Text>
-          <MapView
-              style={{height: 300, marginTop: 20}}
-              region={mapRegion}
-            >
-              {checkInLocation && (
-                <Marker
-                  coordinate={{
-                    latitude: parseFloat(checkInLocation.split(',')[0]),
-                    longitude: parseFloat(checkInLocation.split(',')[1]),
-                  }}
-                  title="Check-In"
-                />
-              )}
-              {checkOutLocation && (
-                <Marker
-                  coordinate={{
-                    latitude: parseFloat(checkOutLocation.split(',')[0]),
-                    longitude: parseFloat(checkOutLocation.split(',')[1]),
-                  }}
-                  title="Check-Out"
-                />
-              )}
-              {checkInLocation && checkOutLocation && (
-                <Polyline
-                  coordinates={[
-                    {
-                      latitude: parseFloat(checkInLocation.split(',')[0]),
-                      longitude: parseFloat(checkInLocation.split(',')[1]),
-                    },
-                    {
-                      latitude: parseFloat(checkOutLocation.split(',')[0]),
-                      longitude: parseFloat(checkOutLocation.split(',')[1]),
-                    },
-                  ]}
-                  strokeColor="#000"
-                  strokeWidth={3}
-                />
-              )}
-            </MapView> */}
+         
           </View>
           <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} taskList={taskList}/>
           <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
@@ -519,6 +478,49 @@ const TaskScreen = () => {
             
           }
         />
+            {/* <Button title="Check In" onPress={handleCheckIn} />
+          <Text>Check-In Location: {checkInLocation}</Text>
+          <Button title="Check Out" onPress={handleCheckOut} />
+          <Text>Check-Out Location: {checkOutLocation}</Text>
+          <MapView
+              style={{height: 300, marginTop: 20}}
+              region={mapRegion}
+            >
+              {checkInLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(checkInLocation.split(',')[0]),
+                    longitude: parseFloat(checkInLocation.split(',')[1]),
+                  }}
+                  title="Check-In"
+                />
+              )}
+              {checkOutLocation && (
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(checkOutLocation.split(',')[0]),
+                    longitude: parseFloat(checkOutLocation.split(',')[1]),
+                  }}
+                  title="Check-Out"
+                />
+              )}
+              {checkInLocation && checkOutLocation && (
+                <Polyline
+                  coordinates={[
+                    {
+                      latitude: parseFloat(checkInLocation.split(',')[0]),
+                      longitude: parseFloat(checkInLocation.split(',')[1]),
+                    },
+                    {
+                      latitude: parseFloat(checkOutLocation.split(',')[0]),
+                      longitude: parseFloat(checkOutLocation.split(',')[1]),
+                    },
+                  ]}
+                  strokeColor="#000"
+                  strokeWidth={3}
+                />
+              )}
+            </MapView>  */}
           <View className="flex-1">
             <FlatList
                 data={filteredTaskList}

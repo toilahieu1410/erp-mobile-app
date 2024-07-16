@@ -59,8 +59,8 @@ const ModalAddUserWatching = ({
           <View>
             <View className="flex flex-row justify-between items-center p-2">
               <View>
-                <Text className="w-full text-gray-500 mb-2">
-                  Người theo dõi
+                <Text className=" text-gray-500">
+                  Người theo dõi: 
                 </Text>
                 <View>
                   {data.map((item, index) => (

@@ -71,6 +71,11 @@ export const styles = StyleSheet.create({
     padding:moderateScale(3),
     
   },
+  boxSub: {
+    backgroundColor:'#fafafa',
+    flex:1,
+    marginLeft: moderateScale(10)
+  },
   boxXinNghiPhep: {
     position:'relative',
     marginVertical: moderateScale(8), 
@@ -172,11 +177,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(5),
 
   },
+  dropdownSub: {
+    backgroundColor:'#efefef',
+    width: '100%',
+    flex:1,
+    minWidth: moderateScale(200),
+    minHeight: moderateScale(40)
+  },
   iconStyle: {
     width: moderateScale(24),
   },
   dropdownContainer: {
-    
     borderWidth: 1,
     position:'relative',
     borderColor: '#ddd',
@@ -233,6 +244,7 @@ export const styles = StyleSheet.create({
   textLeft: {
     fontSize: moderateScale(14),
     color:'#777',
+    marginTop: moderateScale(10)
   },
   textChoose: {
     textAlign:'center',
@@ -242,6 +254,29 @@ export const styles = StyleSheet.create({
   textRight: {
     fontSize: moderateScale(14),
     color:'#000'
-  }
+  },
+
+
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+  },
+
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  selectedStyle: {
+    borderRadius: moderateScale(8),
+    backgroundColor: '#fff',
+    borderColor: '#00BFFF',
+    borderWidth: 1,
+    
+  },
 });
 
