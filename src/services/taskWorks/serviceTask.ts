@@ -21,6 +21,18 @@ interface CreateTask {
   followers: string[]
 }
 
+interface UpdateTask {
+  id: string;
+  title: string;
+  typejob: typeJob;
+  customerCode: string;
+  content: string;
+  feedback: string;
+  vote: number;
+  deadline: string;
+  followers: string[];
+}
+
 interface Followers {
   id: string;
   userId: string;
@@ -76,7 +88,7 @@ export const TaskService = {
     }
   },
 
-  async createListTask(data: CreateTask): Promise<BaseResponse<any>> {
+  async createTask(data: CreateTask): Promise<BaseResponse<any>> {
     try {
       const response = await http.post('/task/create', data)
       if (response.data.isSuccess) {
@@ -88,6 +100,18 @@ export const TaskService = {
       throw error
     }
   }, 
+  async updateTask(data: UpdateTask) : Promise<BaseResponse<any>> {
+    try {
+      const response = await http.put('/task/update', data)
+      if (response.data.isSuccess) {
+        return response.data
+      } else {
+        throw new Error(response.data.error.message || 'Error update tasks')
+      }
+    } catch (error) {
+      throw error
+    }
+  },
 
   async deleteTask(taskId: string): Promise<BaseResponse<any>> {
     try {
