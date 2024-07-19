@@ -11,6 +11,7 @@ import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTas
 import ModalAddUserWatching from '../../components/task/addTask/ModalAddUserWatching';
 import SelectDateTime from '../../components/app/input/SelectDate';
 import Select from '../../components/app/input/Select';
+
 const EditTaskScreen = () => {
   const route = useRoute();
   //@ts-ignore

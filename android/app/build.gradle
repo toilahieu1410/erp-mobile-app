@@ -79,8 +79,8 @@ android {
         applicationId "com.app_hoplonglms"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.7"
+        versionCode 9
+        versionName "1.9"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -112,8 +112,9 @@ dependencies {
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-restart')
     implementation project(':react-native-vector-icons')
- 
-
+    // implementation project(':react-native-maps')
+    // implementation 'com.google.android.gms:play-services-maps:17.0.0' // thêm dòng này
+    // implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

@@ -95,9 +95,9 @@ const AddNewTaskScreen = () => {
   const requestLocationPermission = async () => {
     const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
     if (result === RESULTS.GRANTED) {
-      console.log('Location permission granted');
+      console.log('Quyền truy cập vị trí đã được cấp');
     } else {
-      console.log('Location permission denied');
+      console.log('Quyền truy cập vị trí đã bị từ chối');
     }
   };
 
@@ -315,6 +315,7 @@ const AddNewTaskScreen = () => {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${apiKey}`
       );
+      console.log(response.data,'ádasdasfsdvvxvcxvxcvxvcxvx')
       if (response.data.routes.length === 0) {
         throw new Error('No routes found');
       }
@@ -332,7 +333,7 @@ const AddNewTaskScreen = () => {
   };
     
  
-  console.log(totalDistance,'total')
+
   // useEffect(() => {
   //   const data = [
   //     {

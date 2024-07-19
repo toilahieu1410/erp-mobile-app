@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Dimensions, Text, View, useWindowDimensions} from 'react-native';
+import {Alert, Dimensions, Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 import {Avatar, TouchableRipple} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -38,6 +38,7 @@ interface ListTask {
 
 interface TaskProps {
   task: ListTask;
+  onDelete: (id: string) => void
 }
 
 const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
@@ -69,9 +70,11 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
                 type: 'success',
               });
             } catch (error) {
+              console.log(error,'errrr')
+              const errorMessage = error.response?.data?.detail || 'Xóa báo cáo công việc thất bại';
               showMessage({
                 message: 'Error',
-                description: 'Xóa báo cáo công việc thất bại',
+                description: errorMessage,
                 type: 'danger',
               });
             }
@@ -95,6 +98,7 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
     </RectButton>
     )
   }
+
   const calculateDistance = () => {
     if (task.locationCheckIn && task.locationCheckOut) {
       const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
@@ -134,11 +138,10 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
-  <TouchableRipple
-      rippleColor={'transparent'}
+  <TouchableOpacity
       onPress={() =>
         //@ts-ignore
-        navigator.navigate(SCREENS.DETAILTASK.KEY, {id: task.id})
+        navigator.navigate(SCREENS.DETAILTASK.KEY, {task})
       }>
       <View className="mb-4">
         <View className="bg-blue-500 flex-row items-center justify-between p-2">
@@ -211,7 +214,7 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
           </View>
         </View>
       </View>
-    </TouchableRipple>
+    </TouchableOpacity>
     </Swipeable>
   
   );

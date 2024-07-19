@@ -435,8 +435,6 @@ const TaskScreen = () => {
         </View>
   );
 
-
-
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">

@@ -52,7 +52,7 @@ const TaskStack = () => {
         }}
         component={DetailTaskScreen}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={SCREENS.EDITTASK.KEY}
         options={{
           title: SCREENS.EDITTASK.NAME,
@@ -64,7 +64,7 @@ const TaskStack = () => {
           },
         }}
         component={EditTaskScreen}
-      />
+      /> */}
 
       <Stack.Screen
         name={SCREENS.TASK_LIST.KEY}

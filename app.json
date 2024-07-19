@@ -1,7 +1,4 @@
 {
   "name": "App_HopLongLMS",
-  "displayName": "App_HopLongLMS",
-  "jsEngine" : "jsc"
-
-
+  "displayName": "App_HopLongLMS"
 }

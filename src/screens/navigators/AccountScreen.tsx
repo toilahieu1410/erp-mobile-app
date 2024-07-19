@@ -31,7 +31,7 @@ interface Item {
 }
 
 const AccountScreen = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const [userName, setUserName] = useState(null);
@@ -64,6 +64,7 @@ const AccountScreen = () => {
       title: SCREENS.PAYROLL.NAME,
       type: 'menu',
       onClick: () => {
+        //@ts-ignore
         navigation?.navigate(SCREENS.PAYROLL.KEY);
       },
     },
@@ -85,6 +86,7 @@ const AccountScreen = () => {
       title: SCREENS.CHANGEPASSWORD.NAME,
       type: 'menu',
       onClick: () => {
+          //@ts-ignore
         navigation?.navigate(SCREENS.CHANGEPASSWORD.KEY);
       },
     },
@@ -102,10 +104,12 @@ const AccountScreen = () => {
               message: 'Đăng xuất thành công!',
               type: 'info',
             });
+              //@ts-ignore
             navigation.replace(SCREENS.LOGIN.KEY);
           })
           .catch((err: BaseResponse) => {
             if (err.error && err.error.code === 'LOGOUT_ERROR') {
+                //@ts-ignore
               navigation.replace(SCREENS.LOGIN.KEY);
             } else {
               showMessage({
@@ -127,6 +131,7 @@ const AccountScreen = () => {
       title: SCREENS.LIST_DON_XAC_NHAN.NAME,
       type: 'menu',
       onClick: () => {
+          //@ts-ignore
         navigation?.navigate(SCREENS.LIST_DON_XAC_NHAN.KEY);
       },
     },
@@ -135,6 +140,7 @@ const AccountScreen = () => {
       title: SCREENS.LIST_DON_NGHI_PHEP.NAME,
       type: 'menu',
       onClick: () => {
+          //@ts-ignore
         navigation?.navigate(SCREENS.LIST_DON_NGHI_PHEP.KEY);
       },
     },
@@ -144,6 +150,7 @@ const AccountScreen = () => {
       title: SCREENS.LIST_WORK_FROM_HOME.NAME,
       type: 'menu',
       onClick: () => {
+          //@ts-ignore
         navigation?.navigate(SCREENS.LIST_WORK_FROM_HOME.KEY);
       },
     },
@@ -153,6 +160,7 @@ const AccountScreen = () => {
       title: SCREENS.OFFERPAYMENTS.NAME,
       type: 'menu',
       onClick: () => {
+          //@ts-ignore
         navigation?.navigate(SCREENS.OFFERPAYMENTS.KEY);
       },
     },
@@ -212,6 +220,7 @@ const AccountScreen = () => {
               <View style={styles.button}>
                 <TouchableOpacity
                   style={styles.buttonClick}
+                    //@ts-ignore
                   onPress={() => navigation?.navigate(SCREENS.INFOACCOUNT.KEY)}>
                   <Text style={styles.textWhite}>Thông tin cá nhân</Text>
                 </TouchableOpacity>

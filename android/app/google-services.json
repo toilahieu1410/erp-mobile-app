@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964067627253",
+    "project_id": "hoplonglms",
+    "storage_bucket": "hoplonglms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964067627253:android:fd0740e19961c70a4675bc",
+        "android_client_info": {
+          "package_name": "com.app_hoplonglms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTMM3KJMU_U8ZIRtTfSlDKymNcaxOBhA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -60,6 +60,10 @@ interface TypeJob {
   display: string;
 }
 
+interface UpdateTask extends CreateTask {
+  id: string
+}
+
 export const TaskService = {
   async getTasks(
     fromDate?: string,
