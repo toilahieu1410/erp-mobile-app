@@ -50,10 +50,24 @@ export const ServiceConfirm = {
 
   async getConfirmList(fromDate: string, toDate: string, pageNumber: number, pageSize: number): Promise<BaseResponse<ListConfirm[]>> {
     try {
-      const response = await http.get(`/approval_application?FromDate=${fromDate}&ToDate=${toDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`)
-      return response.data.value.items
+      // Tạo URL cơ bản với pageNumber và pageSize
+      let url = `/approval_application?PageNumber=${pageNumber}&PageSize=${pageSize}`;
+      
+      // Nếu fromDate có giá trị, thêm vào URL
+      if (fromDate) {
+        url += `&FromDate=${fromDate}`;
+      }
+      
+      // Nếu toDate có giá trị, thêm vào URL
+      if (toDate) {
+        url += `&ToDate=${toDate}`;
+      }
+      
+      // Gọi API với URL đã điều chỉnh
+      const response = await http.get(url);
+      return response.data.value.items;
     } catch (error) {
-      throw error 
+      throw error;
     }
   },
 

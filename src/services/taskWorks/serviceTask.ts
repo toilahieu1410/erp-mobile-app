@@ -1,7 +1,7 @@
 import http from '../../../store/http';
 import {BaseResponse} from '../../models/BaseResponse';
 
-enum typeJob  {
+enum typeVote  {
   Kem = 1,
   TrungBinh = 2,
   Tot = 3
@@ -9,12 +9,12 @@ enum typeJob  {
 
 interface CreateTask {
   title: string,
-  typejob: typeJob,
+  typejob: number,
   internalCode: string,
   customerCode: string,
   content: string,
   feedback: string,
-  vote: number,
+  vote: typeVote,
   locationCheckIn: string,
   locationCheckOut: string,
   deadline: string,
@@ -24,11 +24,11 @@ interface CreateTask {
 interface UpdateTask {
   id: string;
   title: string;
-  typejob: typeJob;
+  typejob: number;
   customerCode: string;
   content: string;
   feedback: string;
-  vote: number;
+  vote: typeVote;
   deadline: string;
   followers: string[];
 }
@@ -44,10 +44,10 @@ interface Followers {
 interface ListTask {
   id: string;
   title: string;
-  typeJob: string;
+  typeJob: number;
   content: string;
   feedback: string;
-  vote: string;
+  vote: number;
   locationCheckIn: string;
   locationCheckout: string;
   deadline: string;
@@ -72,7 +72,20 @@ export const TaskService = {
     pageSize?: number,
   ): Promise<BaseResponse<ListTask[]>> {
     try {
-      const response = await http.get(`/task?FromDate=${fromDate}&ToDate=${toDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`)
+       // Tạo URL cơ bản với pageNumber và pageSize
+       let url = `/task?PageNumber=${pageNumber}&PageSize=${pageSize}`;
+      
+       // Nếu fromDate có giá trị, thêm vào URL
+       if (fromDate) {
+         url += `&FromDate=${fromDate}`;
+       }
+       
+       // Nếu toDate có giá trị, thêm vào URL
+       if (toDate) {
+         url += `&ToDate=${toDate}`;
+       }
+
+       const response = await http.get(url);
       if (response.data.isSuccess) {
         return response.data.value
       } else {
@@ -94,7 +107,7 @@ export const TaskService = {
 
   async createTask(data: CreateTask): Promise<BaseResponse<any>> {
     try {
-      const response = await http.post('/task/create', data)
+      const response = await http.post('/task', data)
       if (response.data.isSuccess) {
         return response.data
       }else {
@@ -106,7 +119,7 @@ export const TaskService = {
   }, 
   async updateTask(data: UpdateTask) : Promise<BaseResponse<any>> {
     try {
-      const response = await http.put('/task/update', data)
+      const response = await http.put('/task', data)
       if (response.data.isSuccess) {
         return response.data
       } else {
@@ -119,9 +132,7 @@ export const TaskService = {
 
   async deleteTask(taskId: string): Promise<BaseResponse<any>> {
     try {
-      const response = await http.delete(`task/delete`, {
-        data: {id: taskId}
-      })
+      const response = await http.delete(`task/${taskId}`)
       if (response.data.isSuccess) {
         return response.data
       } else {

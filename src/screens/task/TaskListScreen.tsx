@@ -26,10 +26,10 @@ interface Follower {
 interface ListTask {
   id: string;
   title: string;
-  typeJob: string;
+  typeJob: number;
   content: string;
   feedback: string;
-  vote: string;
+  vote: number;
   locationCheckIn: string;
   locationCheckOut: string;
   deadline: string;

@@ -18,7 +18,7 @@ export const API_LMS = 'https://lms.giga.vn/api/v1'
 
 export const _postApiSignIn = async (body: {username:string; password: string}) => {
   try {
-    const response = await axios.post(`${API_LMS}/auth`, body, {
+    const response = await axios.post(`${API_LMS}/auth/login`, body, {
       headers: {
         'Content-Type': 'application/json',
       },

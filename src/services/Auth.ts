@@ -5,7 +5,7 @@ import http from '../../store/http';
 export const AuthenticateService = {
   
   async Login(data: {username: string; password: string}): Promise<BaseResponse<Token>> {
-    const response = await http.post('/auth', data)
+    const response = await http.post('/auth/login', data)
     return response.data
   },
 

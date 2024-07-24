@@ -32,7 +32,7 @@ const apiKey = 'AIzaSyBqnaTZHOfI539sJlwuXY5uDsoJP_DPI4I';
 
 Geocoder.init(apiKey, { language: 'vi' });
 
-enum TypeJob {
+enum TypeVote {
   Kem = 1,
   TrungBinh = 2,
   Tot = 3
@@ -53,7 +53,7 @@ const AddNewTaskScreen = () => {
     locationCheckIn: '',
     locationCheckOut: '',
     deadline: moment(new Date()).format('DD/MM/YYYY'),
-    followers: [],
+    followers: [] as string[],
   })
   // const [data, setData] = useState<Task>({
   //   id: 'null',
@@ -180,9 +180,7 @@ const AddNewTaskScreen = () => {
       } 
     } catch (error) {
       // Xử lý lỗi từ phản hồi API trong catch
-      console.log(error,'error')
       const errorMessages = error.response?.data?.errors?.map(err => err.message).join('\n') || error.response.data.detail;
-      console.log(errorMessages,'errorMessages')
       showMessage({
         message: 'Error',
         description: errorMessages ,
@@ -191,10 +189,10 @@ const AddNewTaskScreen = () => {
     }
   };
 
-  const handleUserSelect = (selectedItems) => {
+  const handleUserSelect = (selectedItems: string[]) => {
     if (selectedItems && Array.isArray(selectedItems)) {
       setSelectedUserIds(selectedItems);
-      setTaskData({ ...taskData, followers: selectedItems.map(id => ({ id })) });
+      setTaskData({ ...taskData, followers: selectedItems  });
     } else {
       setSelectedUserIds([]);
       setTaskData({ ...taskData, followers: [] });
@@ -456,9 +454,9 @@ const AddNewTaskScreen = () => {
                     setTaskData({...taskData, vote: itemValue})
                   }}
                 >
-                  <Picker.Item label="Kém" value={TypeJob.Kem} />
-                    <Picker.Item label="Trung bình" value={TypeJob.TrungBinh} />
-                    <Picker.Item label="Tốt" value={TypeJob.Tot} />
+                  <Picker.Item label="Kém" value={TypeVote.Kem} />
+                    <Picker.Item label="Trung bình" value={TypeVote.TrungBinh} />
+                    <Picker.Item label="Tốt" value={TypeVote.Tot} />
                 </Picker>
               </View>
               <View className='flex-row flex-1 justify-between items-center'>

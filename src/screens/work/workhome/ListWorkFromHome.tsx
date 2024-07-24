@@ -110,7 +110,7 @@ const ListWorkFromHome: React.FC = () => {
       setTotalItems(response.length === 0 ? 0 : response.length)
       setHasMore(response.length === pageSize);
     } catch (error) {
-      console.error('Error fetching list confirm', error);
+      console.error('Error fetching list work from home', error);
       if (page === 1) setListWorkFromHome([])
     } finally {
       setLoading(false)

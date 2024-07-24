@@ -109,13 +109,16 @@ const ListConfirm: React.FC = () => {
 
   const fetchConfirmList = useCallback(async (fromDate: Date | null, toDate: Date | null, page: number) => {
     try {
-      if (page === 1) setLoading(true);
-      setLoadingMore(page > 1);
+      setLoading(page === 1)
+      setLoadingMore(page > 1)
 
       const formattedFromDate = fromDate ? moment(fromDate).format('DD/MM/YYYY') : '';
       const formattedToDate = toDate ? moment(toDate).format('DD/MM/YYYY') : '';
-
+      console.log('Calling API with:', { fromDate: formattedFromDate, toDate: formattedToDate, page });
       const response: any = await ServiceConfirm.getConfirmList(formattedFromDate, formattedToDate, page, pageSize);
+
+      console.log('API response:', response); 
+      
       const sortedResponse = response.sort((a: XacNhan, b: XacNhan) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });

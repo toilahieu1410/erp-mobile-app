@@ -55,15 +55,16 @@ const DetailTaskScreen: React.FC = () => {
   const route = useRoute();
   const navigator = useNavigation();
 
-  const { task } = route.params as {task: any}
+  const { task } = route.params as {task: Task }
 
+  console.log(task,'taaaaa')
   const [title, setTitle] = useState(task.title)
   const [content, setContent] = useState(task.content)
   const [customerCode, setCustomerCode] = useState(task.customerCode || 'string')
   const [feedBack, setFeedBack] = useState(task.feedback)
-  const [vote, setVote] = useState<number>(Number(task.vote))
-  const [typeJob, setTypeJob] = useState<number>(Number(task.typeJob))
-  const [followers, setFollowers] = useState(task.followers.map(f => f.id))
+  const [vote, setVote] = useState<number>(Number(task.vote) || 1);  // Chuyển đổi từ string sang number
+  const [typeJob, setTypeJob] = useState<number>(Number(task.typejob) || 1); 
+  const [followers, setFollowers] = useState<string[]>(task.followers.map(f => f.id) || []);
   const [deadline, setDeadline] = useState<Date | null>(new Date(task.deadline))
   const [taskData, setTaskData] = useState({
     title,
@@ -91,19 +92,22 @@ const DetailTaskScreen: React.FC = () => {
     fetchJobTypes()
   }, [])
 
-  console.log(vote,'ádasda', typeJob)
+  console.log(vote,'kkkkkkkkkkk', typeJob)
   const handleSave = async () => {
+      // Kiểm tra và chuyển đổi giá trị
+  
     try {
       const formattedDeadline = deadline ? moment(deadline).format('DD/MM/YYYY') : '';
       const updateData = {
-        
         ...taskData,
         id: task.id,
+        title: title,
+        content: content,
         feedback: feedBack,
         deadline: formattedDeadline,
-        followers: followers ,
-        vote: Number(vote), // Ensure vote is a number
-        typeJob: Number(typeJob)
+        followers: followers || [], // Ensure followers is an array
+        vote: Number(vote) || 0, // Ensure this is a number
+        typejob: Number(typeJob) || 0, 
       }
       console.log(updateData,'updateData')
       await TaskService.updateTask(updateData)
@@ -210,7 +214,7 @@ const DetailTaskScreen: React.FC = () => {
             </ChoiceMenu> */}
             <TouchableOpacity
               onPress={ () => handleSave()}>
-              <Text className="text-black font-bold text-sm px-2">Edit11</Text>
+              <Text className="text-black font-bold text-sm px-2">Edit</Text>
             </TouchableOpacity>
           </View>
         }

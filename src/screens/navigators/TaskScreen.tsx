@@ -66,11 +66,12 @@ const TaskScreen = () => {
   const [toDate, setToDate] = useState<Date | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [openFromDatePicker, setOpenFromDatePicker] = useState(false)
-  const [openToDatePicker, setOpenToDatePicker] = useState(false)
+  // const [openFromDatePicker, setOpenFromDatePicker] = useState(false)
+  // const [openToDatePicker, setOpenToDatePicker] = useState(false)
+  // const [checkInLocation, setCheckInLocation] = useState<string | null>(null)
+  // const [checkOutLocation, setCheckOutLocation] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [checkInLocation, setCheckInLocation] = useState<string | null>(null)
-  const [checkOutLocation, setCheckOutLocation] = useState<string | null>(null)
+
   const [refreshing, setRefreshing] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -82,23 +83,25 @@ const TaskScreen = () => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-
   const fetchTasks = async (isRefreshing = false) => {
-      if (isRefreshing) {
+    if (isRefreshing) {
       setRefreshing(true);
     } else {
       setLoading(true);
     }
-    setError(null)
+    setError(null);
 
     try {
-      const fromDateString = fromDate ? moment(fromDate).format('YYYY-MM-DD') : '';
-      const toDateString = toDate ? moment(toDate).format('YYYY-MM-DD') : '';
+      const fromDateString = fromDate ? moment(fromDate).format('DD/MM/YYYY') : '';
+      const toDateString = toDate ? moment(toDate).format('DD/MM/YYYY') : '';
 
-      const tasks = await TaskService.getTasks(fromDateString, toDateString, pageNumber, pageSize)
+      // Tăng pageSize để lấy tất cả bản ghi
+      const effectivePageSize = isRefreshing ? 1000 : pageSize;
 
-      setTaskList(tasks)
-      setFilteredTaskList(tasks)
+      const tasks = await TaskService.getTasks(fromDateString, toDateString, pageNumber, effectivePageSize);
+
+      setTaskList(tasks);
+      setFilteredTaskList(tasks);
     } catch (error) {
       setError('Không lấy được danh sách công việc');
     } finally {
@@ -434,7 +437,7 @@ const TaskScreen = () => {
           </View>
         </View>
   );
-
+  console.log(filteredTaskList,'ádasdasd')
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">

@@ -267,6 +267,7 @@ const ListTakeLeave: React.FC = () => {
     ),
   });
 
+  console.log(listNghiPhep,'listNghiPhep')
   return (
     <GestureHandlerRootView style={styles.container}>
       <AppHeader
@@ -372,7 +373,7 @@ const ViewTask: React.FC<ViewTakeLeaveProps> = ({
             <Text style={styles.statusText}>Đã duyệt</Text>
           </View>
         );
-      case 'Rejected':
+      case 'Reject':
         return (
           <View style={[styles.statusWrapper, {backgroundColor: '#cc2a36'}]}>
             <Text style={styles.statusText}>Hủy duyệt</Text>
