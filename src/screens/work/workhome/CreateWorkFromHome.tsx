@@ -29,8 +29,8 @@ const CreateWorkFromHome = () => {
   const navigation = useNavigation()
   const [content, setContent] = useState('')
   const [equipmentBorrow, setEquipmentBorrow] = useState('')
-  const [fromDate, setFromDate] = useState<Date | null>(null)
-  const [toDate, setToDate] = useState<Date | null>(null)
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
   const [disabled, setDisabled] = useState(true)
   const [showStartPicker, setShowStartPicker] = useState(false)
   const [showEndPicker, setShowEndPicker] = useState(false)
@@ -48,10 +48,11 @@ const CreateWorkFromHome = () => {
       const payload: any = {
         content: content,
         equipmentBorrow: equipmentBorrow,
-        fromDate: fromDate ? moment(fromDate).format('DD/MM/YYYY') : '',
-        toDate: toDate ? moment(toDate).format('DD/MM/YYYY') : ''
+        startDate: startDate ? moment(startDate).format('DD/MM/YYYY') : '',
+        endDate: endDate ? moment(endDate).format('DD/MM/YYYY') : ''
       }
 
+      console.log(payload,'payyyyy')
       const response = await ServiceWorkFromHome.createWorkFromHome(payload);
       const message = response.value
       showMessage({
@@ -73,10 +74,10 @@ const CreateWorkFromHome = () => {
 
   const handleDateChange = (event: any, selectedDate?: Date, picker?: 'startDate' | 'endDate') => {
     if (picker === 'startDate') {
-      setFromDate(selectedDate || fromDate)
+      setStartDate(selectedDate || startDate)
       setShowStartPicker(false)
     } else if (picker === 'endDate') {
-      setToDate(selectedDate || toDate)
+      setEndDate(selectedDate || endDate)
       setShowEndPicker(false)
     }
   }
@@ -107,13 +108,13 @@ const CreateWorkFromHome = () => {
               <View style={styles.flexTime}>
                 <TouchableOpacity style={styles.btnDate} onPress={() => setShowStartPicker(true)}>
                   <Text style={styles.dateTextFromTo}>
-                    {fromDate ? moment(fromDate).format('DD/MM/YYYY') : 'Chọn ngày'}
+                    {startDate ? moment(startDate).format('DD/MM/YYYY') : 'Chọn ngày'}
                   </Text>
                 </TouchableOpacity>
                 <Icon name="today-outline" size={moderateScale(20)} color={'#2179A9'} />
                 {showStartPicker && (
                   <DatePickerDay
-                    date={fromDate || newDate}
+                    date={startDate || newDate}
                     mode={'date'}
                     onChange={(event, date) => handleDateChange(event, date, 'startDate')}
                   />
@@ -125,13 +126,13 @@ const CreateWorkFromHome = () => {
               <View style={styles.flexTime}>
                 <TouchableOpacity style={styles.btnDate} onPress={() => setShowEndPicker(true)}>
                   <Text style={styles.dateTextFromTo}>
-                    {toDate ? moment(toDate).format('DD/MM/YYYY') : 'Chọn ngày'}
+                    {endDate ? moment(endDate).format('DD/MM/YYYY') : 'Chọn ngày'}
                   </Text>
                 </TouchableOpacity>
                 <Icon name="today-outline" size={20} color={'#2179A9'} />
                 {showEndPicker && (
                   <DatePickerDay
-                    date={toDate || newDate}
+                    date={endDate || newDate}
                     mode={'date'}
                     onChange={(event, date) => handleDateChange(event, date, 'endDate')}
                   />

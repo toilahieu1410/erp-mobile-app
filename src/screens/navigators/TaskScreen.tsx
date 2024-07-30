@@ -28,7 +28,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import moment from 'moment';
 import { moderateScale } from '../size';
- import { position } from '../../../utils/geoLocation';
+ import { position } from '../../utils/geoLocation';
  import MapView, {Marker, Polyline} from 'react-native-maps';
 
 interface Follower {
@@ -42,8 +42,10 @@ interface Follower {
 interface ListTask {
   id: string;
   title: string;
-  typeJob: string;
+  typejob: string;
   content: string;
+  status: string;
+  customerCode: string;
   feedback: string;
   vote: string;
   locationCheckIn: string;
@@ -65,7 +67,7 @@ const TaskScreen = () => {
   const [fromDate, setFromDate] = useState<Date | null>(null)
   const [toDate, setToDate] = useState<Date | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(10000)
   // const [openFromDatePicker, setOpenFromDatePicker] = useState(false)
   // const [openToDatePicker, setOpenToDatePicker] = useState(false)
   // const [checkInLocation, setCheckInLocation] = useState<string | null>(null)
@@ -158,6 +160,15 @@ const TaskScreen = () => {
     setFilteredTaskList(prevList => prevList.filter(task => task.id !== taskId))
   }
 
+  const handleUpdateTaskStatus = (taskId: string, status: string) => {
+    setTaskList(prevList =>
+      prevList.map(task => (task.id === taskId ? { ...task, status } : task))
+    );
+    setFilteredTaskList(prevList =>
+      prevList.map(task => (task.id === taskId ? { ...task, status } : task))
+    );
+  };
+
   const requestLocationPermission = async () => {
     const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
     if (result === RESULTS.GRANTED) {
@@ -166,6 +177,18 @@ const TaskScreen = () => {
       console.log('Location permission denied');
     }
   };
+
+  const getTaskCountByStatus = (status: string) => {
+    return taskList.filter(task => task.status === status).length
+  }
+
+  const handleStatusFilter = (status: string) => {
+    if (status === '') {
+      setFilteredTaskList(taskList)
+    } else {
+      setFilteredTaskList(taskList.filter(task => task.status === status))
+    }
+  }
 
   useEffect(() => {
     requestLocationPermission();
@@ -431,13 +454,19 @@ const TaskScreen = () => {
             </View> */}
          
           </View>
-          <ProcessTaskTodayComponent totalTask={25} countDoneTask={13} taskList={taskList}/>
+          <ProcessTaskTodayComponent 
+            totalTask={taskList.length}
+            countDoneTask={getTaskCountByStatus('DaHoanThanh')}
+            taskList={taskList} 
+            handleStatusFilter={handleStatusFilter} 
+            getTaskCountByStatus={getTaskCountByStatus}
+          />
           <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
             <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
           </View>
         </View>
   );
-  console.log(filteredTaskList,'ádasdasd')
+
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">
@@ -523,20 +552,26 @@ const TaskScreen = () => {
               )}
             </MapView>  */}
           <View className="flex-1">
-            <FlatList
-                data={filteredTaskList}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => <TaskFlatListComponent task={item} onDelete={handleDeleteTask}/>}
-                refreshControl={
-                  <RefreshControl 
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    colors={[COLORS.PRIMARY]}
-                  />
-                }
-                ListHeaderComponent={ListHeader}
-                 contentContainerStyle={{paddingHorizontal: moderateScale(15)}}
-              />
+          <FlatList
+              data={filteredTaskList}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <TaskFlatListComponent 
+                  task={item} 
+                  onDelete={handleDeleteTask}
+                  onUpdateStatus={handleUpdateTaskStatus} // Truyền hàm onUpdateStatus
+                />
+              )}
+              refreshControl={
+                <RefreshControl 
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[COLORS.PRIMARY]}
+                />
+              }
+              ListHeaderComponent={ListHeader}
+              contentContainerStyle={{paddingHorizontal: moderateScale(15)}}
+            />
           </View>
       </SafeAreaView>
     </>

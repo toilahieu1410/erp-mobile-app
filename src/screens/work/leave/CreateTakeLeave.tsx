@@ -43,9 +43,9 @@ interface ListUsers {
 }
 
 const timeTypes = [
-  { value: 0, display: 'Sáng' },
-  { value: 1, display: 'Chiều' },
-  { value: 2, display: 'Cả ngày' },
+  { value: 1, display: 'Sáng' },
+  { value: 2, display: 'Chiều' },
+  { value: 3, display: 'Cả ngày' },
 ]
 
 const CreateTakeLeave = () => {
@@ -157,6 +157,7 @@ const CreateTakeLeave = () => {
           timeType: detail.timeType
         }))
       }
+      //@ts-ignore
       await ServiceTakeLeave.createTakeLeave(payload)
 
       showMessage({
@@ -246,6 +247,7 @@ const CreateTakeLeave = () => {
                         style={styles.pickerDropdown}
                         onPress={openTimeActionSheet}
                       >
+                     
                       <Text style={styles.textChoose}>
                         {timeTypes.find(t => t.value === detail.timeType)?.display || 'Chọn thời gian nghỉ'}
                         </Text>
@@ -260,6 +262,7 @@ const CreateTakeLeave = () => {
                               actionSheetTimeRef.current?.hide()
                             }}
                           >
+                               {}
                             <Text>{item.display}</Text>
                           </TouchableOpacity>
                         ))}

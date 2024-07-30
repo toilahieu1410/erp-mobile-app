@@ -1,5 +1,5 @@
 import { BaseResponse } from "../../models/BaseResponse"
-import http from "../../../store/http"
+import http from "../../store/http"
 
 interface WorkFromHomePayLoad {
   content: string,

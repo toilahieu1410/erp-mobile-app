@@ -5,16 +5,15 @@ import {
   Text,
   View,
   ScrollView,
-  Image,
-  Alert,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
+import  Icon  from 'react-native-vector-icons/Ionicons';
 import AppHeader from '../../components/navigators/AppHeader';
 import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
-import {Divider, Icon, Menu} from 'react-native-paper';
 import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
 import {SCREENS} from '../../constants/screens';
 import TaskService from '../../services/taskWorks/serviceTask';
@@ -22,8 +21,10 @@ import { showMessage } from 'react-native-flash-message';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
+import { MultiSelect } from 'react-native-element-dropdown';
 import moment from 'moment';
 import { moderateScale } from '../size';
+import ServiceTakeLeave from '../../services/listWorks/serviceTakeLeave';
 
 interface Follower {
   id: string;
@@ -57,26 +58,18 @@ const DetailTaskScreen: React.FC = () => {
 
   const { task } = route.params as {task: Task }
 
-  console.log(task,'taaaaa')
+
   const [title, setTitle] = useState(task.title)
   const [content, setContent] = useState(task.content)
   const [customerCode, setCustomerCode] = useState(task.customerCode || 'string')
   const [feedBack, setFeedBack] = useState(task.feedback)
   const [vote, setVote] = useState<number>(Number(task.vote) || 1);  // Chuyển đổi từ string sang number
   const [typeJob, setTypeJob] = useState<number>(Number(task.typejob) || 1); 
-  const [followers, setFollowers] = useState<string[]>(task.followers.map(f => f.id) || []);
+  const [followers, setFollowers] = useState<string[]>(task.followers.map(f => f.userId) || []);
   const [deadline, setDeadline] = useState<Date | null>(new Date(task.deadline))
-  const [taskData, setTaskData] = useState({
-    title,
-    content,
-    customerCode,
-    vote,
-    typeJob,
-    followers
-  })
   const [openDeadlinePicker, setOpenDeadlinePicker] = useState(false)
   const [changeJobTypes, setChangeJobTypes] = useState<TypeJob[]>([])
-
+  const [users, setUsers] = useState<Follower[]>([]);
   const richTextContent = useRef<RichEditor>(null)
   const richTextFeedBack = useRef<RichEditor>(null)
 
@@ -92,17 +85,23 @@ const DetailTaskScreen: React.FC = () => {
     fetchJobTypes()
   }, [])
 
-  console.log(vote,'kkkkkkkkkkk', typeJob)
+  const followerOptions = users.map(item => ({
+    label: item.hoTen,
+    value: item.id
+
+  }))
+
+
   const handleSave = async () => {
       // Kiểm tra và chuyển đổi giá trị
   
     try {
       const formattedDeadline = deadline ? moment(deadline).format('DD/MM/YYYY') : '';
       const updateData = {
-        ...taskData,
         id: task.id,
         title: title,
         content: content,
+        customerCode: customerCode,
         feedback: feedBack,
         deadline: formattedDeadline,
         followers: followers || [], // Ensure followers is an array
@@ -110,6 +109,7 @@ const DetailTaskScreen: React.FC = () => {
         typejob: Number(typeJob) || 0, 
       }
       console.log(updateData,'updateData')
+      // @ts-ignore
       await TaskService.updateTask(updateData)
       showMessage({
         message: 'Success',
@@ -117,7 +117,6 @@ const DetailTaskScreen: React.FC = () => {
         type: 'success'
       })
 
-   
       //@ts-ignore
       navigator.navigate(SCREENS.TASK.KEY, {id: task.id})
     } catch (error: any) {
@@ -131,6 +130,18 @@ const DetailTaskScreen: React.FC = () => {
     }
  
   }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await ServiceTakeLeave.getUserHandOver('');
+        //@ts-ignore
+        setUsers(response);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchUsers();
+  }, []);
   // const data = {
   //   id: 'KAP-1',
   //   title: 'Gặp khách hàng tại Đình Thôn',
@@ -178,7 +189,7 @@ const DetailTaskScreen: React.FC = () => {
   //   attachment: [{}],
   // };
 
-  console.log(task,'ádasdas')
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <AppHeader
@@ -252,6 +263,7 @@ const DetailTaskScreen: React.FC = () => {
                   />
                    <RichToolbar editor={richTextFeedBack}   selectedIconTint="blue"/>
                 </View>
+          
                   <View className='mb-4'>
                   <Text className='block text-gray-700 text-sm font-bold mb-2'>Customer code</Text>
                   <TextInput 
@@ -262,8 +274,44 @@ const DetailTaskScreen: React.FC = () => {
                     className='shadow appearance-none border-slate-300 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                   />
                 </View>
+                <View className='mb-4'>
+                <Text className='block text-gray-700 text-sm font-bold mb-2'>Người theo dõi</Text>
+          
+                <MultiSelect 
+                  style={styles.dropdown}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={followerOptions}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select followers"
+                  value={followers}
+                  search
+                  searchPlaceholder='Search...'
+                  onChange={item => setFollowers(item)}
+                  renderLeftIcon={() => (
+                    <Icon name='ribbon-outline' size={moderateScale(20)}/>
+                  )}
+                  renderItem={(item) => (
+                    <View style={styles.item}>
+                      <Text style={styles.selectedTextStyle}>{item.label}</Text>
+                      <Icon name='close' size={moderateScale(20)}/>
+                    </View>
+                  )}
+                  renderSelectedItem={(item, unSelect) => (
+                    <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+                      <View style={styles.selectedStyle}>
+                        <Text style={styles.textSelectedStyle}>{item.label}</Text>
+                        <Icon name='close' size={moderateScale(20)}/>
+                      </View>
+                    </TouchableOpacity>
+                  )}  
+                />
+                </View>
                 <View className='mb-4 flex-row items-center justify-between'>
-                  <Text className='  text-gray-700 text-sm font-bold bg-blue-400 '>Vote 111</Text>
+                  <Text className='  text-gray-700 text-sm font-bold bg-blue-400 '>Vote </Text>
                  <Picker
                   style={{height: moderateScale(50), width: '100%'}}
                   selectedValue={vote}
@@ -287,6 +335,7 @@ const DetailTaskScreen: React.FC = () => {
                   ))}
                 </Picker>
                 </View>
+            
                 <View className='mb-4'>
                 <Text className='block text-gray-700 text-sm font-bold mb-2'>Deadline</Text>
                 <TouchableOpacity onPress={() => setOpenDeadlinePicker(true)}>
@@ -316,5 +365,70 @@ const DetailTaskScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  dropdown: {
+    height: 50,
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  item: {
+    padding: 17,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  selectedStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    marginTop: 8,
+    marginRight: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  textSelectedStyle: {
+    marginRight: 5,
+    fontSize: 16,
+  },
+});
+
 
 export default DetailTaskScreen;

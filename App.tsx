@@ -5,7 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {Provider, useDispatch, useSelector} from 'react-redux';
-import {RootState, store, persistor} from './store/store';
+import {RootState, store, persistor} from './src/store/store';
 import FlashMessage from 'react-native-flash-message';
 import { checkToken} from './src/slice/Auth';
 import {BaseResponse} from './src/models/BaseResponse';
@@ -16,7 +16,7 @@ import SplashScreen from 'react-native-splash-screen';
 import NetInfo from '@react-native-community/netinfo';
 import RNRestart from 'react-native-restart';
 import {PersistGate} from 'redux-persist/integration/react';
-import { navigationRef } from './store/navigationRef';
+import { navigationRef } from './src/store/navigationRef';
 
 const config = {
   screens: {

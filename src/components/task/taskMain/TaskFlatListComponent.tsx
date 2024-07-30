@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert, Dimensions, Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
-import {Avatar, TouchableRipple} from 'react-native-paper';
+import {Avatar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SCREENS} from '../../../constants/screens';
@@ -25,10 +25,12 @@ interface Follower {
 interface ListTask {
   id: string;
   title: string;
-  typeJob: number;
+  typejob: string;
+  customerCode: string;
+  status: string;
   content: string;
   feedback: string;
-  vote: number;
+  vote: string;
   locationCheckIn: string;
   locationCheckOut: string;
   deadline: string;
@@ -38,10 +40,11 @@ interface ListTask {
 
 interface TaskProps {
   task: ListTask;
-  onDelete: (id: string) => void
+  onDelete: (id: string) => void;
+  onUpdateStatus: (id: string, status: string) => void;
 }
 
-const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
+const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
   const navigator = useNavigation();
 
   const { width } = useWindowDimensions()
@@ -82,7 +85,6 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
         }
       ]
     )
-  
   }
 
   const renderRightActions = () => {
@@ -99,42 +101,42 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
     )
   }
 
-  const calculateDistance = () => {
-    if (task.locationCheckIn && task.locationCheckOut) {
-      const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
-      const [checkOutLat, checkOutLng] = task.locationCheckOut.split(',');
+  // const calculateDistance = () => {
+  //   if (task.locationCheckIn && task.locationCheckOut) {
+  //     const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
+  //     const [checkOutLat, checkOutLng] = task.locationCheckOut.split(',');
 
-      const checkInLatNum = parseFloat(checkInLat);
-      const checkInLngNum = parseFloat(checkInLng);
-      const checkOutLatNum = parseFloat(checkOutLat);
-      const checkOutLngNum = parseFloat(checkOutLng);
+  //     const checkInLatNum = parseFloat(checkInLat);
+  //     const checkInLngNum = parseFloat(checkInLng);
+  //     const checkOutLatNum = parseFloat(checkOutLat);
+  //     const checkOutLngNum = parseFloat(checkOutLng);
 
-      if (
-        isNaN(checkInLatNum) ||
-        isNaN(checkInLngNum) ||
-        isNaN(checkOutLatNum) ||
-        isNaN(checkOutLngNum)
-      ) {
-        console.error('Invalid coordinates:', {
-          checkInLatNum,
-          checkInLngNum,
-          checkOutLatNum,
-          checkOutLngNum,
-        });
-        return null;
-      }
+  //     if (
+  //       isNaN(checkInLatNum) ||
+  //       isNaN(checkInLngNum) ||
+  //       isNaN(checkOutLatNum) ||
+  //       isNaN(checkOutLngNum)
+  //     ) {
+  //       console.error('Invalid coordinates:', {
+  //         checkInLatNum,
+  //         checkInLngNum,
+  //         checkOutLatNum,
+  //         checkOutLngNum,
+  //       });
+  //       return null;
+  //     }
 
-      const distance = getDistance(
-        { latitude: checkInLatNum, longitude: checkInLngNum },
-        { latitude: checkOutLatNum, longitude: checkOutLngNum }
-      );
+  //     const distance = getDistance(
+  //       { latitude: checkInLatNum, longitude: checkInLngNum },
+  //       { latitude: checkOutLatNum, longitude: checkOutLngNum }
+  //     );
 
-      return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
-    }
-    return null;
-  };
+  //     return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
+  //   }
+  //   return null;
+  // };
 
-  const distance = calculateDistance()
+  // const distance = calculateDistance()
 
   return (
     <Swipeable renderRightActions={renderRightActions}>
@@ -148,7 +150,13 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
           <Text numberOfLines={2} className="text-white text-sm tracking-wider">
             {moment(task.createdAt).format('DD/MM/YYYY')}
           </Text>
-          <BottomActionComponent title={task.title} id={task.id} onDelete={handleDelete}/>
+          <BottomActionComponent 
+          title={task.title} 
+          id={task.id} 
+          task={task}
+          status={task.status} 
+          onDelete={handleDelete} 
+          onUpdateStatus={onUpdateStatus}/>
         </View>
 
         <View className="rounded-b-lg border w-full border-gray-300 p-2 min-h-[100px] h-[150px] bg-white">
@@ -169,13 +177,22 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
                     }}
                     onError={err => {}}
                   />
-                  <View className='flex-1'>
+                  <View className='flex-1 flex-row justify-between'>
+                    <View className='flex-1'>
                     <Text
                       numberOfLines={2}
                       className="text-black text-sm font-bold tracking-wider">
                       {task.title}
                     </Text>
                     <HTML contentWidth={width} source={{html: task.content}}  />
+                    </View>
+                    <View className='bg-transparent border-solid border-2 border-rose-400 p-1 inline h-[30px] rounded'>
+                    <Text
+                      numberOfLines={2}
+                      className="text-black text-xs font-bold tracking-wider">
+                      {task.status}
+                    </Text>
+                    </View>
                   </View>
                 </View>
                 <View className="flex-row justify-between items-center">
@@ -185,11 +202,11 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
                     className="text-black text-sm font-bold tracking-wider">
                     Người theo dõi: {followerNames}
                   </Text>
-                  {distance && (
+                  {/* {distance && (
                     <Text className="text-gray-600 text-xs">
                       Quãng đường: {distance} km
                     </Text>
-                  )}
+                  )} */}
                   </View>
                   <View className={task.vote === 'TrungBinh' ? 'bg-yellow-400 p-1' : task.vote === 'Kem' ? 'bg-red-400 p-1' : 'bg-green-400 p-1'} >
                   <Text
@@ -207,16 +224,12 @@ const TaskFlatListComponent = ({task, onDelete}: TaskProps) => {
                 </Text> */}
                
               </View>
-              {/* <View>
-                
-              </View> */}
             </View>
           </View>
         </View>
       </View>
     </TouchableOpacity>
     </Swipeable>
-  
   );
 };
 

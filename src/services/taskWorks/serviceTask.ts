@@ -1,4 +1,4 @@
-import http from '../../../store/http';
+import http from '../../store/http';
 import {BaseResponse} from '../../models/BaseResponse';
 
 enum typeVote  {
@@ -9,7 +9,7 @@ enum typeVote  {
 
 interface CreateTask {
   title: string,
-  typejob: number,
+  typeJob: string,
   internalCode: string,
   customerCode: string,
   content: string,
@@ -24,7 +24,7 @@ interface CreateTask {
 interface UpdateTask {
   id: string;
   title: string;
-  typejob: number;
+  typeJob: string;
   customerCode: string;
   content: string;
   feedback: string;
@@ -44,8 +44,9 @@ interface Followers {
 interface ListTask {
   id: string;
   title: string;
-  typeJob: number;
+  typeJob: string;
   content: string;
+  status: string;
   feedback: string;
   vote: number;
   locationCheckIn: string;

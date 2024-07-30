@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {Alert, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 
 import AppHeader from '../../components/navigators/AppHeader';
@@ -20,13 +20,14 @@ import { MultiSelect  } from 'react-native-element-dropdown';
 import { styles } from '../../assets/css/ListTaskScreen/addTaskScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CheckInOutMap from '../../components/task/taskMain/checkInOutMap';
-import { position } from '../../../utils/geoLocation';
+import { position } from '../../utils/geoLocation';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geocoder from 'react-native-geocoding';
 import { getDistance } from 'geolib';
 import axios from 'axios';
 import polyline from '@mapbox/polyline';
+import ActionSheet, { SheetManager } from 'react-native-actions-sheet';
 
 const apiKey = 'AIzaSyBqnaTZHOfI539sJlwuXY5uDsoJP_DPI4I';
 
@@ -37,6 +38,13 @@ enum TypeVote {
   TrungBinh = 2,
   Tot = 3
 }
+
+const voteOptions = [
+  {label: 'Kém', value: TypeVote.Kem},
+  {label: 'Trung bình', value: TypeVote.TrungBinh},
+  {label: 'Tốt', value: TypeVote.Tot}
+]
+
 const AddNewTaskScreen = () => {
 
   const navigation = useNavigation()
@@ -44,12 +52,12 @@ const AddNewTaskScreen = () => {
   const [selectedJobType, setSelectedJobType] = useState({ value: null, display: '' })
   const [taskData, setTaskData] = useState({
     title: '',
-    typejob: 1,
+    typejob: '',
     internalCode: '',
     customerCode: '',
     content: '',
     feedback: '',
-    vote: 1,
+    vote: '',
     locationCheckIn: '',
     locationCheckOut: '',
     deadline: moment(new Date()).format('DD/MM/YYYY'),
@@ -91,6 +99,12 @@ const AddNewTaskScreen = () => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+
+  const jobTypeActionSheetRef = useRef<any>(null);
+  const voteActionSheetRef = useRef<any>(null);
+
+  const voteOption = voteOptions.find(option => option.value === taskData.vote);
+
 
   const requestLocationPermission = async () => {
     const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -159,8 +173,6 @@ const AddNewTaskScreen = () => {
       fetchRoute(taskData.locationCheckIn, taskData.locationCheckOut);
     }
   }, [taskData.locationCheckIn, taskData.locationCheckOut]);
-
-
   const handleSave = async () => {
    
     const payload = {
@@ -265,40 +277,40 @@ const AddNewTaskScreen = () => {
     }
   };
 
-  const calculateDistance = (locationCheckIn, locationCheckOut) => {
-    if (locationCheckIn && locationCheckOut) {
-      const [checkInLat, checkInLng] = locationCheckIn.split(',');
-      const [checkOutLat, checkOutLng] = locationCheckOut.split(',');
+  // const calculateDistance = (locationCheckIn, locationCheckOut) => {
+  //   if (locationCheckIn && locationCheckOut) {
+  //     const [checkInLat, checkInLng] = locationCheckIn.split(',');
+  //     const [checkOutLat, checkOutLng] = locationCheckOut.split(',');
 
-      const checkInLatNum = parseFloat(checkInLat);
-      const checkInLngNum = parseFloat(checkInLng);
-      const checkOutLatNum = parseFloat(checkOutLat);
-      const checkOutLngNum = parseFloat(checkOutLng);
+  //     const checkInLatNum = parseFloat(checkInLat);
+  //     const checkInLngNum = parseFloat(checkInLng);
+  //     const checkOutLatNum = parseFloat(checkOutLat);
+  //     const checkOutLngNum = parseFloat(checkOutLng);
 
-      if (
-        isNaN(checkInLatNum) ||
-        isNaN(checkInLngNum) ||
-        isNaN(checkOutLatNum) ||
-        isNaN(checkOutLngNum)
-      ) {
-        console.error('Invalid coordinates:', {
-          checkInLatNum,
-          checkInLngNum,
-          checkOutLatNum,
-          checkOutLngNum,
-        });
-        return null;
-      }
+  //     if (
+  //       isNaN(checkInLatNum) ||
+  //       isNaN(checkInLngNum) ||
+  //       isNaN(checkOutLatNum) ||
+  //       isNaN(checkOutLngNum)
+  //     ) {
+  //       console.error('Invalid coordinates:', {
+  //         checkInLatNum,
+  //         checkInLngNum,
+  //         checkOutLatNum,
+  //         checkOutLngNum,
+  //       });
+  //       return null;
+  //     }
 
-      const distance = getDistance(
-        { latitude: checkInLatNum, longitude: checkInLngNum },
-        { latitude: checkOutLatNum, longitude: checkOutLngNum }
-      );
-      console.log(distance,'distance')
-      return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
-    }
-    return null;
-  };
+  //     const distance = getDistance(
+  //       { latitude: checkInLatNum, longitude: checkInLngNum },
+  //       { latitude: checkOutLatNum, longitude: checkOutLngNum }
+  //     );
+  //     console.log(distance,'distance')
+  //     return (distance / 1000).toFixed(2); // Convert meters to kilometers and format to 2 decimal places
+  //   }
+  //   return null;
+  // };
 
   const fetchRoute = async (startLoc, destinationLoc) => {
     console.log(`Fetching route from ${startLoc} to ${destinationLoc}`);
@@ -313,7 +325,6 @@ const AddNewTaskScreen = () => {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${apiKey}`
       );
-      console.log(response.data,'ádasdasfsdvvxvcxvxcvxvcxvx')
       if (response.data.routes.length === 0) {
         throw new Error('No routes found');
       }
@@ -330,7 +341,17 @@ const AddNewTaskScreen = () => {
     }
   };
     
- 
+  const openJobTypeActionSheet = () => {
+    jobTypeActionSheetRef.current?.setModalVisible(true);
+  };
+
+  const openVoteActionSheet = () => {
+    voteActionSheetRef.current?.setModalVisible(true);
+  };
+
+  const handleVoteChange = (vote: TypeVote) => {
+    setTaskData({ ...taskData, vote });
+  };
 
   // useEffect(() => {
   //   const data = [
@@ -373,7 +394,30 @@ const AddNewTaskScreen = () => {
       />
       <View style={{flex:1, marginVertical: moderateScale(10)}}>
         <ScrollView contentContainerStyle={{paddingHorizontal: 10}}>
-        <View className='flex flex-row justify-between items-center'>
+          {Platform.OS === 'ios' ? (
+             <View className='flex flex-row justify-between items-center'>
+             <Text className='text-black text-base'>Loại công việc:</Text>
+             <TouchableOpacity
+               style={styles.pickerDropdown}
+               onPress={openJobTypeActionSheet}>
+               <Text style={styles.textChoose}>{selectedJobType?.display || 'Loại công việc'}</Text>
+             </TouchableOpacity>
+             <ActionSheet ref={jobTypeActionSheetRef}>
+               {jobTypes.map((item) => (
+                 <TouchableOpacity
+                   key={item.value}
+                   style={styles.actionSheetItem}
+                   onPress={() => {
+                    setSelectedJobType(item);
+                    jobTypeActionSheetRef.current?.hide();
+                   }}>
+                   <Text>{item.display}</Text>
+                 </TouchableOpacity>
+               ))}
+             </ActionSheet>
+           </View>
+          ) : (
+            <View className='flex flex-row justify-between items-center'>
             <Text className='text-black text-base'>Loại công việc: </Text>
             <Picker
             style={{backgroundColor:'#efefef', flex:1, }}
@@ -388,7 +432,9 @@ const AddNewTaskScreen = () => {
                 <Picker.Item style={{textAlign:'center', width:'100%'}} label={type.display} value={type.value} key={type.value} />
               ))}
             </Picker>
-          </View>
+            </View>
+          )}
+       
           {selectedJobType !== null && (
             <View>
               <CustomTextInput 
@@ -396,7 +442,7 @@ const AddNewTaskScreen = () => {
                 onChangeText={text => setTaskData({ ...taskData, title: text})}
                 value={taskData.title}
               />
-                  <CustomTextInput
+              <CustomTextInput
                 label="Mã nội bộ"
                 onChangeText={text => setTaskData({ ...taskData, internalCode: text })}
                 value={taskData.internalCode}
@@ -406,6 +452,47 @@ const AddNewTaskScreen = () => {
                 onChangeText={text => setTaskData({ ...taskData, customerCode: text })}
                 value={taskData.customerCode}
               />
+
+            {/* {Platform.OS === 'ios' ? (
+             <View className='flex flex-row justify-between items-center'>
+             <Text className='text-black text-base'>Loại công việc:</Text>
+             <TouchableOpacity
+               style={styles.pickerDropdown}
+               onPress={openJobTypeActionSheet}>
+               <Text style={styles.textChoose}>{selectedJobType?.display || 'Loại công việc'}</Text>
+             </TouchableOpacity>
+             <ActionSheet ref={jobTypeActionSheetRef}>
+               {jobTypes.map((item) => (
+                 <TouchableOpacity
+                   key={item.value}
+                   style={styles.actionSheetItem}
+                   onPress={() => {
+                    setSelectedJobType(item);
+                    jobTypeActionSheetRef.current?.hide();
+                   }}>
+                   <Text>{item.display}</Text>
+                 </TouchableOpacity>
+               ))}
+             </ActionSheet>
+           </View>
+          ) : (
+            <View className='flex flex-row justify-between items-center'>
+            <Text className='text-black text-base'>Trạng thái CV: </Text>
+            <Picker
+            style={{backgroundColor:'#efefef', flex:1, }}
+              // className='border-b-4 border-indigo-500 h-[150px] w-full bg-blue'
+              selectedValue={selectedJobType}
+              onValueChange={(itemValue) => {
+                setSelectedJobType(itemValue);
+                setTaskData({ ...taskData, typejob: itemValue });
+              }}
+            >
+              {jobTypes.map((type) => (
+                <Picker.Item style={{textAlign:'center', width:'100%'}} label={type.display} value={type.value} key={type.value} />
+              ))}
+            </Picker>
+            </View>
+          )} */}
 
               <CusTomTextInputMultiline
                 label="Nội dung"
@@ -446,18 +533,38 @@ const AddNewTaskScreen = () => {
                 onChangeText={text => setTaskData({ ...taskData, feedback: text })}
                 value={taskData.feedback}
               />
-              <View className='border rounded-md border-gray-300'>
-                <Picker
+              <View className=''>
+                {Platform.OS !== 'ios' ? (
+                  <View style={styles.flexStatus}>
+                    <Text style={styles.textLeft}>Chất lượng CV</Text>
+                    <TouchableOpacity onPress={openVoteActionSheet} style={styles.buttonStatus}>
+                      <Text style={styles.textChoose}>  <Text style={styles.textChoose}>{voteOption ? voteOption.label : 'Chưa chọn'}</Text></Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <Picker
                   selectedValue={taskData.vote}
                   style={{height:moderateScale(50), width:'100%'}}
                   onValueChange={(itemValue) => {
-                    setTaskData({...taskData, vote: itemValue})
+                    handleVoteChange(itemValue);
                   }}
-                >
-                  <Picker.Item label="Kém" value={TypeVote.Kem} />
-                    <Picker.Item label="Trung bình" value={TypeVote.TrungBinh} />
-                    <Picker.Item label="Tốt" value={TypeVote.Tot} />
+                  >
+                    {voteOptions.map((option) => (
+                      <Picker.Item label={option.label} value={option.value} key={option.value}/>
+                    ))}
                 </Picker>
+                )}
+               <ActionSheet ref={voteActionSheetRef}>
+                    {voteOptions.map((option) => (
+                      <TouchableOpacity
+                        key={option.value}
+                        style={styles.actionSheetItem}
+                        onPress={() => {handleVoteChange(option.value); voteActionSheetRef.current?.hide()}}
+                      > 
+                        <Text>{option.label}</Text>
+                      </TouchableOpacity>
+                    ))}
+                </ActionSheet>
               </View>
               <View className='flex-row flex-1 justify-between items-center'>
               <CustomTextInput
@@ -595,7 +702,7 @@ const AddNewTaskScreen = () => {
                 onChangeValue={value => setAttachment(value)}
               />
               <ModalAddUserWatching
-                data={watchings}
+              data={watchings}
                 onChangeData={value => {
                   setWatchings(value);
                 }}

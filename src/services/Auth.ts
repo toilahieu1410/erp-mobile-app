@@ -1,6 +1,6 @@
 import {BaseResponse} from '../models/BaseResponse';
 import {Token} from '../services/Token';
-import http from '../../store/http';
+import http from '../store/http';
 
 export const AuthenticateService = {
   

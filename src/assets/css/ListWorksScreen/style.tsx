@@ -3,6 +3,7 @@ import {Platform, StyleSheet, Dimensions} from 'react-native';
 import {heightScale, moderateScale, widthScale} from '../../../screens/size';
 
 const height = Dimensions.get('window').height;
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Text, View} from 'react-native'
-import {fomatNumber} from '../../../utils/CommonFunction'
+import {formatNumber} from '../../utils/CommonFunction'
 
 type PayRollComponentProps = {
   title?: string | undefined;
@@ -28,7 +28,7 @@ const PayRollComponent = ({
         ) : null}
       </View>
       <Text className="text-black text-sm">
-        {value != null && fomatNumber(value)}
+        {value != null && formatNumber(value)}
       </Text>
     </View>
   );

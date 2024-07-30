@@ -13,7 +13,7 @@ import { showMessage } from 'react-native-flash-message';
 import { styles } from '../../assets/css/AccountScreen/style';
 import SelectPhoto from '../../components/app/FileManager/SelectPhoto';
 import { COLORS } from '../../constants/screens';
-import LoadingPage from '../../../utils/loading';
+import LoadingPage from '../../utils/loading.js';
 
 
 interface FormData {
@@ -67,8 +67,8 @@ const EditAccountScreen = () => {
 
 
   const genderOptions = [
-    { id: 0, label: 'Nam', value: "Nam" },
-    { id: 1, label: 'Nữ', value: "Nu" },
+    { id: 0, label: 'Nam', value: 'Nam' },
+    { id: 1, label: 'Nữ', value: 'Nu' },
   ]
 
   useEffect(() => {
@@ -150,7 +150,8 @@ const EditAccountScreen = () => {
     //   Alert.alert('Invalid Email', 'Vui lòng nhập đúng định dạng email')
     //   return
     // }
-   
+    
+
     try {
       const formattedData = {
         ...data,
@@ -162,15 +163,22 @@ const EditAccountScreen = () => {
         ngayLamChinhThuc: moment(ngayLamChinhThuc).format('DD/MM/YYYY'),
         leaderId: leaderId
       };
+      console.log(data,'resss', formattedData)
 
-
+      if(data.avatar === undefined) {
+        delete formattedData.avatar
+      }
+      if(data.maXacNhan === undefined) {
+        delete formattedData.maXacNhan
+      }
       const selectedUser = users.find(user => user.hoTen === leaderName);
+     
       if (selectedUser) {
         data.leaderId = selectedUser.hoTen;
       }
 
       const response = await AuthenticateService.UpdateUser(userInfo.id, formattedData);
-      console.log(response,'resss',formattedData, userInfo)
+      console.log(response,'bbbbbbbbbb',formattedData, userInfo)
       if (response.isSuccess) {
         showMessage({
           message: 'Dữ liệu đã được cập nhật',
@@ -266,8 +274,8 @@ const EditAccountScreen = () => {
                 >
                   <View style={styles.radioButtonHorizonal}>
                     {genderOptions.map((option) => (
-                    <View style={styles.radioButtonContainer} key={option.id}>
-                       <RadioButton value={option.value} />
+                    <View style={styles.radioButtonContainer} key={option.value}>
+                       <RadioButton value={option.value}  />
                       <Text>{option.label}</Text>
                     </View>
                   ))}
@@ -474,7 +482,7 @@ const EditAccountScreen = () => {
               <Text style={styles.textTitle}>Is Leader</Text>
               </View>
             </View>
-      </View>
+          </View>
       </ScrollView>
         </>
       )}

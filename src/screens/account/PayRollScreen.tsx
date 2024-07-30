@@ -3,7 +3,7 @@ import {Animated, SafeAreaView, ScrollView, Text, View} from 'react-native'
 import {TouchableRipple} from 'react-native-paper'
 import AppHeader from '../../components/navigators/AppHeader'
 import PayRollComponent from '../../components/account/PayRollComponent'
-import {fomatNumber} from '../../../utils/CommonFunction'
+import {formatNumber} from '../../utils/CommonFunction'
 import ModalPage from '../../components/app/modal/ModalPage'
 
 const PayRollScreen = () => {
@@ -25,7 +25,7 @@ const PayRollScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <AppHeader title="Bảng lương" centerTitle={true} showButtonBack={true} />
+      <AppHeader title="Bảng lương" centerTitle={true} showButtonBack={true} backgroundColor='#fff' titleColor='#000'/>
       <View className="flex-1 w-full">
         <ScrollView>
           <View>
@@ -263,7 +263,7 @@ const PayRollScreen = () => {
               />
               <View className="my-6 flex flex-col justify-center items-center">
                 <Text className="text-center text-xl font-bold text-black">
-                  Thực lĩnh: {fomatNumber(1000000)}
+                  Thực lĩnh: {formatNumber(1000000)}
                 </Text>
                 <Text className="text-sm text-gray-500">
                   Thực lĩnh = (21)-(24)-(26)-(27)-(28)-(30)-(31)

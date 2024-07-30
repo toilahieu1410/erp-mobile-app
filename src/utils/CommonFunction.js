@@ -1,4 +1,4 @@
-export const fomatNumber = number => {
+export const formatNumber = number => {
   if (number == undefined || number == null) {
     return 0;
   } else {

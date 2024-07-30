@@ -61,6 +61,13 @@ export const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center'
   },
+  flexStatus: {
+
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent: 'space-between'
+  },
+
   charCount: {
     color: '#999',
   },
@@ -71,6 +78,17 @@ export const styles = StyleSheet.create({
     padding:moderateScale(3),
     
   },
+  buttonStatus: {
+    flex: 1,
+    maxWidth: moderateScale(100),
+    padding: moderateScale(10),
+    // minHeight: moderateScale(40),
+    borderColor: '#ddd',
+    borderRadius: moderateScale(5),
+    borderWidth:1,
+    backgroundColor: '#fff',
+  },
+
   boxSub: {
     backgroundColor:'#fafafa',
     flex:1,

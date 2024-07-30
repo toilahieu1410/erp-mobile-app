@@ -1,6 +1,6 @@
 import React from "react"
 import {View, Text} from 'react-native'
-import {styles} from '../src/assets/css/Loading/style'
+import {styles} from '../assets/css/Loading/style'
 import { ActivityIndicator } from "react-native-paper"
 
 const LoadingPage = () => {

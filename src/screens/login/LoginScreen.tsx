@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../../store/store';
+import {RootState} from '../../store/store';
 import Spinner from 'react-native-loading-spinner-overlay';
 import InputLoginComponent from '../../components/login/InputLoginComponent';
 

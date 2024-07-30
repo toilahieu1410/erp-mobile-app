@@ -11,13 +11,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  listAllWorks: {
+    flex:1,
+  },
+  boxFull: {
+
+    width: '100%',
+    borderRadius:moderateScale(10)
+  },
   listStatusWork: {
     flexDirection:'row',
     justifyContent:'space-between'
   },
 
   boxLeft: {
-    backgroundColor: '#013E5D',
+    backgroundColor: '#006266',
     justifyContent:'center',
     alignContent:'center',
     alignItems:'center',
@@ -30,8 +38,19 @@ export const styles = StyleSheet.create({
     alignContent:'center',
     justifyContent:'space-between',
   },
+  boxCenterWidthFull: {
+    marginBottom: moderateScale(20),
+    backgroundColor: '#273c75',
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center',
+    width: '100%',
+    height:moderateScale(70),
+    borderRadius:moderateScale(10),
+
+  },
   boxRightTop: {
-    backgroundColor: '#338384',
+    backgroundColor: '#0097e6',
     flexDirection:'row',
     justifyContent:'flex-start',
     alignItems:'center',
@@ -41,7 +60,7 @@ export const styles = StyleSheet.create({
     paddingLeft: moderateScale(20)
   },
   boxRightBottom: {
-    backgroundColor: '#F36072',
+    backgroundColor: '#eb4d4b',
     flexDirection:'row',
     justifyContent:'flex-start',
     alignItems:'center',

@@ -13,7 +13,6 @@ import { Picker } from '@react-native-picker/picker';
 import { showMessage } from 'react-native-flash-message';
 import { styles } from '../../../assets/css/ListWorksScreen/style';
 import moment from 'moment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { moderateScale } from '../../../screens/size';
 import ServiceConfirm from '../../../services/listWorks/serviceConfirm';
@@ -98,6 +97,13 @@ const CreateConfirm = () => {
         endDate: endDate ? moment(endDate).format('DD/MM/YYYY HH:mm') : "",
         dateNeedConfirm: moment(dateTime).format('DD/MM/YYYY'),
       };
+      if(payload.startDate === "") {
+        delete payload.startDate
+      }
+      if(payload.endDate === "") {
+        delete payload.endDate
+      }
+      console.log(payload,'pauuuuu')
       const response = await ServiceConfirm.createConfirm(payload);
       const message = response.value
       showMessage({
@@ -157,6 +163,7 @@ const CreateConfirm = () => {
     actionSheetRef.current?.setModalVisible(true);
   };
 
+  console.log(confirmType,'confirmType')
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -246,7 +253,7 @@ const CreateConfirm = () => {
                   selectedValue={selectConfirm}
                   onValueChange={itemValue => handleConfirm(itemValue)}>
                   <Picker.Item label={'Loại xác nhận'} value="" />
-                  {confirmType.map(item => (
+                  {confirmType && confirmType.map(item => (
                     <Picker.Item label={item.display} value={item} key={item.value} />
                   ))}
                 </Picker>

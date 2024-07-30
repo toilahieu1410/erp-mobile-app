@@ -1,5 +1,5 @@
 import { BaseResponse } from "../../models/BaseResponse"
-import http from "../../../store/http"
+import http from "../../store/http"
 
 interface TakeLeavePayLoad {
   content: string,
@@ -7,6 +7,7 @@ interface TakeLeavePayLoad {
   handOverContent: string,
   handOverToUserId: string,
   leaveApplicationDetails: {
+    id: string,
     leaveAt: string,
     timeType: number
   }[]
@@ -58,7 +59,7 @@ export const ServiceTakeLeave = {
   async getTypesTakeLeave(): Promise<TakeLeaveType[]> {
     try {
       const response = await http.get('/leave_application/get_type_application' )
-        return response.data.value
+        return response.data
     } catch (error) {
       throw new Error(' Không thể lấy loại xác nhận')
     }
@@ -67,7 +68,7 @@ export const ServiceTakeLeave = {
   async getListTakeLeave(fromDate: string, toDate: string, pageNumber: number, pageSize: number): Promise<BaseResponse<ListTakeLeave[]>> {
     try {
       // Tạo URL cơ bản với pageNumber và pageSize
-      let url = `/approval_application?PageNumber=${pageNumber}&PageSize=${pageSize}`;
+      let url = `/leave_application?PageNumber=${pageNumber}&PageSize=${pageSize}`;
 
       // Nếu fromDate có giá trị, thêm vào URL
       if (fromDate) {

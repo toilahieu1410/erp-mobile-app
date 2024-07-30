@@ -1,5 +1,5 @@
 import { BaseResponse } from "../../models/BaseResponse"
-import http from "../../../store/http"
+import http from "../../store/http"
 
 interface ConfirmPayload {
   content: string,
@@ -42,7 +42,7 @@ export const ServiceConfirm = {
   async getConfirmTypes(): Promise<ConfirmType[]> {
     try {
       const response = await http.get('/approval_application/get_type_application')
-      return response.data.value
+      return response.data
     } catch (error) {
       throw new Error('Không thể lấy loại xác nhận') // Failed to fetch confirmation types
     }

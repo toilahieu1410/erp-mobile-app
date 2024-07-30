@@ -64,7 +64,7 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
         response.value
       );
  
-      console.log('Token data to save:', tokenData);
+      console.log('Token data to save:', tokenData.accessToken);
       await Token.saveToken(tokenData);
       return response
     } catch (err) {

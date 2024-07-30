@@ -44,6 +44,7 @@ const EditTakeLeave: React.FC = () => {
 
   const {item}: any = route.params
 
+  console.log(item,'iiiiii')
   const [selectTakeLeave, setSelectTakeLeave] = useState<NghiPhepType | null>(null)
   const [takeLeaveTypes, setTakeLeaveTypes] = useState<NghiPhepType[]>([])
   const [content, setContent] = useState(item.content)

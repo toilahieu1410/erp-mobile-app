@@ -4,7 +4,7 @@ import {Button, TextInput} from 'react-native-paper';
 import {useForm, Controller} from 'react-hook-form';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState, useAppDispatch} from '../../../store/store';
+import {RootState, useAppDispatch} from '../../store/store';
 import {showMessage} from 'react-native-flash-message';
 import {BaseResponse} from '../../models/BaseResponse';
 import {COLORS} from '../../constants/screens';
