@@ -101,6 +101,44 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
     )
   }
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'ChuaXuLy':
+        return 'Chưa xử lý';
+      case 'DangXuLy':
+        return 'Đang xử lý';
+      case 'DaHoanThanh':
+        return 'Đã hoàn thành';
+      default:
+        return status;
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'ChuaXuLy':
+        return 'alert-circle-outline';
+      case 'DangXuLy':
+        return 'sync-outline';
+      case 'DaHoanThanh':
+        return 'checkmark-circle-outline';
+      default:
+        return 'help-circle-outline';
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'ChuaXuLy':
+        return '#eb4d4b';
+      case 'DangXuLy':
+        return '#0097e6';
+      case 'DaHoanThanh':
+        return '#006266';
+      default:
+        return 'black';
+    }
+  }
   // const calculateDistance = () => {
   //   if (task.locationCheckIn && task.locationCheckOut) {
   //     const [checkInLat, checkInLng] = task.locationCheckIn.split(',');
@@ -186,12 +224,14 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
                     </Text>
                     <HTML contentWidth={width} source={{html: task.content}}  />
                     </View>
-                    <View className='bg-transparent border-solid border-2 border-rose-400 p-1 inline h-[30px] rounded'>
+                    <View className='bg-transparent border-solid flex-row'>
+                    <Icon name={getStatusIcon(task.status)} size={moderateScale(18)} color={getStatusColor(task.status)} style={{ marginRight: 4 }} />
                     <Text
-                      numberOfLines={2}
-                      className="text-black text-xs font-bold tracking-wider">
-                      {task.status}
-                    </Text>
+                          numberOfLines={2}
+                          style={{ color: getStatusColor(task.status) }} // Set color based on status
+                          className="text-sm font-bold tracking-wider">
+                          {getStatusText(task.status)}
+                        </Text>
                     </View>
                   </View>
                 </View>
