@@ -475,12 +475,13 @@ const TaskScreen = () => {
           </View>
         </View>
   );
-
+  const currentMonth = moment().format('MMMM');
+  
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">
         <AppHeader
-          title="Lịch công việc"
+          title={`Lịch công việc ${currentMonth}`}
           centerTitle={true}
           backgroundColor="#fff"
           titleColor="#000"

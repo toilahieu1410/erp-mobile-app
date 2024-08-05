@@ -530,7 +530,6 @@ const AddNewTaskScreen = () => {
                   selectedStyle={styles.selectedStyle}
                 />
                 </View>
-                
               </View>
               </View>
                 <CusTomTextInputMultiline
