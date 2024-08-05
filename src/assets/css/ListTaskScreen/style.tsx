@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { heightScale, moderateScale } from '../../../screens/size';
-import {Dimensions} from 'react-native';
 
 
 export const height = Dimensions.get('window').height
@@ -15,7 +14,6 @@ export const styles = StyleSheet.create({
     flex:1,
   },
   boxFull: {
-
     width: '100%',
     borderRadius:moderateScale(10)
   },

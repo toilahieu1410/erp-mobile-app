@@ -42,7 +42,7 @@ interface Follower {
 interface ListTask {
   id: string;
   title: string;
-  typejob: string;
+  typeJob: string;
   content: string;
   status: string;
   customerCode: string;
@@ -100,10 +100,19 @@ const TaskScreen = () => {
       // Tăng pageSize để lấy tất cả bản ghi
       const effectivePageSize = isRefreshing ? 1000 : pageSize;
 
-      const tasks = await TaskService.getTasks(fromDateString, toDateString, pageNumber, effectivePageSize);
+      const tasks = await TaskService.getTasks(fromDateString, toDateString, pageNumber, pageSize);
 
-      setTaskList(tasks);
-      setFilteredTaskList(tasks);
+      //@ts-ignore
+      const currentMonthTasks  = tasks.filter(task => {
+        const taskDate = moment(task.createdAt);
+        const currentMonth = moment().month();
+        const currentYear = moment().year();
+        return taskDate.month() === currentMonth && taskDate.year() === currentYear 
+      });
+      
+      const filteredTasks = currentMonthTasks.filter(task => task.status === 'ChuaXuLy')
+      setTaskList(currentMonthTasks);
+      setFilteredTaskList(filteredTasks);
     } catch (error) {
       setError('Không lấy được danh sách công việc');
     } finally {
@@ -462,7 +471,7 @@ const TaskScreen = () => {
             getTaskCountByStatus={getTaskCountByStatus}
           />
           <View className="my-4 flex flex-row flex-nowrap justify-between items-center">
-            <Text className="text-black text-lg font-bold">Công việc hiện tại</Text>
+            <Text className="text-black text-lg font-bold">Công việc đang chưa xử lý</Text>
           </View>
         </View>
   );

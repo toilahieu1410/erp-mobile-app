@@ -11,12 +11,8 @@ import {
 } from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
-import  Icon  from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import AppHeader from '../../components/navigators/AppHeader';
-import AttachmentTaskComponent from '../../components/task/addTask/AttachmentTaskComponent';
-import ChoiceMenu from '../../components/app/menu/ChoiceMenu';
-import {SCREENS} from '../../constants/screens';
-import TaskService from '../../services/taskWorks/serviceTask';
 import { showMessage } from 'react-native-flash-message';
 import { RichEditor, RichToolbar } from 'react-native-pell-rich-editor';
 import { Picker } from '@react-native-picker/picker';
@@ -24,7 +20,9 @@ import DatePicker from 'react-native-date-picker';
 import { MultiSelect } from 'react-native-element-dropdown';
 import moment from 'moment';
 import { moderateScale } from '../size';
+import TaskService from '../../services/taskWorks/serviceTask';
 import ServiceTakeLeave from '../../services/listWorks/serviceTakeLeave';
+import { SCREENS } from '../../constants/screens';
 
 interface Follower {
   id: string;
@@ -37,17 +35,17 @@ interface Follower {
 interface Task {
   id: string;
   title: string;
-  typejob: number;
+  typeJob: string; 
   customerCode: string;
   content: string;
   feedback: string;
-  vote: number;
+  vote: string; 
   deadline: string;
   followers: Follower[];
 }
 
 interface TypeJob {
-  value: number;
+  value: string; // Chuyển đổi value sang kiểu string
   display: string;
 }
 
@@ -58,13 +56,14 @@ const DetailTaskScreen: React.FC = () => {
 
   const { task } = route.params as {task: Task }
 
+  console.log(task,'taskkkkkk')
 
   const [title, setTitle] = useState(task.title)
   const [content, setContent] = useState(task.content)
   const [customerCode, setCustomerCode] = useState(task.customerCode || 'string')
   const [feedBack, setFeedBack] = useState(task.feedback)
-  const [vote, setVote] = useState<number>(Number(task.vote) || 1);  // Chuyển đổi từ string sang number
-  const [typeJob, setTypeJob] = useState<number>(Number(task.typejob) || 1); 
+  const [vote, setVote] = useState(task.vote);  
+  const [typeJob, setTypeJob] = useState(task.typeJob); 
   const [followers, setFollowers] = useState<string[]>(task.followers.map(f => f.userId) || []);
   const [deadline, setDeadline] = useState<Date | null>(new Date(task.deadline))
   const [openDeadlinePicker, setOpenDeadlinePicker] = useState(false)
@@ -73,11 +72,18 @@ const DetailTaskScreen: React.FC = () => {
   const richTextContent = useRef<RichEditor>(null)
   const richTextFeedBack = useRef<RichEditor>(null)
 
+  console.log(task.typeJob,'task.typeJob', typeJob)
+
   useEffect(() => {
     const fetchJobTypes = async () => {
       try {
         const response = await TaskService.getJobTypes()
-        setChangeJobTypes(response.value)
+        if (response.isSuccess) {
+          setChangeJobTypes(response.value.map((item: any) => ({
+            value: item.value.toString(), 
+            display: item.display
+          })));
+        }
       } catch (error) {
         console.error('Error fetching job types', error)
       }
@@ -88,13 +94,9 @@ const DetailTaskScreen: React.FC = () => {
   const followerOptions = users.map(item => ({
     label: item.hoTen,
     value: item.id
-
   }))
 
-
   const handleSave = async () => {
-      // Kiểm tra và chuyển đổi giá trị
-  
     try {
       const formattedDeadline = deadline ? moment(deadline).format('DD/MM/YYYY') : '';
       const updateData = {
@@ -105,10 +107,10 @@ const DetailTaskScreen: React.FC = () => {
         feedback: feedBack,
         deadline: formattedDeadline,
         followers: followers || [], // Ensure followers is an array
-        vote: Number(vote) || 0, // Ensure this is a number
-        typejob: Number(typeJob) || 0, 
+        vote: vote, // Chuyển đổi vote thành chuỗi
+        typeJob: typeJob, // Chuyển đổi typeJob thành chuỗi
       }
-      console.log(updateData,'updateData')
+      console.log(updateData, 'updateData')
       // @ts-ignore
       await TaskService.updateTask(updateData)
       showMessage({
@@ -128,8 +130,8 @@ const DetailTaskScreen: React.FC = () => {
         type: 'danger'
       })
     }
- 
   }
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -142,53 +144,6 @@ const DetailTaskScreen: React.FC = () => {
     };
     fetchUsers();
   }, []);
-  // const data = {
-  //   id: 'KAP-1',
-  //   title: 'Gặp khách hàng tại Đình Thôn',
-  //   status: 'todo',
-  //   userCreate: 'Duclv',
-  //   fullNameCreate: 'Lâm Văn Đức',
-  //   type: 'visit',
-  //   customer: 'Công ty TNHH ....',
-  //   customerCode: 'KH000001',
-  //   descreption: 'Công ty TNHH ....',
-  //   avatarUserCreate:
-  //     'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-  //   watching: [
-  //     {
-  //       username: 'VinhLQ',
-  //       fullName: 'Lâm Quang Vinh',
-  //       avatar:
-  //         'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-  //     },
-  //     {
-  //       username: 'Duclv',
-  //       fullName: 'Lâm Văn Đức',
-  //       avatar:
-  //         'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/Sunset-900x600.jpeg',
-  //     },
-  //     {
-  //       username: 'HienLT',
-  //       fullName: 'Lâm Thị Hiền',
-  //       avatar:
-  //         'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg',
-  //     },
-  //     {
-  //       username: 'TanNM',
-  //       fullName: 'Nguyễn Minh Tân',
-  //       avatar:
-  //         'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg',
-  //     },
-  //     {
-  //       username: 'VinhLQ',
-  //       fullName: 'Lâm Quang Vinh',
-  //       avatar:
-  //         'https://scontent.fhan4-1.fna.fbcdn.net/v/t39.30808-6/406235614_1046644906482722_7384331104801404722_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=c42490&_nc_ohc=C331E7nigToAX8CaLVh&_nc_ht=scontent.fhan4-1.fna&oh=00_AfAjP5GkQD5p0YFG2rp93uulFCc9xz34eDC9daKb7sx1GQ&oe=65B791B5',
-  //     },
-  //   ],
-  //   attachment: [{}],
-  // };
-
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
@@ -200,31 +155,7 @@ const DetailTaskScreen: React.FC = () => {
         titleColor='#000'
         actions={
           <View className="flex flex-row justify-end items-center">
-            {/* <ChoiceMenu>
-              <Menu.Item
-                titleStyle={{color: 'green'}}
-                onPress={() => {}}
-                title="Done"
-              />
-              <Menu.Item
-                titleStyle={{color: 'red'}}
-                onPress={() => {
-                  Alert.alert(data.title, 'Bạn có chắc chắn xóa ?', [
-                    {
-                      text: 'Hủy',
-                      style: 'destructive',
-                    },
-                    {
-                      text: 'Đồng ý',
-                    },
-                  ]);
-                }}
-                title="Xóa"
-              />
-              <Divider />
-            </ChoiceMenu> */}
-            <TouchableOpacity
-              onPress={ () => handleSave()}>
+            <TouchableOpacity onPress={ () => handleSave()}>
               <Text className="text-black font-bold text-sm px-2">Edit</Text>
             </TouchableOpacity>
           </View>
@@ -268,7 +199,6 @@ const DetailTaskScreen: React.FC = () => {
                   <Text className='block text-gray-700 text-sm font-bold mb-2'>Customer code</Text>
                   <TextInput 
                     value={customerCode}
-                    
                     onChangeText={setCustomerCode}
                     placeholder='Title'
                     className='shadow appearance-none border-slate-300 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
@@ -276,7 +206,6 @@ const DetailTaskScreen: React.FC = () => {
                 </View>
                 <View className='mb-4'>
                 <Text className='block text-gray-700 text-sm font-bold mb-2'>Người theo dõi</Text>
-          
                 <MultiSelect 
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
@@ -315,27 +244,27 @@ const DetailTaskScreen: React.FC = () => {
                  <Picker
                   style={{height: moderateScale(50), width: '100%'}}
                   selectedValue={vote}
-                  onValueChange={(itemValue: number)  => setVote(itemValue)}
+                  onValueChange={(itemValue)  => setVote(itemValue)}
                   className='bg-blue-400 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400' 
                  >
-                  <Picker.Item label='Kem' value={1}/>
-                  <Picker.Item label='TrungBinh' value={2}/>
-                  <Picker.Item label='Tot' value={3}/>
+                  <Picker.Item label='Kem' value={'Kem'}/>
+                  <Picker.Item label='TrungBinh' value={'TrungBinh'}/>
+                  <Picker.Item label='Tot' value={'Tot'}/>
                  </Picker>
                 </View>
                 <View className='mb-4'>
-                  <Text className='block text-gray-700 text-sm font-bold mb-2'>Type Job</Text>
-                  <Picker
+                <Text className='block text-gray-700 text-sm font-bold mb-2'>Type Job</Text>
+                <Picker
                   selectedValue={typeJob}
-                  onValueChange={(itemValue: number) => setTypeJob(itemValue)}
+                  onValueChange={(itemValue) => setTypeJob(itemValue)}
                   style={{ height: 50, width: '100%' }}
                 >
+                   <Picker.Item label={typeJob} value="" />
                   {changeJobTypes.map((jobType) => (
                     <Picker.Item key={jobType.value} label={jobType.display} value={jobType.value} />
                   ))}
                 </Picker>
-                </View>
-            
+              </View>
                 <View className='mb-4'>
                 <Text className='block text-gray-700 text-sm font-bold mb-2'>Deadline</Text>
                 <TouchableOpacity onPress={() => setOpenDeadlinePicker(true)}>
@@ -359,7 +288,6 @@ const DetailTaskScreen: React.FC = () => {
               </View>
             </View>
               </View>
-           
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -429,6 +357,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
 
 export default DetailTaskScreen;

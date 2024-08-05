@@ -25,7 +25,7 @@ interface Follower {
 interface ListTask {
   id: string;
   title: string;
-  typejob: string;
+  typeJob: string;
   customerCode: string;
   status: string;
   content: string;
@@ -189,12 +189,12 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
             {moment(task.createdAt).format('DD/MM/YYYY')}
           </Text>
           <BottomActionComponent 
-          title={task.title} 
-          id={task.id} 
-          task={task}
-          status={task.status} 
-          onDelete={handleDelete} 
-          onUpdateStatus={onUpdateStatus}/>
+            title={task.title} 
+            id={task.id} 
+            task={task}
+            status={task.status} 
+            onDelete={handleDelete} 
+            onUpdateStatus={onUpdateStatus}/>
         </View>
 
         <View className="rounded-b-lg border w-full border-gray-300 p-2 min-h-[100px] h-[150px] bg-white">

@@ -34,9 +34,9 @@ const apiKey = 'AIzaSyBqnaTZHOfI539sJlwuXY5uDsoJP_DPI4I';
 Geocoder.init(apiKey, { language: 'vi' });
 
 enum TypeVote {
-  Kem = 1,
-  TrungBinh = 2,
-  Tot = 3
+  Kem = 'Kem',
+  TrungBinh = 'TrungBinh',
+  Tot = 'Tot'
 }
 
 const voteOptions = [
@@ -49,15 +49,15 @@ const AddNewTaskScreen = () => {
 
   const navigation = useNavigation()
   const [jobTypes, setJobTypes] = useState([])
-  const [selectedJobType, setSelectedJobType] = useState({ value: null, display: '' })
+  const [selectedJobType, setSelectedJobType] = useState({ value: 'Task', display: 'Task' })
   const [taskData, setTaskData] = useState({
     title: '',
-    typejob: '',
+    typeJob: 'Task',
     internalCode: '',
     customerCode: '',
     content: '',
     feedback: '',
-    vote: '',
+    vote: TypeVote.Kem,
     locationCheckIn: '',
     locationCheckOut: '',
     deadline: moment(new Date()).format('DD/MM/YYYY'),
@@ -135,12 +135,12 @@ const AddNewTaskScreen = () => {
     fetchJobTypes();
   }, []);
 
-  useEffect(() => {
-    if (taskData.locationCheckIn && taskData.locationCheckOut) {
-      const distance = calculateDistance(taskData.locationCheckIn, taskData.locationCheckOut);
-      setTotalDistance(distance);
-    }
-  }, [taskData.locationCheckIn, taskData.locationCheckOut]);
+  // useEffect(() => {
+  //   if (taskData.locationCheckIn && taskData.locationCheckOut) {
+  //     const distance = calculateDistance(taskData.locationCheckIn, taskData.locationCheckOut);
+  //     setTotalDistance(distance);
+  //   }
+  // }, [taskData.locationCheckIn, taskData.locationCheckOut]);
 
 
   useEffect(() => {
@@ -173,15 +173,19 @@ const AddNewTaskScreen = () => {
       fetchRoute(taskData.locationCheckIn, taskData.locationCheckOut);
     }
   }, [taskData.locationCheckIn, taskData.locationCheckOut]);
+
   const handleSave = async () => {
    
     const payload = {
       ...taskData,
-      followers: selectedUserIds // Đảm bảo followers là một mảng các đối tượng có thuộc tính id
+      followers: selectedUserIds,
+      
     };
-
+    console.log(payload,'pâyyyyy')
     try {
+      // @ts-ignore
       const response = await TaskService.createTask(payload);
+      
       if (response.isSuccess) {
         showMessage({
           message: 'Success',
@@ -191,6 +195,7 @@ const AddNewTaskScreen = () => {
         navigation.goBack();
       } 
     } catch (error) {
+      console.log(error,'vxbxvbv')
       // Xử lý lỗi từ phản hồi API trong catch
       const errorMessages = error.response?.data?.errors?.map(err => err.message).join('\n') || error.response.data.detail;
       showMessage({
@@ -394,46 +399,46 @@ const AddNewTaskScreen = () => {
       />
       <View style={{flex:1, marginVertical: moderateScale(10)}}>
         <ScrollView contentContainerStyle={{paddingHorizontal: 10}}>
-          {Platform.OS === 'ios' ? (
-             <View className='flex flex-row justify-between items-center'>
-             <Text className='text-black text-base'>Loại công việc:</Text>
-             <TouchableOpacity
-               style={styles.pickerDropdown}
-               onPress={openJobTypeActionSheet}>
-               <Text style={styles.textChoose}>{selectedJobType?.display || 'Loại công việc'}</Text>
-             </TouchableOpacity>
-             <ActionSheet ref={jobTypeActionSheetRef}>
-               {jobTypes.map((item) => (
-                 <TouchableOpacity
-                   key={item.value}
-                   style={styles.actionSheetItem}
-                   onPress={() => {
-                    setSelectedJobType(item);
-                    jobTypeActionSheetRef.current?.hide();
-                   }}>
-                   <Text>{item.display}</Text>
-                 </TouchableOpacity>
-               ))}
-             </ActionSheet>
-           </View>
-          ) : (
-            <View className='flex flex-row justify-between items-center'>
-            <Text className='text-black text-base'>Loại công việc: </Text>
-            <Picker
-            style={{backgroundColor:'#efefef', flex:1, }}
-              // className='border-b-4 border-indigo-500 h-[150px] w-full bg-blue'
-              selectedValue={selectedJobType}
-              onValueChange={(itemValue) => {
-                setSelectedJobType(itemValue);
-                setTaskData({ ...taskData, typejob: itemValue });
-              }}
-            >
-              {jobTypes.map((type) => (
-                <Picker.Item style={{textAlign:'center', width:'100%'}} label={type.display} value={type.value} key={type.value} />
-              ))}
-            </Picker>
-            </View>
-          )}
+        {Platform.OS === 'ios' ? (
+              <View className="flex flex-row justify-between items-center">
+                <Text className="text-black text-base">Loại công việc:</Text>
+                <TouchableOpacity style={styles.pickerDropdown} onPress={openJobTypeActionSheet}>
+                  <Text style={styles.textChoose}>{selectedJobType?.display || 'Loại công việc'}</Text>
+                </TouchableOpacity>
+                <ActionSheet ref={jobTypeActionSheetRef}>
+                  {jobTypes.map(item => (
+                    <TouchableOpacity
+                      key={item.value}
+                      style={styles.actionSheetItem}
+                      onPress={() => {
+                        setSelectedJobType(item);
+                        setTaskData({ ...taskData, typeJob: item.value });
+                        jobTypeActionSheetRef.current?.hide();
+                      }}>
+                      <Text>{item.display}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ActionSheet>
+              </View>
+            ) : (
+              <View className="flex flex-row justify-between items-center">
+                <Text className="text-black text-base">Loại công việc: </Text>
+                
+                <Picker
+                  style={{ backgroundColor: '#efefef', flex: 1 }}
+                  selectedValue={selectedJobType.value}
+                  onValueChange={itemValue => {
+                    const selectedItem = jobTypes.find(item => item.value === itemValue);
+                 
+                    setSelectedJobType(selectedItem);
+                    setTaskData({ ...taskData, typeJob: selectedItem.value.toString() });
+                  }}>
+                  {jobTypes.map(type => (
+                    <Picker.Item style={{ textAlign: 'center', width: '100%' }} label={type.display} value={type.value} key={type.value} />
+                  ))}
+                </Picker>
+              </View>
+            )}
        
           {selectedJobType !== null && (
             <View>
@@ -534,27 +539,13 @@ const AddNewTaskScreen = () => {
                 value={taskData.feedback}
               />
               <View className=''>
-                {Platform.OS !== 'ios' ? (
+                {Platform.OS === 'ios' ? (
                   <View style={styles.flexStatus}>
                     <Text style={styles.textLeft}>Chất lượng CV</Text>
                     <TouchableOpacity onPress={openVoteActionSheet} style={styles.buttonStatus}>
                       <Text style={styles.textChoose}>  <Text style={styles.textChoose}>{voteOption ? voteOption.label : 'Chưa chọn'}</Text></Text>
                     </TouchableOpacity>
-                  </View>
-                ) : (
-                  <Picker
-                  selectedValue={taskData.vote}
-                  style={{height:moderateScale(50), width:'100%'}}
-                  onValueChange={(itemValue) => {
-                    handleVoteChange(itemValue);
-                  }}
-                  >
-                    {voteOptions.map((option) => (
-                      <Picker.Item label={option.label} value={option.value} key={option.value}/>
-                    ))}
-                </Picker>
-                )}
-               <ActionSheet ref={voteActionSheetRef}>
+                    <ActionSheet ref={voteActionSheetRef}>
                     {voteOptions.map((option) => (
                       <TouchableOpacity
                         key={option.value}
@@ -565,6 +556,21 @@ const AddNewTaskScreen = () => {
                       </TouchableOpacity>
                     ))}
                 </ActionSheet>
+                  </View>
+                ) : (
+                  <Picker
+                  selectedValue={taskData.vote}
+                  style={{height:moderateScale(50), width:'100%'}}
+                  onValueChange={(itemValue) => {
+                    setTaskData({ ...taskData, vote: itemValue });
+                  }}
+                  >
+                    {voteOptions.map((option) => (
+                      <Picker.Item label={option.label} value={option.value} key={option.value}/>
+                    ))}
+                </Picker>
+                )}
+          
               </View>
               <View className='flex-row flex-1 justify-between items-center'>
               <CustomTextInput
