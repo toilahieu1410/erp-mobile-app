@@ -103,7 +103,6 @@ const CreateConfirm = () => {
       if(payload.endDate === "") {
         delete payload.endDate
       }
-      console.log(payload,'pauuuuu')
       const response = await ServiceConfirm.createConfirm(payload);
       const message = response.value
       showMessage({
@@ -163,7 +162,6 @@ const CreateConfirm = () => {
     actionSheetRef.current?.setModalVisible(true);
   };
 
-  console.log(confirmType,'confirmType')
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

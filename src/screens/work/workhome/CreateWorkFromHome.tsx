@@ -52,7 +52,6 @@ const CreateWorkFromHome = () => {
         endDate: endDate ? moment(endDate).format('DD/MM/YYYY') : ''
       }
 
-      console.log(payload,'payyyyy')
       const response = await ServiceWorkFromHome.createWorkFromHome(payload);
       const message = response.value
       showMessage({

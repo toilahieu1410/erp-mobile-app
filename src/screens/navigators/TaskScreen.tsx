@@ -107,6 +107,8 @@ const TaskScreen = () => {
         const taskDate = moment(task.createdAt);
         const currentMonth = moment().month();
         const currentYear = moment().year();
+
+
         return taskDate.month() === currentMonth && taskDate.year() === currentYear 
       });
       

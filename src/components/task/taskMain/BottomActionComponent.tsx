@@ -94,7 +94,6 @@ const BottomActionComponent = ({title, id, status, task,  onDelete, onUpdateStat
         followers: followersIds,
         status: newStatus, // Thêm trường status mới
       };
-      console.log(updatedTask,'updateeeeeee')
       if (task.followers.length > 0) {
         task.followers.forEach(follower => {
           if (!follower.id || !follower.userId || !follower.userName || !follower.hoTen || !follower.maPhongBan) {
@@ -110,7 +109,7 @@ const BottomActionComponent = ({title, id, status, task,  onDelete, onUpdateStat
         type: 'success',
       });
     } catch (error) {
-      console.log(error,'errorrrr')
+
       showMessage({
         message: 'Error',
         description: 'Cập nhật trạng thái thất bại',

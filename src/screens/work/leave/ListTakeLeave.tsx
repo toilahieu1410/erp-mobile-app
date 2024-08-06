@@ -267,7 +267,7 @@ const ListTakeLeave: React.FC = () => {
     ),
   });
 
-  console.log(listNghiPhep,'listNghiPhep')
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <AppHeader

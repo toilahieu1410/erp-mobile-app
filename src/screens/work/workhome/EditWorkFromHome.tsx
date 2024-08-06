@@ -72,7 +72,6 @@ const EditWorkFromHome: React.FC = () => {
     }
   };
 
-  console.log(item, 'item');
   const handleDateChange = (
     selectedDate: Date,
     picker: 'startDate' | 'endDate',

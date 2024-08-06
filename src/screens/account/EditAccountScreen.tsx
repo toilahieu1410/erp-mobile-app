@@ -163,7 +163,7 @@ const EditAccountScreen = () => {
         ngayLamChinhThuc: moment(ngayLamChinhThuc).format('DD/MM/YYYY'),
         leaderId: leaderId
       };
-      console.log(data,'resss', formattedData)
+
 
       if(data.avatar === undefined) {
         delete formattedData.avatar
@@ -178,7 +178,6 @@ const EditAccountScreen = () => {
       }
 
       const response = await AuthenticateService.UpdateUser(userInfo.id, formattedData);
-      console.log(response,'bbbbbbbbbb',formattedData, userInfo)
       if (response.isSuccess) {
         showMessage({
           message: 'Dữ liệu đã được cập nhật',

@@ -56,8 +56,6 @@ const DetailTaskScreen: React.FC = () => {
 
   const { task } = route.params as {task: Task }
 
-  console.log(task,'taskkkkkk')
-
   const [title, setTitle] = useState(task.title)
   const [content, setContent] = useState(task.content)
   const [customerCode, setCustomerCode] = useState(task.customerCode || 'string')
@@ -72,7 +70,6 @@ const DetailTaskScreen: React.FC = () => {
   const richTextContent = useRef<RichEditor>(null)
   const richTextFeedBack = useRef<RichEditor>(null)
 
-  console.log(task.typeJob,'task.typeJob', typeJob)
 
   useEffect(() => {
     const fetchJobTypes = async () => {
@@ -110,7 +107,6 @@ const DetailTaskScreen: React.FC = () => {
         vote: vote, // Chuyển đổi vote thành chuỗi
         typeJob: typeJob, // Chuyển đổi typeJob thành chuỗi
       }
-      console.log(updateData, 'updateData')
       // @ts-ignore
       await TaskService.updateTask(updateData)
       showMessage({
@@ -122,7 +118,7 @@ const DetailTaskScreen: React.FC = () => {
       //@ts-ignore
       navigator.navigate(SCREENS.TASK.KEY, {id: task.id})
     } catch (error: any) {
-      console.log(error,'errupdate')
+
       const errorMessage = error.response?.data?.detail || 'Cập nhập công việc thất bại';
       showMessage({
         message: 'Error',

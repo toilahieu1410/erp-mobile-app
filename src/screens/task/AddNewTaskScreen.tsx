@@ -181,7 +181,6 @@ const AddNewTaskScreen = () => {
       followers: selectedUserIds,
       
     };
-    console.log(payload,'pâyyyyy')
     try {
       // @ts-ignore
       const response = await TaskService.createTask(payload);
@@ -195,7 +194,6 @@ const AddNewTaskScreen = () => {
         navigation.goBack();
       } 
     } catch (error) {
-      console.log(error,'vxbxvbv')
       // Xử lý lỗi từ phản hồi API trong catch
       const errorMessages = error.response?.data?.errors?.map(err => err.message).join('\n') || error.response.data.detail;
       showMessage({
@@ -254,7 +252,6 @@ const AddNewTaskScreen = () => {
     setIsLoading(true);
     try {
       const location = await position();
-      console.log(location,'loooo')
       await handleLocationSave('checkin', { coords: location });
       Alert.alert('Success', 'Check-In thành công');
     } catch (error) {
@@ -325,7 +322,6 @@ const AddNewTaskScreen = () => {
   };
 
   const getDirections = async (startLoc, destinationLoc, apiKey) => {
-    console.log(startLoc,'startLoc',destinationLoc)
     try {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${apiKey}`

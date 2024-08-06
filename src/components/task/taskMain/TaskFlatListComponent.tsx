@@ -73,7 +73,6 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
                 type: 'success',
               });
             } catch (error) {
-              console.log(error,'errrr')
               const errorMessage = error.response?.data?.detail || 'Xóa báo cáo công việc thất bại';
               showMessage({
                 message: 'Error',
@@ -194,7 +193,7 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
             task={task}
             status={task.status} 
             onDelete={handleDelete} 
-            onUpdateStatus={onUpdateStatus}/>
+            onUpdateStatus={onUpdateStatus} />
         </View>
 
         <View className="rounded-b-lg border w-full border-gray-300 p-2 min-h-[100px] h-[150px] bg-white">
@@ -227,11 +226,11 @@ const TaskFlatListComponent = ({task, onDelete, onUpdateStatus}: TaskProps) => {
                     <View className='bg-transparent border-solid flex-row'>
                     <Icon name={getStatusIcon(task.status)} size={moderateScale(18)} color={getStatusColor(task.status)} style={{ marginRight: 4 }} />
                     <Text
-                          numberOfLines={2}
-                          style={{ color: getStatusColor(task.status) }} // Set color based on status
-                          className="text-sm font-bold tracking-wider">
-                          {getStatusText(task.status)}
-                        </Text>
+                      numberOfLines={2}
+                      style={{ color: getStatusColor(task.status) }} // Set color based on status
+                      className="text-sm font-bold tracking-wider">
+                      {getStatusText(task.status)}
+                    </Text>
                     </View>
                   </View>
                 </View>

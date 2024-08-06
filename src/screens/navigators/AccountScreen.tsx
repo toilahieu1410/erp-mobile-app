@@ -170,7 +170,6 @@ const AccountScreen = () => {
     const fetchUserData = async () => {
       try {
         const token = await AsyncStorage.getItem('accessToken');
-        console.log(token, 'token đc lưu trữ');
         if (token) {
           const response = await AuthenticateService.GetUser();
           const user = response.value;
