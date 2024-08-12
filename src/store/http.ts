@@ -90,8 +90,8 @@ class Http {
     try {
       const token = await Token.getToken();
       if (token) {
-        const expireRefreshToken = token?.expireRefreshToken;
-        const expireRefreshTokenDate = new Date(expireRefreshToken);
+   
+        const expireRefreshTokenDate = new Date(token.refreshToken);
         const currentDate = new Date();
         if (currentDate > expireRefreshTokenDate) {
           return null;

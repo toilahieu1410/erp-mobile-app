@@ -79,8 +79,8 @@ export const AuthenticateService = {
   async CheckToken() {
     const token = await Token.getToken();
     if (token) {
-      const expireAccessTokenDate = new Date(token.expireAccessToken);
-      const expireRefreshTokenDate = new Date(token.expireRefreshToken);
+      const expireAccessTokenDate = new Date(token.accessToken);
+      const expireRefreshTokenDate = new Date(token.refreshToken);
       const currentDate = new Date();
   
       if (currentDate > expireAccessTokenDate && currentDate <= expireRefreshTokenDate) {
