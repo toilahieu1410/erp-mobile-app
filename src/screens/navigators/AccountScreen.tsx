@@ -204,9 +204,7 @@ const AccountScreen = () => {
                     style={styles.imageAvatar}
                     size={Dimensions.get('screen').width * 0.15}
                     source={{uri: selectedImage}}
-                    >
-
-                    </Avatar.Image>
+                    />
                 </View>
 
                 <View style={styles.textRight}>

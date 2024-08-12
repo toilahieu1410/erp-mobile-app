@@ -56,11 +56,15 @@ export const login = createAsyncThunk<BaseResponse<Token>, {username: string; pa
   async (data, {rejectWithValue}) => {
     try {
       const response = await AuthenticateService.Login(data)
+
+      const accessToken = response.value.accessToken || '';
+      const refreshToken = response.value.refreshToken || '';
+      const refreshTokenExpiryTime = response.value.refreshTokenExpiryTime || '';
+
       const tokenData = new Token(
-        response.value.accessToken,
-        '',
-        response.value.refreshToken,
-        '',
+        accessToken,
+        refreshToken,
+        refreshTokenExpiryTime,
         response.value
       );
  

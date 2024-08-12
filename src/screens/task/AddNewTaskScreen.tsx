@@ -188,7 +188,7 @@ const AddNewTaskScreen = () => {
       if (response.isSuccess) {
         showMessage({
           message: 'Success',
-          description: 'Task created successfully.',
+          description: 'Tạo báo cáo công việc thành công.',
           type: 'success',
         });
         navigation.goBack();

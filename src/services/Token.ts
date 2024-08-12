@@ -8,29 +8,33 @@ interface DecodedToken {
 
 export class Token {
   accessToken: string;
-  expireAccessToken: string;
   refreshToken: string;
-  expireRefreshToken: string;
+  refreshTokenExpiryTime: string;
   value: any;
 
   constructor(
     accessToken: string,
-    expireAccessToken: string,
     refreshToken: string,
-    expireRefreshToken: string,
+    refreshTokenExpiryTime: string,
     value: any,
   ) {
     this.accessToken = accessToken;
-    this.expireAccessToken = expireAccessToken;
     this.refreshToken = refreshToken;
-    this.expireRefreshToken = expireRefreshToken;
+    this.refreshTokenExpiryTime = refreshTokenExpiryTime;
     this.value = value;
   }
 
   static async saveToken(token: Token) {
     try {
-      await AsyncStorage.setItem('accessToken', token.accessToken);
-      await AsyncStorage.setItem('refreshToken', token.refreshToken);
+      if (token.accessToken) {
+        await AsyncStorage.setItem('accessToken', token.accessToken);
+      }
+      if (token.refreshToken) {
+        await AsyncStorage.setItem('refreshToken', token.refreshToken);
+      }
+      if (token.refreshTokenExpiryTime) {  // Chỉ lưu nếu giá trị tồn tại
+        await AsyncStorage.setItem('refreshTokenExpiryTime', token.refreshTokenExpiryTime);
+      }
       console.log('Token đã được lưu:', token);
     } catch (error) {
       console.error('Không thể lưu token', error);
@@ -42,10 +46,11 @@ export class Token {
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const refreshToken = await AsyncStorage.getItem('refreshToken');
-      if (accessToken && refreshToken) {
-        return new Token(accessToken, '', refreshToken, '', {});
+      const refreshTokenExpiryTime = await AsyncStorage.getItem('refreshTokenExpiryTime');
+      if (accessToken && refreshToken && refreshTokenExpiryTime) {
+        return new Token(accessToken, refreshToken, refreshTokenExpiryTime, {});
       } else {
-        return null; // No token found
+        return null; // Không tìm thấy token
       }
     } catch (error) {
       return null;
@@ -71,6 +76,9 @@ export class Token {
     try {
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
-    } catch (error) {}
+      await AsyncStorage.removeItem('refreshTokenExpiryTime');
+    } catch (error) {
+      console.error('Không thể xóa token', error);
+    }
   }
 }

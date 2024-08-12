@@ -79,25 +79,21 @@ export const AuthenticateService = {
   async CheckToken() {
     const token = await Token.getToken();
     if (token) {
-      const expireAccessToken = token?.expireAccessToken;
-      const expireAccessTokenDate = new Date(expireAccessToken);
-
-      const expireRefreshToken = token?.expireRefreshToken;
-      const expireRefreshTokenDate = new Date(expireRefreshToken);
-
+      const expireAccessTokenDate = new Date(token.expireAccessToken);
+      const expireRefreshTokenDate = new Date(token.expireRefreshToken);
       const currentDate = new Date();
-
-      if (
-        currentDate > expireAccessTokenDate &&
-        currentDate > expireRefreshTokenDate
-      ) {
+  
+      if (currentDate > expireAccessTokenDate && currentDate <= expireRefreshTokenDate) {
+        const refreshedToken = await this.RefreshToken(token.refreshToken);
+        return refreshedToken.isSuccess;
+      } else if (currentDate > expireRefreshTokenDate) {
         return false;
       } else {
         return true;
       }
     }
     return false;
-  },
+  }
 };
 
 export default AuthenticateService;
